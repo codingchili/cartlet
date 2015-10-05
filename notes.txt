@@ -1,4 +1,5 @@
 * Add csrf-tokens to POST forms.
+* Remove XSS form usernames.
 * Change logout form method to POST
 * Enable multiple images per product.
 * Allow managers to remove products/categories that have zero relations.
