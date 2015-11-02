@@ -47,7 +47,6 @@ public class Login extends HttpServlet implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        System.out.println("INIT_INIT_INIT");
         AccountManager.registerAdmin("admin", "rawadminsocks", "admin_zip", "admin_street");
     }
 

@@ -86,7 +86,7 @@ class ProductDB implements ProductStore {
         return products;
     }
 
-    private ArrayList<Integer> listProductImages(Product product) throws ProductStoreException {
+    public ArrayList<Integer> listProductImages(Product product) throws ProductStoreException {
         ArrayList<Integer> ids = new ArrayList<>();
 
         try (Connection connection = Database.getConnection()) {

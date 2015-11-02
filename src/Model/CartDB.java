@@ -1,6 +1,8 @@
 package Model;
 
 import Model.Exception.CartStoreException;
+import Model.Exception.ProductStoreException;
+import Model.Exception.StoreException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +11,7 @@ import java.sql.SQLException;
 
 /**
  * Created by Robin on 2015-09-30.
- *
+ * <p>
  * Implementation of CartStore using MySQL Database.
  */
 
@@ -138,7 +140,7 @@ class CartDB implements CartStore {
     }
 
     @Override
-    public Cart getCart(Account account) throws CartStoreException {
+    public Cart getCart(Account account) throws StoreException {
         Cart cart = new Cart();
         cart.setOwner(account);
 
@@ -157,7 +159,7 @@ class CartDB implements CartStore {
         return cart;
     }
 
-    private Cart cartFromResult(ResultSet result) throws SQLException {
+    private Cart cartFromResult(ResultSet result) throws SQLException, ProductStoreException {
         Cart cart = new Cart();
 
         while (result.next()) {
@@ -167,6 +169,7 @@ class CartDB implements CartStore {
             product.setName(result.getString(CartTable.GetCart.OUT.NAME));
             product.setCount(result.getInt(CartTable.GetCart.OUT.COUNT));
             product.setCost(result.getInt(CartTable.GetCart.OUT.COST));
+            product.setImageIds(new ProductDB().listProductImages(product));
             cart.addProduct(product);
         }
 

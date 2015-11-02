@@ -14,7 +14,7 @@ public class Product implements Bean {
     private int id;
     private int count;
     private int cost;
-    private ArrayList<Integer> imageId;
+    private ArrayList<Integer> imageId = new ArrayList<>();
 
     public int getFrontImage() {
         if (imageId.size() > 0)

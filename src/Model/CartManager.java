@@ -67,7 +67,7 @@ abstract public class CartManager {
         Cart cart = new Cart();
         try {
             cart = store.getCart(account);
-        } catch (CartStoreException e) {
+        } catch (StoreException e) {
             e.printStackTrace();
         }
         return cart;

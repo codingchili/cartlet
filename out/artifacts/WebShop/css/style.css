@@ -39,6 +39,12 @@ legend {
     margin: auto auto -18px auto;
 }
 
+.cart-thumbnail {
+    max-width:42px;
+    max-height: 42px;
+    min-height: 42px;
+}
+
 table {
     text-decoration: none; !important;
 }

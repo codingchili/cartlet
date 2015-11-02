@@ -1,6 +1,7 @@
 package Model;
 
 import Model.Exception.CartStoreException;
+import Model.Exception.StoreException;
 
 /**
  * Created by Robin on 2015-09-30.
@@ -41,5 +42,5 @@ interface CartStore {
      * @param account owning the the cart.
      * @return the specified users cart.
      */
-    Cart getCart(Account account) throws CartStoreException;
+    Cart getCart(Account account) throws CartStoreException, StoreException;
 }
