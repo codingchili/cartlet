@@ -1,5 +1,7 @@
 # webshoppe
 
+[image]
+
 Java EE webshop,
 * 3 Tier
 * MVC
@@ -7,3 +9,9 @@ Java EE webshop,
 * MySQL
 * Bootstrap
 * HTML5
+
+### Building
+
+### Installing
+
+## Contributing
