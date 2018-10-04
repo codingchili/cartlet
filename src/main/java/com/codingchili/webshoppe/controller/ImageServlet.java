@@ -1,5 +1,6 @@
 package com.codingchili.webshoppe.controller;
 
+import com.codingchili.webshoppe.model.Image;
 import com.codingchili.webshoppe.model.ProductManager;
 import com.codingchili.webshoppe.model.exception.ProductStoreException;
 
@@ -24,18 +25,23 @@ public class ImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             int imageId = Integer.parseInt(req.getParameter("id"));
-            com.codingchili.webshoppe.model.Image image = ProductManager.getProductImage(imageId);
-            String data = image.getData();
 
-            resp.setContentType(getContentType(data));
-            data = stripContentType(data);
+            if (imageId == -1) {
+                Forwarding.to("/img/placeholder.svg", req, resp);
+            } else {
+                Image image = ProductManager.getProductImage(imageId);
+                String data = image.getData();
 
-            OutputStream out = resp.getOutputStream();
-            byte[] bytes = Base64.getDecoder().decode(data);
-            out.write(bytes);
-            out.close();
+                resp.setContentType(getContentType(data));
+                data = stripContentType(data);
+
+                OutputStream out = resp.getOutputStream();
+                byte[] bytes = Base64.getDecoder().decode(data);
+                out.write(bytes);
+                out.close();
+            }
         } catch (NumberFormatException | ProductStoreException e) {
-            Forwarding.to("img/placeholder.svg", req, resp);
+            Forwarding.to("/img/placeholder.svg", req, resp);
         }
     }
 

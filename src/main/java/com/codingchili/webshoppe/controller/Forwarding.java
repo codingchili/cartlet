@@ -38,8 +38,9 @@ abstract class Forwarding {
     }
 
     private static HttpServletRequest next(HttpServletRequest req) {
-        req.setAttribute("categories", ProductManager.listCategories());
-
+        if (req.getAttribute("categories") == null) {
+            req.setAttribute("categories", ProductManager.listCategories());
+        }
         if (Session.isAuthenticated(req)) {
             req.getSession().setAttribute("cart", CartManager.getCart((Account) req.getSession().getAttribute("account")));
         }

@@ -15,7 +15,7 @@ import java.io.IOException;
  * This is the entry point for the webshop, products are listed here.
  */
 
-@WebServlet("/products")
+@WebServlet({"/products", "/"})
 public class IndexServlet extends HttpServlet {
 
     @Override

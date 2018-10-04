@@ -6,7 +6,7 @@
 <div class="col-xs-12 well">
     <c:forEach items="${products}" var="product">
         <div class="panel panel-default product col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="panel-heading">${product.name}</div>
+            <div class="product-header">${product.name}</div>
             <div class="panel-body">
                 <a href="view?product=${product.id}">
                     <img src="image?id=${product.frontImage}" class="product-thumbnail-img">
@@ -14,7 +14,7 @@
                 <span class="text-red product-thumbnail-price">${product.cost} :-</span>
             </div>
 
-            <div class="panel-footer">
+            <div class="product-footer">
                 <form method="POST" action="buy">
                     <input type="hidden" name="count" value="1">
                     <input type="hidden" name="product" value="${product.id}">

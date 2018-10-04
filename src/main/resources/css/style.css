@@ -23,6 +23,18 @@ legend {
     min-height: 352px;
 }
 
+.product-header {
+    height: 24px;
+    margin-top: 8px;
+    border-size: 1px;
+    border: 1px #77888888;
+    border-bottom-style: solid;
+}
+
+.product-footer {
+
+}
+
 .product-thumbnail-img {
     display: block;
     max-height: 200px;

@@ -9,9 +9,9 @@ import java.sql.*;
  * with the use of connection pooling.
  */
 class Database {
-    private static final String HOST = "jdbc:mysql://localhost:3306/WebShop";
-    private static final String USER = "webshopaccount";
-    private static final String PASSWORD = "RainbowUnicornSquirrelOfTheMultiverse";
+    private static final String HOST = "jdbc:mysql://192.168.10.129:3306/WebShop?useSSL=false";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
 
     static {
         try {

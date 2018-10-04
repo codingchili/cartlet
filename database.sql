@@ -9,72 +9,72 @@ DROP TABLE IF EXISTS order_product;
 DROP TABLE IF EXISTS orderstatus;
 DROP TABLE IF EXISTS role;
 
-CREATE TABLE `webshop`.`account` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `zip` VARCHAR(12) NOT NULL,
-  `street` VARCHAR(32) NOT NULL,
-  `role` INT DEFAULT 1,
-  `password` VARCHAR(256) NOT NULL,
-  `salt` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
+CREATE TABLE account (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  zip VARCHAR(12) NOT NULL,
+  street VARCHAR(32) NOT NULL,
+  role INT DEFAULT 1,
+  password VARCHAR(256) NOT NULL,
+  salt VARCHAR(128) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX name_UNIQUE (name ASC));
   
-  CREATE TABLE `webshop`.`cart` (
-  `product` INT NOT NULL,
-  `owner` INT NOT NULL,
-  `count` INT NOT NULL,
-  PRIMARY KEY (`product`, `owner`));
+  CREATE TABLE cart (
+  product INT NOT NULL,
+  owner INT NOT NULL,
+  count INT NOT NULL,
+  PRIMARY KEY (product, owner));
 
-CREATE TABLE `webshop`.`product_category` (
-  `product` INT NOT NULL,
-  `category` INT NOT NULL,
-  PRIMARY KEY (`product`, `category`));
+CREATE TABLE product_category (
+  product INT NOT NULL,
+  category INT NOT NULL,
+  PRIMARY KEY (product, category));
 
-CREATE TABLE `webshop`.`category` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
+CREATE TABLE category (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC),
+  UNIQUE INDEX name_UNIQUE (name ASC));
 
-CREATE TABLE `webshop`.`image` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `product` INT NOT NULL,
-  `data` MEDIUMBLOB NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `product_UNIQUE` (`product` ASC));
+CREATE TABLE image (
+  id INT NOT NULL AUTO_INCREMENT,
+  product INT NOT NULL,
+  data MEDIUMBLOB NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX product_UNIQUE (product ASC));
 
-CREATE TABLE `webshop`.`product` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `description` VARCHAR(255) NOT NULL,
-  `count` INT NOT NULL DEFAULT 0,
-  `cost` INT NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE product (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  count INT NOT NULL DEFAULT 0,
+  cost INT NOT NULL,
+  PRIMARY KEY (id));
   
-CREATE TABLE `webshop`.`order` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `owner` INT NOT NULL,
-  `created` VARCHAR(24) NOT NULL,
-  `status` INT NOT NULL,
-  `changed` VARCHAR(24) NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `order` (
+  id INT NOT NULL AUTO_INCREMENT,
+  owner INT NOT NULL,
+  created VARCHAR(24) NOT NULL,
+  status INT NOT NULL,
+  changed VARCHAR(24) NOT NULL,
+  PRIMARY KEY (id));
 
-CREATE TABLE `webshop`.`order_product` (
+CREATE TABLE order_product (
   `order` INT NOT NULL,
-  `product` INT NOT NULL,
+  product INT NOT NULL,
   `count` INT NOT NULL);
 
-CREATE TABLE `webshop`.`orderstatus` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE orderstatus (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  PRIMARY KEY (id));
   
-  CREATE TABLE `webshop`.`role` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`));
+  CREATE TABLE role (
+  id INT NOT NULL,
+  name VARCHAR(45) NULL,
+  PRIMARY KEY (id));
 
 
 
@@ -128,4 +128,4 @@ INSERT INTO orderstatus (name) VALUES ('Shipped');
 
 INSERT INTO role (id, name) VALUES (1, 'user');
 INSERT INTO role (id, name) VALUES (2, 'employee');
-INSERT INTO role (id, name) VALUES (3, 'administrator')
+INSERT INTO role (id, name) VALUES (3, 'administrator');

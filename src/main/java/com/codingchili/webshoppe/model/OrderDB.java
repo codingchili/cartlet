@@ -4,10 +4,7 @@ import com.codingchili.webshoppe.model.exception.AccountStoreException;
 import com.codingchili.webshoppe.model.exception.NoSuchOrderException;
 import com.codingchili.webshoppe.model.exception.OrderStoreException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,11 +24,13 @@ class OrderDB implements OrderStore {
 
             // Create the order post in order table.
             try (PreparedStatement statement =
-                         connection.prepareStatement(OrderTable.CreateOrder.QUERY)) {
+                         connection.prepareStatement(OrderTable.CreateOrder.QUERY, Statement.RETURN_GENERATED_KEYS)) {
+
                 statement.setString(OrderTable.CreateOrder.IN.CREATED, getTimeStamp());
                 statement.setString(OrderTable.CreateOrder.IN.CHANGED, getTimeStamp());
                 statement.setInt(OrderTable.CreateOrder.IN.OWNER, account.getId());
                 statement.execute();
+
                 ResultSet result = statement.getGeneratedKeys();
 
                 if (result.next())
