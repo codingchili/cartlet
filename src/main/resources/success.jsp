@@ -1,12 +1,10 @@
 <%@include file="header.jsp" %>
 
-<h2 style="text-align: center;">
-    <span class="label label-success">
+<h2 class="badge-header">
+    <span class="badge badge-success">
         ${requestScope.message}
     </span>
 </h2>
-
-<div class="row" style="margin-top: 225px;">
 
 </div>
 

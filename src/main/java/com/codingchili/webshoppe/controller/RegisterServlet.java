@@ -40,9 +40,9 @@ public class RegisterServlet extends HttpServlet {
 
         req.setAttribute("registerResult", registerResult);
 
-        if (registerResult.isErroneous())
+        if (registerResult.isErroneous()) {
             Forwarding.to("register.jsp", req, resp);
-        else {
+        } else {
             Session.authenticate(req, registerResult.getAccount());
             Forwarding.to("/products", req, resp);
         }

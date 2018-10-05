@@ -1,9 +1,9 @@
 <%@include file="header.jsp" %>
 
 <div class="row">
-    <div class="col-xs-6 col-xs-offset-3">
+    <div class="col-6 offset-3">
         <div class="text-center margin-top-2">
-            <span class="label label-danger">Locked for editing.</span>
+            <span class="badge badge-danger">Locked for editing.</span>
         </div>
 
         <div class="panel panel-default margin-top-1">

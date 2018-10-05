@@ -74,6 +74,12 @@ public abstract class AccountManager {
         return new RegisterResult()
                 .setZipSet(zip.length() != 0)
                 .setStreetSet(street.length() != 0)
+                .setAccount(new Account()
+                        .setUsername(username)
+                        .setZip(zip)
+                        .setStreet(street)
+                        .setPassword(password)
+                )
                 .setPasswordLowEntropy(password.length() < PASSWORD_MIN_LENGTH)
                 .setAccountNameTooShort(username.length() < ACCOUNT_MIN_LENGTH);
     }

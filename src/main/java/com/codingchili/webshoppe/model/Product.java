@@ -1,6 +1,7 @@
 package com.codingchili.webshoppe.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-30.
@@ -9,12 +10,12 @@ import java.util.ArrayList;
  */
 
 public class Product implements Bean {
+    private List<Integer> imageId = new ArrayList<>();
     private String name;
     private String description;
     private int id;
     private int count;
     private int cost;
-    private ArrayList<Integer> imageId = new ArrayList<>();
 
     public int getFrontImage() {
         if (imageId.size() > 0)
@@ -68,11 +69,11 @@ public class Product implements Bean {
         this.id = id;
     }
 
-    public ArrayList<Integer> getImageIds() {
+    public List<Integer> getImageIds() {
         return imageId;
     }
 
-    protected void setImageIds(ArrayList<Integer> imageId) {
+    protected void setImageIds(List<Integer> imageId) {
         this.imageId = imageId;
     }
 }

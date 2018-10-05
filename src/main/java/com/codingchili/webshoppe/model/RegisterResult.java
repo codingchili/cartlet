@@ -23,8 +23,9 @@ public class RegisterResult implements Bean {
         return account;
     }
 
-    protected void setAccount(Account account) {
+    protected RegisterResult setAccount(Account account) {
         this.account = account;
+        return this;
     }
 
     public boolean isAccountExists() {

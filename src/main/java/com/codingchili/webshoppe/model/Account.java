@@ -53,7 +53,7 @@ public class Account implements Bean {
         return username;
     }
 
-    protected String getPassword() {
+    public String getPassword() {
         return password;
     }
 

@@ -1,12 +1,8 @@
 package com.codingchili.webshoppe.model;
 
-import com.codingchili.webshoppe.model.exception.AccountStoreException;
-import com.codingchili.webshoppe.model.exception.NoSuchAccountException;
+import com.codingchili.webshoppe.model.exception.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -46,7 +42,11 @@ class AccountDB implements AccountStore {
                 statement.execute();
             }
         } catch (SQLException e) {
-            throw new AccountStoreException(e);
+            if (e instanceof SQLIntegrityConstraintViolationException) {
+                throw new AccountExistsException(e);
+            } else {
+                throw new AccountStoreException(e);
+            }
         }
     }
 

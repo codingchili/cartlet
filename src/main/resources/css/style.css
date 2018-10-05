@@ -2,15 +2,82 @@ legend {
     text-align: center;
 }
 
+.margin-top {
+    margin-top: 32px;
+}
+
+.fill-width {
+    width: 100%;
+}
+
+.text-center {
+    width: 100%;
+}
+
+.badge-header {
+    text-align: center;
+    display: block;
+    margin-top: 32px;
+}
+
+.table-icon-button {
+    background: none;
+    padding-bottom: 0;
+}
+
+.heading-text {
+    text-align: center;
+    width: 100%;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.edit-product-icon {
+    text-align: right;
+    margin-top: 12px;
+}
+
+.info-container {
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.product-title {
+    margin-top: 12px;
+}
+
+.product-container {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+}
+
 .form-footer-link {
     display: block;
     margin-top: 32px;
     text-align: center;
 }
 
-#footer {
+.error-list {
     text-align: center;
-    margin-top: 74px;
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 8px;
+}
+
+.panel-body-spacer {
+    margin-top: 24px;
+}
+
+#footer {
+    font-size: x-small;
+    text-align: center;
+    position: fixed;
+    z-index: -1;
+    bottom: 8px;
+    width: 100%;
 }
 
 .button-spacer-top {
@@ -18,28 +85,29 @@ legend {
 }
 
 #product-image {
+    margin-bottom: 32px;
     max-width: 322px;
     max-height: 352px;
-    min-height: 352px;
 }
 
 .product-header {
     height: 24px;
     margin-top: 8px;
+    margin-bottom: 8px;
     border-size: 1px;
     border: 1px #77888888;
     border-bottom-style: solid;
 }
 
 .product-footer {
-
+    margin-top: 18px;
 }
 
 .product-thumbnail-img {
     display: block;
     max-height: 200px;
     min-height: 200px;
-    width: 215px;
+    width: 195px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -52,17 +120,19 @@ legend {
 }
 
 .cart-thumbnail {
-    max-width:42px;
+    max-width: 42px;
     max-height: 42px;
     min-height: 42px;
 }
 
 table {
-    text-decoration: none; !important;
+    text-decoration: none;
+!important;
 }
 
 a {
-    text-decoration: none; !important;
+    text-decoration: none;
+!important;
 }
 
 a:hover {
@@ -89,7 +159,6 @@ a:visited {
 }
 
 .buy-form {
-    margin-top: 32px;
 }
 
 .text-red {

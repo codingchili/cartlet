@@ -11,10 +11,10 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import io.undertow.servlet.util.DefaultClassIntrospector;
 
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
-import java.util.Collection;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,12 +56,13 @@ public class Launcher {
                 Handlers.resource(new ClassPathResourceManager(Launcher.class.getClassLoader())));
 
         DeploymentInfo builder = new DeploymentInfo()
+                .addFilter(Servlets.filter(EncodingFilter.class))
+                .addFilterUrlMapping(EncodingFilter.class.getSimpleName(), "/*", DispatcherType.REQUEST)
                 .setClassLoader(Launcher.class.getClassLoader())
                 .setContextPath("/")
                 .setClassIntrospecter(DefaultClassIntrospector.INSTANCE)
                 .setDeploymentName("webshop.war")
                 .setResourceManager(new ClassPathResourceManager(Launcher.class.getClassLoader()))
-                //.setResourceManager(new TestResourceLoader(Launcher.class))
                 .addServlets(allServlets())
                 .addServlet(JspServletBuilder.createServlet("Default Jsp Servlet", "*.jsp"));
 
@@ -85,7 +86,7 @@ public class Launcher {
 
     private static Collection<ServletInfo> allServlets() {
         // i think this api is stupid because there is no way to find @WebServlets and just start them...
-        return Stream.of(IndexServlet.class,
+        return Stream.of(ProductServlet.class,
                 ViewServlet.class,
                 AccountServlet.class,
                 BuyServlet.class,
@@ -103,12 +104,9 @@ public class Launcher {
                 StorageServlet.class
         )
         .map(servlet -> {
-            /*ServletInfo info = Servlets.servlet(servlet.getSimpleName(), servlet);
+            ServletInfo info = Servlets.servlet(servlet);
             Arrays.stream(servlet.getAnnotation(WebServlet.class).value()).forEach(info::addMapping);
-            return info;*/
-            WebServlet path = servlet.getAnnotation(WebServlet.class);
-            return Servlets.servlet(servlet.getSimpleName(), servlet).addMapping(path.value()[0]);
-
+            return info;
         }).collect(Collectors.toList());
     }
 

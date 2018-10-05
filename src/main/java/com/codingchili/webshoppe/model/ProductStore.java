@@ -3,6 +3,7 @@ package com.codingchili.webshoppe.model;
 import com.codingchili.webshoppe.model.exception.ProductStoreException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-30.
@@ -24,7 +25,7 @@ interface ProductStore {
      * @return all products mathching the nameFilter.
      * @throws ProductStoreException when the store query has failed.
      */
-    ArrayList<Product> listProductsByName(String nameFilter) throws ProductStoreException;
+    List<Product> listProductsByName(String nameFilter) throws ProductStoreException;
 
     /**
      * Retrieves all products from a specified category.
@@ -32,7 +33,7 @@ interface ProductStore {
      * @return all products matching the categoryFilter.
      * @throws ProductStoreException when the store query has failed.
      */
-    ArrayList<Product> listProductsByCategory(Category category) throws ProductStoreException;
+    List<Product> listProductsByCategory(Category category) throws ProductStoreException;
 
     /**
      * Get a product from the store by its id.

@@ -56,7 +56,7 @@ public class StorageServlet extends HttpServlet {
             req.setAttribute("message", "Created product \"" + name + "\".");
             Forwarding.to("success.jsp", req, resp);
         } catch (NumberFormatException | StoreException e) {
-            req.setAttribute("message", "Failed to add product.");
+            req.setAttribute("message", "Failed to add product: " + e.getMessage());
             Forwarding.to("error.jsp", req, resp);
         }
     }

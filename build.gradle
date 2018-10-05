@@ -21,23 +21,17 @@ repositories {
 }
 
 dependencies {
+    compile 'javax:javaee-api:8.0'
     compile 'mysql:mysql-connector-java:8.0.12'
+    compile 'com.zaxxer:HikariCP:3.1.0'
 
     compile 'io.undertow:undertow-core:2.0.13.Final'
     compile 'io.undertow:undertow-servlet:2.0.13.Final'
-    compile 'io.undertow:undertow-websockets-jsr:2.0.13.Final'
 
-    //compile 'javax.servlet:jstl:1.2'
-    compile 'taglibs:standard:1.1.2'
-
-    compile group: 'javax', name: 'javaee-api', version:'7.0'
-    compile group: 'io.undertow.jastow', name: 'jastow', version: '2.1.0.Final'
-
-    // required for JSP support in undertow (TldLocator)
-    compile 'org.jboss.metadata:jboss-metadata-common:8.0.0.Final'
-    compile 'org.jboss.metadata:jboss-metadata-web:8.0.0.Final'
-
-
+    compile 'org.apache.taglibs:taglibs-standard-impl:1.2.5'
+    compile 'io.undertow.jastow:jastow:2.1.0.Final'
+    compile 'org.jboss.metadata:jboss-metadata-common:11.0.0.Final'
+    compile 'org.jboss.metadata:jboss-metadata-web:11.0.0.Final'
 
     testCompile 'junit:junit:4.12'
 }

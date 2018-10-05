@@ -6,21 +6,25 @@ package com.codingchili.webshoppe.model;
  * A single point to define the stores used, a store
  * may be dependent on another store.
  */
-
  class Store {
+     private static final AccountDB accountDB = new AccountDB();
+     private static final OrderDB orderDB = new OrderDB();
+     private static final ProductDB productDB = new ProductDB();
+     private static final CartDB cartDB = new CartDB();
+
     public static AccountStore getAccountStore() {
-        return new AccountDB();
+        return accountDB;
     }
 
     public static OrderStore getOrderStore() {
-        return new OrderDB();
+        return orderDB;
     }
 
     public static ProductStore getProductStore() {
-        return new ProductDB();
+        return productDB;
     }
 
     public static CartStore getCartStore() {
-        return new CartDB();
+        return cartDB;
     }
 }

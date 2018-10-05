@@ -2,8 +2,8 @@
 <jsp:useBean id="order" class="com.codingchili.webshoppe.model.Order" scope="session"/>
 
 <div class="row">
-    <h3 style="text-align: center;">
-        <span class="text-red">
+    <h3 class="heading-text">
+        <span class="text-danger">
             Total ${order.total}:-
         </span>
     </h3>
@@ -23,11 +23,11 @@
         <tbody>
         <c:forEach items="${order.products}" var="product">
             <tr>
-                <td>${product.name}</td>
-                <td>${product.cost}</td>
-                <td>${product.count}</td>
-                <td><a href="view?product=${product.id}">View</a></td>
-                <td class="text-red">${product.count * product.cost}:-</td>
+                <td class="align-middle">${product.name}</td>
+                <td class="align-middle">${product.cost}</td>
+                <td class="align-middle">${product.count}</td>
+                <td class="align-middle"><a href="view?product=${product.id}">View</a></td>
+                <td  class="align-middle" class="text-danger">${product.count * product.cost}:-</td>
             </tr>
         </c:forEach>
         </tbody>
@@ -36,7 +36,7 @@
 
 <div class="row">
     <h3 class="text-center">
-    <span class="label label-success">
+    <span class="badge badge-success">
         Status: ${order.status}
     </span>
     </h3>

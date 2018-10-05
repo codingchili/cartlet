@@ -5,11 +5,12 @@ import com.codingchili.webshoppe.model.exception.ProductStoreException;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by Robin on 2015-09-30.
- *
+ * <p>
  * An implementation of a Product Store using a MySQL database.
  */
 
@@ -38,22 +39,19 @@ class ProductDB implements ProductStore {
     }
 
     @Override
-    public ArrayList<Product> listProductsByName(String nameFilter) throws ProductStoreException {
-        ArrayList<Product> products;
-
+    public List<Product> listProductsByName(String nameFilter) throws ProductStoreException {
         try (Connection connection = Database.getConnection()) {
             try (PreparedStatement statement =
                          connection.prepareStatement(ProductTable.ListProductsByName.QUERY)) {
 
                 statement.setString(ProductTable.ListProductsByName.IN.NAME, "%" + nameFilter + "%");
                 ResultSet result = statement.executeQuery();
-                products = productsFromResult(result);
+                return productsFromResult(result);
             }
         } catch (SQLException e) {
             throw new ProductStoreException(e);
         }
 
-        return products;
     }
 
     private Product productFromResult(ResultSet result) throws SQLException, ProductStoreException {
@@ -67,8 +65,8 @@ class ProductDB implements ProductStore {
         return product;
     }
 
-    private ArrayList<Product> productsFromResult(ResultSet result) throws SQLException, ProductStoreException {
-        ArrayList<Product> products = new ArrayList<>();
+    private List<Product> productsFromResult(ResultSet result) throws SQLException, ProductStoreException {
+        List<Product> products = new ArrayList<>();
 
         while (result.next()) {
             products.add(productFromResult(result));
@@ -77,7 +75,7 @@ class ProductDB implements ProductStore {
         return products;
     }
 
-    public ArrayList<Integer> listProductImages(Product product) throws ProductStoreException {
+    public List<Integer> listProductImages(Product product) throws ProductStoreException {
         ArrayList<Integer> ids = new ArrayList<>();
 
         try (Connection connection = Database.getConnection()) {
@@ -98,27 +96,22 @@ class ProductDB implements ProductStore {
     }
 
     @Override
-    public ArrayList<Product> listProductsByCategory(Category category) throws ProductStoreException {
-        ArrayList<Product> products;
-
+    public List<Product> listProductsByCategory(Category category) throws ProductStoreException {
         try (Connection connection = Database.getConnection()) {
             try (PreparedStatement statement =
                          connection.prepareStatement(ProductTable.ListProductsByCategory.QUERY)) {
 
                 statement.setInt(ProductTable.ListProductsByCategory.IN.ID, category.getCategoryId());
                 ResultSet result = statement.executeQuery();
-                products = productsFromResult(result);
+                return productsFromResult(result);
             }
         } catch (SQLException e) {
             throw new ProductStoreException(e);
         }
-        return products;
     }
 
     @Override
     public Product getProductById(int id) throws ProductStoreException {
-        Product product;
-
         try (Connection connection = Database.getConnection()) {
             try (PreparedStatement statement =
                          connection.prepareStatement(ProductTable.GetProductById.QUERY)) {
@@ -127,14 +120,13 @@ class ProductDB implements ProductStore {
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    product = productFromResult(result);
+                    return productFromResult(result);
                 } else
                     throw new ProductStoreException("Product not found: " + id);
             }
         } catch (SQLException e) {
             throw new ProductStoreException(e);
         }
-        return product;
     }
 
     @Override
@@ -163,7 +155,7 @@ class ProductDB implements ProductStore {
         try (Connection connection = Database.getConnection()) {
             connection.setAutoCommit(false);
             try (PreparedStatement statement =
-                         connection.prepareStatement(ProductTable.AddProduct.QUERY)) {
+                         connection.prepareStatement(ProductTable.AddProduct.QUERY, Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setInt(ProductTable.AddProduct.IN.COST, product.getCost());
                 statement.setInt(ProductTable.AddProduct.IN.COUNT, product.getCount());
