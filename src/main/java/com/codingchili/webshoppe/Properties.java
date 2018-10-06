@@ -18,9 +18,9 @@ public class Properties {
     private static ObjectMapper mapper = new ObjectMapper()
             .configure(SerializationFeature.INDENT_OUTPUT, true);
     private static Properties properties;
-    private String jdbcUrl = "jdbc:mysql://192.168.10.129:3306/WebShop?useSSL=false";
+    private String jdbcUrl = "jdbc:mysql://localhost:3306/webshop?useSSL=false";
     private String databaseUser = "root";
-    private String databasePass = "root";
+    private String databasePass = "";
     private String swishReceiver = "0737557200";
 
     static {

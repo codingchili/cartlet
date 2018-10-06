@@ -9,7 +9,7 @@ import org.junit.*;
  * Tests a logged on users cart.
  */
 
-public class CartManagerTest {
+public class CartManagerIT {
     private static final int COUNT = 1;
     private static final String USERNAME = "000000000";
     private static final String PASS = "PASSWORD_TEST_PASSWORD";

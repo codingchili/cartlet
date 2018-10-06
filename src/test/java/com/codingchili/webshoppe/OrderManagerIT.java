@@ -7,9 +7,8 @@ import org.junit.Test;
 
 /**
  * Created by Robin on 2015-10-01.
- *
  */
-public class OrderManagerTest {
+public class OrderManagerIT {
     private static final int PRODUCT_ID = 1;
     private static final int PRODUCT_COUNT = 2;
     private static Account account;
@@ -47,7 +46,7 @@ public class OrderManagerTest {
         CartManager.clearCart(account);
         OrderList orderList = OrderManager.getOrders(account);
 
-        for (Order order: orderList.getItems()) {
+        for (Order order : orderList.getItems()) {
             Order byId = OrderManager.getOrderById(account, order.getOrderId());
 
             if (byId.getProducts() == null) {
@@ -75,21 +74,19 @@ public class OrderManagerTest {
     @Test
     public void shouldGetOrderToPack() throws Exception {
         CartManager.addToCart(product, 1, account);
-        if (OrderManager.createOrder(account)) {
-            Order order = OrderManager.getOrderForShipping();
+        OrderManager.createOrder(account);
+        Order order = OrderManager.getOrderForShipping();
 
-            if (order.getProducts().size() == 0) {
-                throw new Exception("Order to pack is empty.");
-            }
+        if (order.getProducts().size() == 0) {
+            throw new Exception("Order to pack is empty.");
+        }
 
-            if (order.getAccount() == null) {
-                throw new Exception("No account associated with Order.");
-            }
+        if (order.getAccount() == null) {
+            throw new Exception("No account associated with Order.");
+        }
 
-            if (ProductManager.findProductById(product.getId()).getCount() == product.getCount()) {
-                throw new Exception("Packing order does not deduct stock.");
-            }
-        } else
-            throw new Exception("Failed to create the order.");
+        if (ProductManager.findProductById(product.getId()).getCount() == product.getCount()) {
+            throw new Exception("Packing order does not deduct stock.");
+        }
     }
 }

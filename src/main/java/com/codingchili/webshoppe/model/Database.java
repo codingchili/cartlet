@@ -1,14 +1,12 @@
 package com.codingchili.webshoppe.model;
 
 import com.codingchili.webshoppe.Properties;
-import com.codingchili.webshoppe.model.exception.OrderStoreException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.function.BiConsumer;
 
 /**
  * Created by Robin on 2015-09-28.

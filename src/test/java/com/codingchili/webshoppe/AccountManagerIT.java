@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Tests for the authenticator used for the AccountStore.
  */
 
-public class AccountManagerTest {
+public class AccountManagerIT {
     private final static String ZIP = "137 32 SE";
     private final static String STREET = "Teststreet 1";
     private final static String USER_SHORT = ".";

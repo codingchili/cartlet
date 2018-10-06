@@ -60,9 +60,9 @@ Preload a new database with the file `database.sql`.
 The default configuration looks like,
 ```
 {
-  "jdbcUrl" : "jdbc:mysql://192.168.10.129:3306/webshop?useSSL=false",
+  "jdbcUrl" : "jdbc:mysql://localhost:3306/webshop?useSSL=false",
   "databaseUser" : "root",
-  "databasePass" : "root",
+  "databasePass" : "",
   "swishReceiver" : "07372151522"
 }
 ``` 

@@ -15,7 +15,7 @@ import java.util.List;
  * Tests the product info.
  */
 
-public class ProductManagerTest {
+public class ProductManagerIT {
     private static final int PRODUCT_ID = 1;
     private static final int PRODUCT_CATEGORY = 1;
 
@@ -29,7 +29,7 @@ public class ProductManagerTest {
 
     @Test
     public void findProductByName() throws Exception {
-        List<Product> products = ProductManager.findProductsByName("s");
+        List<Product> products = ProductManager.findProductsByName("shark");
 
         if (products.size() == 0) {
             throw new Exception("No books returned for query with \"s\".");
