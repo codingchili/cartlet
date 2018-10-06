@@ -4,7 +4,7 @@ dist: trusty
 jdk: oraclejdk8
 install: true
 script:
-- "./gradlew jar"
+- "./gradlew build"
 notifications:
   email: true
 before_cache:
