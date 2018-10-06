@@ -13,7 +13,7 @@ interface OrderStore {
      * @param account owning the cart to be ordered.
      * @throws OrderStoreException when the store failed.
      */
-    void createOrder(Account account) throws OrderStoreException;
+    int createOrder(Account account) throws OrderStoreException;
 
     /**
      * Retrieve all the orders associated with an account.

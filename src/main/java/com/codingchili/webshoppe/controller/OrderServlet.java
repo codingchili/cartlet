@@ -25,7 +25,6 @@ public class OrderServlet extends HttpServlet {
                 req.setAttribute("order", OrderManager.getOrderById(Session.getAccount(req), orderId));
                 Forwarding.to("order.jsp", req, resp);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
                 req.setAttribute("message", "Failed to load order details, try later.");
                 Forwarding.to("error.jsp", req, resp);
             }

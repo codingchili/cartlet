@@ -59,7 +59,7 @@
                     <input type="hidden" name="product" value="${product.id}">
                 </div>
 
-                <button class="btn btn-primary btn-block">Buy</button>
+                <button class="btn btn-primary btn-block"><i class="fas fa-cart-plus"></i></button>
             </form>
         </div>
     </div>

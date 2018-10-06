@@ -35,10 +35,10 @@ public class ImageServlet extends HttpServlet {
                 resp.setContentType(getContentType(data));
                 data = stripContentType(data);
 
-                OutputStream out = resp.getOutputStream();
-                byte[] bytes = Base64.getDecoder().decode(data);
-                out.write(bytes);
-                out.close();
+                try (OutputStream out = resp.getOutputStream()) {
+                    byte[] bytes = Base64.getDecoder().decode(data);
+                    out.write(bytes);
+                }
             }
         } catch (NumberFormatException | ProductStoreException e) {
             Forwarding.to("/img/placeholder.svg", req, resp);

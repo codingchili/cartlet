@@ -25,6 +25,8 @@ dependencies {
     compile 'mysql:mysql-connector-java:8.0.12'
     compile 'com.zaxxer:HikariCP:3.1.0'
 
+    compile 'io.vertx:vertx-core:3.5.4'
+
     compile 'io.undertow:undertow-core:2.0.13.Final'
     compile 'io.undertow:undertow-servlet:2.0.13.Final'
 

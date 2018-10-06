@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /**
  * Created by Robin on 2015-10-01.
- *
+ * <p>
  * Handles the updating and display of the cart.
  */
 
@@ -48,13 +48,12 @@ public class CartServlet extends HttpServlet {
     }
 
     private void createOrder(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        boolean created = OrderManager.createOrder(Session.getAccount(req));
-
-        if (created) {
+        try {
+            int orderId = OrderManager.createOrder(Session.getAccount(req));
             CartManager.clearCart(Session.getAccount(req));
-            req.setAttribute("message", "The order was placed successfully.");
-            Forwarding.to("success.jsp", req, resp);
-        } else {
+            req.getSession().setAttribute("order", OrderManager.getOrderById(Session.getAccount(req), orderId));
+            Forwarding.to("swish.jsp", req, resp);
+        } catch (Exception e) {
             req.setAttribute("message", "Failed to place the order right now, try later.");
             Forwarding.to("error.jsp", req, resp);
         }

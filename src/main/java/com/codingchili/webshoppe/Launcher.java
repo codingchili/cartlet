@@ -11,9 +11,9 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import io.undertow.servlet.util.DefaultClassIntrospector;
 
-import javax.servlet.*;
+import javax.servlet.DispatcherType;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,30 +23,6 @@ import java.util.stream.Stream;
  */
 public class Launcher {
 
-    public static void mainX(String[] args) throws ServletException {
-        DeploymentInfo servletBuilder = Servlets.deployment()
-                .setClassLoader(Launcher.class.getClassLoader())
-                .setContextPath("/myapp")
-                .setDeploymentName("test.war")
-                .addServlets(
-                        Servlets.servlet("MessageServlet", LoginServlet.class)
-                                .addMapping("/*"));
-
-        // static resources?
-        // how to exec jsp?
-
-        DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);
-        manager.deploy();
-
-        PathHandler path = Handlers.path(Handlers.redirect("/myapp"))
-                .addPrefixPath("/myapp", manager.start());
-
-        Undertow server = Undertow.builder()
-                .addHttpListener(8080, "localhost")
-                .setHandler(path)
-                .build();
-        server.start();
-    }
 
     public static void main(String[] args) throws ServletException {
         final PathHandler servletPath = new PathHandler();
@@ -78,7 +54,7 @@ public class Launcher {
         servletPath.addPrefixPath(builder.getContextPath(), manager.start());
 
         Undertow server = Undertow.builder()
-                .addHttpListener(8080, "localhost")
+                .addHttpListener(8080, "0.0.0.0")
                 .setHandler(servletPath)
                 .build();
         server.start();
@@ -101,7 +77,8 @@ public class Launcher {
                 ProcessServlet.class,
                 ProductCategoryServlet.class,
                 RegisterServlet.class,
-                StorageServlet.class
+                StorageServlet.class,
+                SwishServlet.class
         )
         .map(servlet -> {
             ServletInfo info = Servlets.servlet(servlet);

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 class OrderDB implements OrderStore {
     @Override
-    public void createOrder(Account account) throws OrderStoreException {
+    public int createOrder(Account account) throws OrderStoreException {
         try (Connection connection = Database.getConnection()) {
             connection.setAutoCommit(false);
             int orderId = -1;
@@ -44,6 +44,7 @@ class OrderDB implements OrderStore {
                 statement.execute();
             }
             connection.commit();
+            return orderId;
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }
@@ -84,8 +85,6 @@ class OrderDB implements OrderStore {
 
     @Override
     public Order getOrderById(Account account, int orderId) throws OrderStoreException {
-        Order order = new Order();
-
         try (Connection connection = Database.getConnection()) {
             try (PreparedStatement statement =
                     connection.prepareStatement(OrderTable.GetOrder.QUERY)) {
@@ -96,14 +95,16 @@ class OrderDB implements OrderStore {
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    order = orderFromResult(result);
+                    Order order = orderFromResult(result);
                     order.setProducts(getOrderItems(order.getOrderId()));
+                    return order;
+                } else {
+                    throw new OrderStoreException("Unable to find the order.");
                 }
             }
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }
-        return order;
     }
 
     @Override
