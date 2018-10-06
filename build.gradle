@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'war'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -36,4 +35,18 @@ dependencies {
     compile 'org.jboss.metadata:jboss-metadata-web:11.0.0.Final'
 
     testCompile 'junit:junit:4.12'
+}
+
+jar {
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'com.codingchili.webshoppe.Launcher'
+        )
+    }
 }
