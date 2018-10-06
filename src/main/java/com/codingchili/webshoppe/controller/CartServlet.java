@@ -1,14 +1,10 @@
 package com.codingchili.webshoppe.controller;
 
-import com.codingchili.webshoppe.model.CartManager;
-import com.codingchili.webshoppe.model.OrderManager;
-import com.codingchili.webshoppe.model.Product;
+import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 /**
@@ -37,6 +33,7 @@ public class CartServlet extends HttpServlet {
 
     private void clearCart(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CartManager.clearCart(Session.getAccount(req));
+        req.getSession().setAttribute("cart", new Cart(Session.getAccount(req)));
         Forwarding.to("cart.jsp", req, resp);
     }
 
@@ -44,19 +41,34 @@ public class CartServlet extends HttpServlet {
         Product product = new Product();
         product.setId(Integer.parseInt(req.getParameter("product")));
         CartManager.removeFromCart(product, Session.getAccount(req));
+        updateCart(req);
         Forwarding.to("cart.jsp", req, resp);
     }
 
     private void createOrder(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            int orderId = OrderManager.createOrder(Session.getAccount(req));
+            Account account = Session.getAccount(req);
+            int orderId = OrderManager.createOrder(account);
             CartManager.clearCart(Session.getAccount(req));
-            req.getSession().setAttribute("order", OrderManager.getOrderById(Session.getAccount(req), orderId));
+
+            HttpSession session = req.getSession();
+            session.setAttribute("order",
+                    OrderManager.getOrderById(account, orderId));
+
+            session.setAttribute("cart", new Cart(account));
+
             Forwarding.to("swish.jsp", req, resp);
         } catch (Exception e) {
             req.setAttribute("message", "Failed to place the order right now, try later.");
             Forwarding.to("error.jsp", req, resp);
         }
+    }
+
+    private void updateCart(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        session.setAttribute("cart",
+                        CartManager.getCart((Account)
+                                session.getAttribute("account")));
     }
 
     @Override

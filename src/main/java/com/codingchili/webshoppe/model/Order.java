@@ -1,6 +1,7 @@
 package com.codingchili.webshoppe.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-10-01.
@@ -13,7 +14,7 @@ public class Order implements Bean {
     private String changed;
     private String created;
     private Account account;
-    private ArrayList<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     public Order() {
     }
@@ -58,11 +59,11 @@ public class Order implements Bean {
         this.status = status;
     }
 
-    public ArrayList<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    protected void setProducts(ArrayList<Product> products) {
+    protected void setProducts(List<Product> products) {
         this.products = products;
     }
 

@@ -39,14 +39,14 @@
                 </p>
 
                 <p>
-                    <textarea class="form-control" rows="12" name="description">${product.description}</textarea>
+                    <textarea style="height:156px;" class="form-control" rows="12" name="description">${product.description}</textarea>
                 </p>
 
             </div>
         </div>
 
         <div class="row">
-            <div class="col-4 offset-2 col-sm-2 offset-sm-3">
+            <div class="col-4 offset-2 col-sm-2 offset-sm-5">
                 <input type="text" class="form-control text-red" name="cost" value="${product.cost}">
             </div>
             <div class="" style="font-size: 22px;">
@@ -55,9 +55,9 @@
         </div>
 
         <div class="row buy-form">
-            <div class="col-6 offset-3">
+            <div class="col-6 col-md-4 offset-3 offset-md-4">
                 <div class="form-group">
-                    <label for="quantity" class="control-label">Modify stock +/-</label>
+                    <label for="quantity" class="control-label">Stock +/-</label>
                     <input type="text" class="form-control" id="quantity" name="quantity" value="0" autofocus="true">
                 </div>
                 <button class="btn btn-primary btn-block">Apply</button>

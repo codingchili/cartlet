@@ -24,7 +24,7 @@ CREATE TABLE account (
   product INT NOT NULL,
   owner INT NOT NULL,
   count INT NOT NULL,
-  PRIMARY KEY (product, owner));
+  PRIMARY KEY (owner, product));
 
 CREATE TABLE product_category (
   product INT NOT NULL,

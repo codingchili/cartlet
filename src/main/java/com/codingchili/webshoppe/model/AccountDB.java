@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Robin on 2015-09-28.
- *
+ * <p>
  * Uses a database connection to Implement an AccountStore.
  */
 
@@ -15,13 +15,11 @@ class AccountDB implements AccountStore {
 
     @Override
     public boolean exists(String username) throws AccountStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(AccountTable.Exists.QUERY)) {
-
+        try {
+            return Database.prepared(AccountTable.Exists.QUERY, (connection, statement) -> {
                 statement.setString(AccountTable.Exists.IN.NAME, username);
                 return statement.executeQuery().getInt(0) != 0;
-            }
+            });
         } catch (SQLException e) {
             throw new AccountStoreException(e);
         }
@@ -29,10 +27,8 @@ class AccountDB implements AccountStore {
 
     @Override
     public void add(Account account) throws AccountStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(AccountTable.Add.QUERY)) {
-
+        try {
+            Database.prepared(AccountTable.Add.QUERY, (connection, statement) -> {
                 statement.setString(AccountTable.Add.IN.NAME, account.getUsername());
                 statement.setString(AccountTable.Add.IN.PASSWORD, account.getPassword());
                 statement.setString(AccountTable.Add.IN.SALT, account.getSalt());
@@ -40,7 +36,8 @@ class AccountDB implements AccountStore {
                 statement.setString(AccountTable.Add.IN.STREET, account.getStreet());
                 statement.setInt(AccountTable.Add.IN.ROLE, account.getRole().getId());
                 statement.execute();
-            }
+                return null;
+            });
         } catch (SQLException e) {
             if (e instanceof SQLIntegrityConstraintViolationException) {
                 throw new AccountExistsException(e);
@@ -53,10 +50,8 @@ class AccountDB implements AccountStore {
 
     @Override
     public Account findByUsername(String username) throws AccountStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(AccountTable.FindByName.QUERY)) {
-
+        try {
+            return Database.prepared(AccountTable.FindByName.QUERY, (connection, statement) -> {
                 statement.setString(AccountTable.FindByName.IN.NAME, username);
                 ResultSet result = statement.executeQuery();
 
@@ -64,9 +59,8 @@ class AccountDB implements AccountStore {
                     return accountFromResult(result);
                 } else
                     throw new NoSuchAccountException("User not found: " + username);
-            }
+            });
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new AccountStoreException(e);
         }
     }
@@ -84,18 +78,18 @@ class AccountDB implements AccountStore {
 
     @Override
     public void deRegister(Account account) throws AccountStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                    connection.prepareStatement(AccountTable.RemoveById.QUERY)) {
-
+        try {
+            Database.prepared(AccountTable.RemoveById.QUERY, (connection, statement) -> {
                 statement.setInt(AccountTable.RemoveById.IN.ACCOUNT_ID, account.getId());
                 statement.execute();
 
-                if (statement.getUpdateCount() == 0)
+                if (statement.getUpdateCount() == 0) {
                     throw new NoSuchAccountException("Account not found: " + account.getUsername());
-            }
+                } else {
+                    return null;
+                }
+            });
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new AccountStoreException(e);
         }
     }
@@ -103,41 +97,35 @@ class AccountDB implements AccountStore {
     @Override
     public ArrayList<Account> getManagers() throws AccountStoreException {
         ArrayList<Account> managers = new ArrayList<>();
-
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                    connection.prepareStatement(AccountTable.GetManagers.QUERY)) {
-
+        try {
+            Database.prepared(AccountTable.GetManagers.QUERY, (connection, statement) -> {
                 ResultSet result = statement.executeQuery();
 
                 while (result.next()) {
                     managers.add(accountFromResult(result));
                 }
-            }
+                return null;
+            });
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new AccountStoreException(e);
         }
         return managers;
     }
 
     protected Account findById(int accountId) throws AccountStoreException {
-        Account account = new Account();
-
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                    connection.prepareStatement(AccountTable.FindById.QUERY)) {
+        try {
+            return Database.prepared(AccountTable.FindById.QUERY, (connection, statement) -> {
                 statement.setInt(AccountTable.FindById.IN.ACCOUNT_ID, accountId);
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    account = accountFromResult(result);
+                    return accountFromResult(result);
+                } else {
+                    throw new AccountStoreException("account does not exist");
                 }
-            }
+            });
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new AccountStoreException(e);
         }
-        return account;
     }
 }

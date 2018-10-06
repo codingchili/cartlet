@@ -5,5 +5,5 @@ package com.codingchili.webshoppe.model.exception;
  *
  * Thrown when a requested order does not exist.
  */
-public class NoSuchOrderException extends Exception {
+public class NoSuchOrderException extends RuntimeException {
 }

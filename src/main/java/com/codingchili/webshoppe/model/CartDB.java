@@ -25,18 +25,15 @@ class CartDB implements CartStore {
         } else if (productsInCart > 0) {
             updateCartCount(product, count + productsInCart, account);
         } else {
-            try (Connection connection = Database.getConnection()) {
-                try (PreparedStatement statement =
-                             connection.prepareStatement(CartTable.AddToCart.QUERY)) {
-
-                    statement.setInt(CartTable.AddToCart.IN.COUNT,
-                            count + getProductCountInCart(product,
-                                    account));
+            try {
+                Database.prepared(CartTable.AddToCart.QUERY, (connection, statement) -> {
+                    statement.setInt(CartTable.AddToCart.IN.COUNT, count + productsInCart);
 
                     statement.setInt(CartTable.AddToCart.IN.OWNER, account.getId());
                     statement.setInt(CartTable.AddToCart.IN.PRODUCT, product.getId());
                     statement.execute();
-                }
+                    return null;
+                });
             } catch (SQLException e) {
                 throw new CartStoreException(e);
             }
@@ -44,54 +41,46 @@ class CartDB implements CartStore {
     }
 
     private void updateCartCount(Product product, int count, Account account) throws CartStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(CartTable.UpdateCartCount.QUERY)) {
-
+        try {
+            Database.prepared(CartTable.UpdateCartCount.QUERY, (connection, statement) -> {
                 statement.setInt(CartTable.UpdateCartCount.IN.COUNT, count);
                 statement.setInt(CartTable.UpdateCartCount.IN.PRODUCT, product.getId());
                 statement.setInt(CartTable.UpdateCartCount.IN.OWNER, account.getId());
                 statement.execute();
-            }
-
+                return null;
+            });
         } catch (SQLException e) {
             throw new CartStoreException(e);
         }
     }
 
     private int getProductCountInCart(Product product, Account account) throws CartStoreException {
-        int count;
-
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(CartTable.ProductIdCount.QUERY)) {
-
+        try {
+            return Database.prepared(CartTable.ProductIdCount.QUERY, (connection, statement) -> {
                 statement.setInt(CartTable.ProductIdCount.IN.OWNER, account.getId());
                 statement.setInt(CartTable.ProductIdCount.IN.PRODUCT, product.getId());
 
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    count = result.getInt(CartTable.ProductIdCount.OUT.COUNT);
+                    return result.getInt(CartTable.ProductIdCount.OUT.COUNT);
                 } else
-                    count = 0;
-            }
+                    return 0;
+            });
         } catch (SQLException e) {
             throw new CartStoreException(e);
         }
-        return count;
     }
 
     @Override
     public void removeFromCart(Product product, Account account) throws CartStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(CartTable.RemoveFromCart.QUERY)) {
-
+        try {
+            Database.prepared(CartTable.RemoveFromCart.QUERY, (connection, statement) -> {
                 statement.setInt(CartTable.RemoveFromCart.IN.OWNER, account.getId());
                 statement.setInt(CartTable.RemoveFromCart.IN.PRODUCT, product.getId());
                 statement.execute();
-            }
+                return null;
+            });
         } catch (SQLException e) {
             throw new CartStoreException(e);
         }
@@ -99,13 +88,12 @@ class CartDB implements CartStore {
 
     @Override
     public void clearCart(Account account) throws CartStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(CartTable.ClearCart.QUERY)) {
-
+        try {
+            Database.prepared(CartTable.ClearCart.QUERY, (connection, statement) -> {
                 statement.setInt(CartTable.ClearCart.IN.OWNER, account.getId());
                 statement.execute();
-            }
+                return null;
+            });
         } catch (SQLException e) {
             throw new CartStoreException(e);
         }
@@ -113,43 +101,34 @@ class CartDB implements CartStore {
 
     @Override
     public int productCount(Account account) throws CartStoreException {
-        int count;
-
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(CartTable.ProductCount.QUERY)) {
-
+        try {
+            return Database.prepared(CartTable.ProductCount.QUERY, (connection, statement) -> {
                 statement.setInt(CartTable.ProductCount.IN.OWNER, account.getId());
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
-                    count = result.getInt(CartTable.ProductCount.OUT.COUNT);
+                    return result.getInt(CartTable.ProductCount.OUT.COUNT);
                 } else
-                    count = 0;
-            }
+                    return 0;
+            });
         } catch (SQLException e) {
             throw new CartStoreException(e);
         }
-        return count;
     }
 
     @Override
     public Cart getCart(Account account) throws StoreException {
-        Cart cart = new Cart();
-        cart.setOwner(account);
-
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                         connection.prepareStatement(CartTable.GetCart.QUERY)) {
-
+        try {
+            return Database.prepared(CartTable.GetCart.QUERY, (connection, statement) -> {
                 statement.setInt(CartTable.GetCart.IN.OWNER, account.getId());
                 ResultSet result = statement.executeQuery();
-                cart = cartFromResult(result);
-            }
+                Cart cart =cartFromResult(result);
+                cart.setOwner(account);
+                return cart;
+            });
         } catch (SQLException e) {
             throw new CartStoreException(e);
         }
-        return cart;
     }
 
     private Cart cartFromResult(ResultSet result) throws SQLException, ProductStoreException {

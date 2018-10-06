@@ -40,7 +40,6 @@ public class LoginServlet extends HttpServlet implements ServletContextListener 
             Forwarding.to("login.jsp", req, resp);
         else {
             Session.authenticate(req, loginResult.getAccount());
-
             Forwarding.to("/products", req, resp);
         }
     }

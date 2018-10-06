@@ -32,18 +32,10 @@ abstract class Forwarding {
      */
     public static void to(String resource, HttpServletRequest req, HttpServletResponse resp) {
         try {
-            req = next(req);
+            req.setAttribute("categories", ProductManager.listCategories());
             req.getRequestDispatcher(resource).forward(req, resp);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static HttpServletRequest next(HttpServletRequest req) {
-        req.setAttribute("categories", ProductManager.listCategories());
-        if (Session.isAuthenticated(req)) {
-            req.getSession().setAttribute("cart", CartManager.getCart((Account) req.getSession().getAttribute("account")));
-        }
-        return req;
     }
 }

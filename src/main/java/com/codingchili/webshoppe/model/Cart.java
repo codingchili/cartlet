@@ -12,7 +12,11 @@ public class Cart implements Bean {
     private ArrayList<Product> items = new ArrayList<>();
     private Account owner;
 
-    protected Cart() {}
+    public Cart() {}
+
+    public Cart(Account account) {
+        owner = account;
+    }
 
     public ArrayList<Product> getItems() {
         return items;

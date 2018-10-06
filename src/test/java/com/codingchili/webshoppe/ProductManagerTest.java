@@ -7,6 +7,7 @@ import com.codingchili.webshoppe.model.ProductManager;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-30.
@@ -20,7 +21,7 @@ public class ProductManagerTest {
 
     @Test
     public void retrieveAllCategories() throws Exception {
-        ArrayList<Category> categories = ProductManager.listCategories();
+        List<Category> categories = ProductManager.listCategories();
 
         if (categories.size() == 0)
             throw new Exception("No categories returned from CategoryInfo!");
@@ -28,7 +29,7 @@ public class ProductManagerTest {
 
     @Test
     public void findProductByName() throws Exception {
-        ArrayList<Product> products = ProductManager.findProductsByName("s");
+        List<Product> products = ProductManager.findProductsByName("s");
 
         if (products.size() == 0) {
             throw new Exception("No books returned for query with \"s\".");
@@ -48,7 +49,7 @@ public class ProductManagerTest {
     public void findProductsByCategory() throws Exception {
         Category category = new Category();
         category.setCategoryId(PRODUCT_CATEGORY);
-        ArrayList<Product> products = ProductManager.findProductsByCategory(category);
+        List<Product> products = ProductManager.findProductsByCategory(category);
 
         if (products.size() == 0) {
             throw new Exception("Could not find any products with Category = " + PRODUCT_CATEGORY);
@@ -58,7 +59,7 @@ public class ProductManagerTest {
     @Test
     public void shouldUpdateProduct() throws Exception {
         ProductManager.addProduct("new-prod", "this.new.prod", 1, 1, 1);
-        ArrayList<Product> products = ProductManager.findProductsByName("new-prod");
+        List<Product> products = ProductManager.findProductsByName("new-prod");
 
         for (Product product: products) {
             ProductManager.updateProduct(product.getId(), 2, 2, "new-name", "new-desc");
@@ -74,7 +75,7 @@ public class ProductManagerTest {
     @Test
     public void shouldAddProduct() throws Exception {
         ProductManager.addProduct("new-prod", "this.new.prod", 1, 1, 1);
-        ArrayList<Product> product = ProductManager.findProductsByName("new-prod");
+        List<Product> product = ProductManager.findProductsByName("new-prod");
 
         if (product.size() == 0) {
             throw new Exception("Product was not added to store.");
@@ -84,7 +85,7 @@ public class ProductManagerTest {
     @Test
     public void shouldAddCategory() throws Exception {
         ProductManager.addCategory("cat_name");
-        ArrayList<Category> categories = ProductManager.listCategories();
+        List<Category> categories = ProductManager.listCategories();
         boolean exists = false;
 
         for (Category category: categories) {
@@ -104,7 +105,7 @@ public class ProductManagerTest {
         ProductManager.setProductImage(product.getId(), "IMAGE");
 
         product = ProductManager.findProductById(product.getId());
-        Image image = ProductManager.getProductImage(product.getFrontImage());
+        Image image = ProductManager.getProductImage(product.getImageId());
 
         if (!image.getData().equals("IMAGE")) {
             throw new Exception("Image not retrieved.");

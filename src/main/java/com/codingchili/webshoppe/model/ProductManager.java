@@ -3,6 +3,7 @@ package com.codingchili.webshoppe.model;
 import com.codingchili.webshoppe.model.exception.NoSuchProductException;
 import com.codingchili.webshoppe.model.exception.ProductStoreException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  */
 
 abstract public class ProductManager {
+    private static List<Category> categories = new ArrayList<>();
 
     /**
      * @return a list of all product categories,
@@ -19,8 +21,11 @@ abstract public class ProductManager {
      * empty list is returned.
      */
     public static List<Category> listCategories() {
-        ProductStore store = Store.getProductStore();
-        return store.listCategories();
+        if (categories.isEmpty()) {
+            ProductStore store = Store.getProductStore();
+            categories = store.listCategories();
+        }
+        return categories;
     }
 
     /**
@@ -104,6 +109,7 @@ abstract public class ProductManager {
      */
     public static void addCategory(String category) throws ProductStoreException {
         Store.getProductStore().addCategory(category);
+        categories.clear();
     }
 
     /**

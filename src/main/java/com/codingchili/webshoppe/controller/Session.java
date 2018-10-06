@@ -1,7 +1,6 @@
 package com.codingchili.webshoppe.controller;
 
-import com.codingchili.webshoppe.model.Account;
-import com.codingchili.webshoppe.model.Role;
+import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,6 +20,7 @@ public class Session implements HttpSessionListener {
         HttpSession session = req.getSession(true);
         session.setMaxInactiveInterval(SESSION_AUTHENTICATED_TIMEOUT);
         session.setAttribute("account", account);
+        session.setAttribute("cart", new Cart(account));
     }
 
     public static void deAuthenticate(HttpServletRequest req) {

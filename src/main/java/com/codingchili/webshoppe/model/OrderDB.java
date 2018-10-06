@@ -8,43 +8,45 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by Robin on 2015-10-01.
- *
+ * <p>
  * Implementation of the OrderStore using MySQL for storage.
  */
 
 class OrderDB implements OrderStore {
     @Override
     public int createOrder(Account account) throws OrderStoreException {
-        try (Connection connection = Database.getConnection()) {
-            connection.setAutoCommit(false);
-            int orderId = -1;
+        try {
+            return Database.prepared(OrderTable.CreateOrder.QUERY, (connection, create) -> {
+                connection.setAutoCommit(false);
+                int orderId = -1;
 
-            // Create the order post in order table.
-            try (PreparedStatement statement =
-                         connection.prepareStatement(OrderTable.CreateOrder.QUERY, Statement.RETURN_GENERATED_KEYS)) {
+                // Create the order post in order table.
+                create.setString(OrderTable.CreateOrder.IN.CREATED, getTimeStamp());
+                create.setString(OrderTable.CreateOrder.IN.CHANGED, getTimeStamp());
+                create.setInt(OrderTable.CreateOrder.IN.OWNER, account.getId());
+                create.execute();
 
-                statement.setString(OrderTable.CreateOrder.IN.CREATED, getTimeStamp());
-                statement.setString(OrderTable.CreateOrder.IN.CHANGED, getTimeStamp());
-                statement.setInt(OrderTable.CreateOrder.IN.OWNER, account.getId());
-                statement.execute();
+                ResultSet result = create.getGeneratedKeys();
 
-                ResultSet result = statement.getGeneratedKeys();
-
-                if (result.next())
+                if (result.next()) {
                     orderId = result.getInt(OrderTable.CreateOrder.OUT.ORDER_ID);
-            }
-            // Move all objects from the users cart to the order_product table.
-            try (PreparedStatement statement =
-                         connection.prepareStatement(OrderTable.CopyFromCart.QUERY)) {
-                statement.setInt(OrderTable.CopyFromCart.IN.ORDER, orderId);
-                statement.setInt(OrderTable.CopyFromCart.IN.OWNER, account.getId());
-                statement.execute();
-            }
-            connection.commit();
-            return orderId;
+                }
+
+                // Move all objects from the users cart to the order_product table.
+                try (PreparedStatement move =
+                             connection.prepareStatement(OrderTable.CopyFromCart.QUERY)) {
+                    move.setInt(OrderTable.CopyFromCart.IN.ORDER, orderId);
+                    move.setInt(OrderTable.CopyFromCart.IN.OWNER, account.getId());
+                    move.execute();
+                }
+                connection.commit();
+                return orderId;
+            });
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }
@@ -52,13 +54,10 @@ class OrderDB implements OrderStore {
 
     @Override
     public OrderList getOrders(Account account) throws OrderStoreException {
-        ArrayList<Order> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
         OrderList list = new OrderList();
-
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.GetOrders.QUERY)) {
-
+        try {
+            Database.prepared(OrderTable.GetOrders.QUERY, (connection, statement) -> {
                 statement.setInt(OrderTable.GetOrders.IN.OWNER, account.getId());
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
@@ -66,7 +65,8 @@ class OrderDB implements OrderStore {
                     order.setProducts(getOrderItems(result.getInt(OrderTable.GetOrder.OUT.ORDER_ID)));
                     orders.add(order);
                 }
-            }
+                return orders;
+            });
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }
@@ -85,10 +85,8 @@ class OrderDB implements OrderStore {
 
     @Override
     public Order getOrderById(Account account, int orderId) throws OrderStoreException {
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.GetOrder.QUERY)) {
-
+        try {
+            return Database.prepared(OrderTable.GetOrder.QUERY, (connection, statement) -> {
                 statement.setInt(OrderTable.GetOrder.IN.ORDER_ID, orderId);
                 statement.setInt(OrderTable.GetOrder.IN.OWNER_ID, account.getId());
 
@@ -101,7 +99,7 @@ class OrderDB implements OrderStore {
                 } else {
                     throw new OrderStoreException("Unable to find the order.");
                 }
-            }
+            });
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }
@@ -109,22 +107,21 @@ class OrderDB implements OrderStore {
 
     @Override
     public void clearOrders(Account account) throws OrderStoreException {
-        try (Connection connection = Database.getConnection()) {
-            connection.setAutoCommit(false);
+        try {
+            Database.prepared(OrderTable.ClearOrders.CLEAR_ORDERS_ITEMS, (connection, items) -> {
+                connection.setAutoCommit(false);
 
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.ClearOrders.CLEAR_ORDERS_ITEMS)) {
-                statement.setInt(OrderTable.ClearOrders.IN.OWNER_ID, account.getId());
-                statement.execute();
-            }
+                items.setInt(OrderTable.ClearOrders.IN.OWNER_ID, account.getId());
+                items.execute();
 
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.ClearOrders.CLEAR_ORDERS)) {
-                statement.setInt(OrderTable.ClearOrders.IN.OWNER_ID, account.getId());
-                statement.execute();
-            }
-
-            connection.commit();
+                try (PreparedStatement orders =
+                             connection.prepareStatement(OrderTable.ClearOrders.CLEAR_ORDERS)) {
+                    orders.setInt(OrderTable.ClearOrders.IN.OWNER_ID, account.getId());
+                    orders.execute();
+                }
+                connection.commit();
+                return null;
+            });
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }
@@ -133,45 +130,45 @@ class OrderDB implements OrderStore {
     @Override
     public Order getOrderForShipping() throws OrderStoreException, NoSuchOrderException {
         Order order = new Order();
-        int ownerId;
+        AtomicReference<Integer> ownerId = new AtomicReference<>();
 
-        try (Connection connection = Database.getConnection()) {
-            connection.setAutoCommit(false);
+        try {
+            Database.prepared(OrderTable.GetOrderForShipping.QUERY, (connection, statement) -> {
+                connection.setAutoCommit(false);
 
-            // get an order ready for shipping
-            try (PreparedStatement statement =
-                         connection.prepareStatement(OrderTable.GetOrderForShipping.QUERY)) {
-
+                // get an order ready for shipping
                 ResultSet result = statement.executeQuery();
 
                 if (result.next()) {
                     order.setOrderId(result.getInt(OrderTable.GetOrderForShipping.OUT.ORDER_ID));
                     order.setCreated(result.getString(OrderTable.GetOrderForShipping.OUT.CREATED));
-                    ownerId = result.getInt(OrderTable.GetOrderForShipping.OUT.OWNER_ID);
-                } else
+                    ownerId.set(result.getInt(OrderTable.GetOrderForShipping.OUT.OWNER_ID));
+                } else {
                     throw new NoSuchOrderException();
-            }
+                }
 
-            // deduct the stock count
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.DeductStockByOrder.QUERY)) {
-                statement.setInt(OrderTable.DeductStockByOrder.IN.ORDER_ID1, order.getOrderId());
-                statement.setInt(OrderTable.DeductStockByOrder.IN.ORDER_ID2, order.getOrderId());
-                statement.execute();
-            }
+                // deduct the stock count
+                try (PreparedStatement stock =
+                             connection.prepareStatement(OrderTable.DeductStockByOrder.QUERY)) {
+                    stock.setInt(OrderTable.DeductStockByOrder.IN.ORDER_ID1, order.getOrderId());
+                    stock.setInt(OrderTable.DeductStockByOrder.IN.ORDER_ID2, order.getOrderId());
+                    stock.execute();
+                }
 
-            // update the order status
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.SetOrderStatus.QUERY)) {
-                statement.setInt(OrderTable.SetOrderStatus.IN.ORDER_ID, order.getOrderId());
-                statement.setInt(OrderTable.SetOrderStatus.IN.STATUS, Order.Status.SHIPPED);
-                statement.setString(OrderTable.SetOrderStatus.IN.CHANGED, getTimeStamp());
-                statement.execute();
-            }
+                // update the order status
+                try (PreparedStatement status =
+                             connection.prepareStatement(OrderTable.SetOrderStatus.QUERY)) {
+                    status.setInt(OrderTable.SetOrderStatus.IN.ORDER_ID, order.getOrderId());
+                    status.setInt(OrderTable.SetOrderStatus.IN.STATUS, Order.Status.SHIPPED);
+                    status.setString(OrderTable.SetOrderStatus.IN.CHANGED, getTimeStamp());
+                    status.execute();
+                }
 
-            connection.commit();
-            order.setProducts(getOrderItems(order.getOrderId()));
-            order.setAccount(new AccountDB().findById(ownerId));
+                connection.commit();
+                order.setProducts(getOrderItems(order.getOrderId()));
+                order.setAccount(new AccountDB().findById(ownerId.get()));
+                return null;
+            });
         } catch (SQLException | AccountStoreException e) {
             throw new OrderStoreException(e);
         }
@@ -179,21 +176,19 @@ class OrderDB implements OrderStore {
         return order;
     }
 
-    private ArrayList<Product> getOrderItems(int orderId) throws OrderStoreException {
-        ArrayList<Product> products = new ArrayList<>();
+    private List<Product> getOrderItems(int orderId) throws OrderStoreException {
+        List<Product> products = new ArrayList<>();
 
-        try (Connection connection = Database.getConnection()) {
-            try (PreparedStatement statement =
-                    connection.prepareStatement(OrderTable.GetOrderItems.QUERY)) {
-
+        try {
+            Database.prepared(OrderTable.GetOrderItems.QUERY, (connection, statement) -> {
                 statement.setInt(OrderTable.GetOrderItems.IN.ORDER_ID, orderId);
                 ResultSet result = statement.executeQuery();
 
                 while (result.next()) {
                     products.add(productFromResult(result));
                 }
-
-            }
+                return null;
+            });
         } catch (SQLException e) {
             throw new OrderStoreException(e);
         }

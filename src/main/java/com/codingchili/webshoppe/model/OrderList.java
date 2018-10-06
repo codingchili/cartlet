@@ -1,6 +1,7 @@
 package com.codingchili.webshoppe.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-10-01.
@@ -8,13 +9,13 @@ import java.util.ArrayList;
  * Used to list the items in an order as JSTL cannot handle generic lists.
  */
 public class OrderList {
-    private ArrayList<Order> items = new ArrayList<>();
+    private List<Order> items = new ArrayList<>();
 
-    public ArrayList<Order> getItems() {
+    public List<Order> getItems() {
         return items;
     }
 
-    protected void setItems(ArrayList<Order> items) {
+    protected void setItems(List<Order> items) {
         this.items = items;
     }
 

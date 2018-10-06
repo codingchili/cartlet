@@ -1,15 +1,9 @@
 package com.codingchili.webshoppe.controller;
 
-import com.codingchili.webshoppe.model.Account;
-import com.codingchili.webshoppe.model.CartManager;
-import com.codingchili.webshoppe.model.Product;
+import com.codingchili.webshoppe.model.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 /**
@@ -21,7 +15,7 @@ import java.io.IOException;
 @WebServlet("/buy")
 public class BuyServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
 
         if (Session.isAuthenticated(req)) {
@@ -30,7 +24,10 @@ public class BuyServlet extends HttpServlet {
                 Product product = new Product();
                 product.setId(Integer.parseInt(req.getParameter("product")));
 
-                CartManager.addToCart(product, count, (Account) session.getAttribute("account"));
+                Account account = (Account) session.getAttribute("account");
+                CartManager.addToCart(product, count, account);
+                session.setAttribute("cart", CartManager.getCart(account));
+
                 Forwarding.redirect("cart", resp);
             } catch (NumberFormatException e) {
                 req.setAttribute("message", "Failed to add product to cart.");

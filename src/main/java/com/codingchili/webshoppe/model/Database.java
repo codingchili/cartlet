@@ -59,6 +59,6 @@ class Database {
 
     @FunctionalInterface
     public interface QueryImplementation<E> {
-        E accept(Connection connection, PreparedStatement statement) throws SQLException;
+        E accept(Connection connection, PreparedStatement statement) throws RuntimeException, SQLException;
     }
 }
