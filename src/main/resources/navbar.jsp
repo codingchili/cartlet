@@ -49,7 +49,7 @@
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Search" name="search">
             </div>
-            <button type="submit" class="btn btn-primary" style="margin-left: 16px;"><i class="fas fa-search"></i>
+            <button type="submit" class="btn btn-warning" style="margin-left: 16px;"><i class="fas fa-search"></i>
             </button>
         </form>
     </div>
