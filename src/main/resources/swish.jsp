@@ -11,7 +11,7 @@
     <!-- pay with swish button -> onClick show the image -->
     <div class="col-10 offset-1">
         <a href="swish://payment?data={'version':1,'payee':{'value':'0737557122'},'amount':{'value': 200},message:{'value':'order 21'}}">
-            <img src="swish?orderId=${order.orderId}">
+            <img alt="Loading QR image from swish.." class="swish-qr" src="swish?orderId=${order.orderId}">
         </a>
     </div>
 

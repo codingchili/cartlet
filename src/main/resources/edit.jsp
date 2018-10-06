@@ -7,7 +7,7 @@
 
     <div class="col-12 card margin-top">
         <a href="view?product=${product.id}" class="text-success edit-product-icon">
-            <i class="far fa-save"></i>
+            <i class="fas fa-times"></i>
         </a>
 
         <div class="row">

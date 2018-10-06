@@ -37,6 +37,10 @@ legend {
     margin-top: 12px;
 }
 
+.swish-qr {
+    min-height: 40%;
+}
+
 .info-container {
     margin-top: 32px;
     margin-bottom: 32px;

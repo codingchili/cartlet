@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 
 <h2 class="badge-header">
-    <span class="badge badge-success">
+    <span class="alert alert-success">
         ${requestScope.message}
     </span>
 </h2>

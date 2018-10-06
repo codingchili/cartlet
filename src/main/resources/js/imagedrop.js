@@ -32,8 +32,10 @@ function onImageDrop(event) {
     var reader = new FileReader();
 
     reader.addEventListener('loadend', function (event, file) {
-        $('#product-image').attr("src", this.result);
-        $('#upload-file').val(this.result);
+        document.getElementById("product-image").src = this.result;
+        document.getElementById("upload-file").value = this.result;
+        /*$('#product-image').attr("src", this.result);
+        $('#upload-file').val(this.result);*/
     });
 
     reader.readAsDataURL(file);
