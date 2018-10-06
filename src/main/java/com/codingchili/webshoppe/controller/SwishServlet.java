@@ -1,5 +1,6 @@
 package com.codingchili.webshoppe.controller;
 
+import com.codingchili.webshoppe.Properties;
 import com.codingchili.webshoppe.model.*;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClientOptions;
@@ -73,7 +74,7 @@ public class SwishServlet extends HttpServlet {
                         .put("editable", false))
                 .put("payee",
                         new JsonObject()
-                                .put("value", "0737995522") // todo from messagebundle
+                                .put("value", Properties.get().getSwishReceiver())
                                 .put("editable", false))
                 .put("amount", new JsonObject()
                         .put("value", order.getTotal())

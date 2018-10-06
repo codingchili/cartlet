@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 
 /**
  * @author Robin Duda
+ *
+ * Bootstrap class for the web app.
  */
 public class Launcher {
 

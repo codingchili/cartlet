@@ -1,5 +1,6 @@
 package com.codingchili.webshoppe.model;
 
+import com.codingchili.webshoppe.Properties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -12,19 +13,17 @@ import java.sql.*;
  * with the use of connection pooling.
  */
 class Database {
-    private static final String HOST = "jdbc:mysql://192.168.10.129:3306/WebShop?useSSL=false";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
+
     private static HikariDataSource ds;
 
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-
+            Properties properties = Properties.get();
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(HOST);
-            config.setUsername(USER);
-            config.setPassword(PASSWORD);
+            config.setJdbcUrl(properties.getJdbcUrl());
+            config.setUsername(properties.getDatabaseUser());
+            config.setPassword(properties.getDatabasePass());
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("useServerPrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");

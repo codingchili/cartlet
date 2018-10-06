@@ -32,9 +32,7 @@ abstract public class ProductManager {
      */
     public static List<Product> findProductsByName(String name) {
         ProductStore store = Store.getProductStore();
-        long then = System.currentTimeMillis();
         List<Product> products = store.listProductsByName(name);
-        System.out.println("all products search completed in: " + (System.currentTimeMillis() - then) + " ms");
         return products;
     }
 

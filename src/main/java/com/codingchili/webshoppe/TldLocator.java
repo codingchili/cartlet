@@ -8,6 +8,8 @@ import org.jboss.metadata.javaee.spec.ParamValueMetaData;
 import org.jboss.metadata.parser.jsp.TldMetaDataParser;
 import org.jboss.metadata.parser.util.NoopXMLResolver;
 import org.jboss.metadata.web.spec.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -27,6 +29,8 @@ import java.util.jar.JarFile;
  * Original code taken from https://github.com/djotanov/undertow-jsp-template
  */
 public class TldLocator {
+    private static final Logger logger = LoggerFactory.getLogger(TldLocator.class);
+
     static HashMap<String, TagLibraryInfo> createTldInfos() {
         URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
         URL[] urls = loader.getURLs();
@@ -70,7 +74,7 @@ public class TldLocator {
                 }
             }
         }
-        System.out.println("Scanned JSP tld's in: " + (System.currentTimeMillis() - time) + "ms.");
+        logger.info("Scanned JSP tld's in: " + (System.currentTimeMillis() - time) + "ms.");
         return tagLibInfos;
     }
 
