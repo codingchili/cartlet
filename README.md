@@ -1,6 +1,6 @@
-# webshoppe
+# webshoppe [![Build Status](https://travis-ci.org/codingchili/webshoppe.svg?branch=master)](https://travis-ci.org/codingchili/webshoppe)
 
-A webshop project from 2015 rebooted.
+A webshop project from 2015 rebooted. 
 
 ![alt text](https://raw.githubusercontent.com/codingchili/webshoppe/master/scrapbook/2-styling-fixes.PNG "Current snapshot version")
 
