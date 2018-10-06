@@ -4,6 +4,8 @@ A webshop project from 2015 rebooted, demo https://www.youtube.com/watch?v=gUCBC
 
 ![alt text](https://raw.githubusercontent.com/codingchili/webshoppe/master/scrapbook/2-styling-fixes.PNG "Current snapshot version")
 
+[(swish payments!)](https://raw.githubusercontent.com/codingchili/webshoppe/master/scrapbook/3-swish-payments.png "Current snapshot version")
+
 ### Background
 
 The project is written as a java EE webshop application with the following stack
