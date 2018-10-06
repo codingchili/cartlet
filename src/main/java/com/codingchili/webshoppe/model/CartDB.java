@@ -158,11 +158,11 @@ class CartDB implements CartStore {
         while (result.next()) {
             Product product = new Product();
 
-            product.setId(result.getInt(CartTable.GetCart.OUT.PRODUCT));
+            product.setId(result.getInt(CartTable.GetCart.OUT.PRODUCT_ID));
             product.setName(result.getString(CartTable.GetCart.OUT.NAME));
             product.setCount(result.getInt(CartTable.GetCart.OUT.COUNT));
             product.setCost(result.getInt(CartTable.GetCart.OUT.COST));
-            product.setImageIds(new ProductDB().listProductImages(product));
+            product.setImageId(result.getInt(CartTable.GetCart.OUT.IMAGE_ID));
             cart.addProduct(product);
         }
 

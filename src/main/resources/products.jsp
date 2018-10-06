@@ -9,7 +9,7 @@
             <div class="product-header">${product.name}</div>
             <div class="panel-body">
                 <a href="view?product=${product.id}">
-                    <img src="image?id=${product.frontImage}" class="product-thumbnail-img">
+                    <img src="image/${product.imageId}" class="product-thumbnail-img">
                 </a>
                 <span class="text-red product-thumbnail-price">${product.cost} :-</span>
             </div>
@@ -18,7 +18,9 @@
                 <form method="POST" action="buy">
                     <input type="hidden" name="count" value="1">
                     <input type="hidden" name="product" value="${product.id}">
-                    <button class="btn btn-primary btn-block"><i class="fas fa-cart-plus"></i></button>
+                    <button class="btn btn-primary btn-block">
+                        <i class="fas fa-cart-plus"></i>
+                    </button>
                 </form>
             </div>
         </div>

@@ -24,7 +24,7 @@
         <tbody>
         <c:forEach items="${sessionScope.cart.items}" var="product">
             <tr>
-                <td class="align-middle"><img class="cart-thumbnail" src="image?id=${product.frontImage}"></td>
+                <td class="align-middle"><img class="cart-thumbnail" src="image/${product.imageId}"></td>
                 <td class="align-middle"><a href="view?product=${product.id}">${product.name}</a></td>
                 <td class="align-middle">${product.cost}</td>
                 <td class="align-middle">${product.count}</td>

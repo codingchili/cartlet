@@ -1,8 +1,5 @@
 package com.codingchili.webshoppe.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Robin on 2015-09-30.
  *
@@ -10,20 +7,13 @@ import java.util.List;
  */
 
 public class Product implements Bean {
-    private List<Integer> imageId = new ArrayList<>();
+    //private List<Integer> imageId = new ArrayList<>();
     private String name;
     private String description;
+    private int imageId = -1;
     private int id;
     private int count;
     private int cost;
-
-    public int getFrontImage() {
-        if (imageId.size() > 0)
-            return imageId.get(0);
-        else
-            return -1;
-    }
-
 
     public int getCost() {
         return cost;
@@ -69,11 +59,19 @@ public class Product implements Bean {
         this.id = id;
     }
 
-    public List<Integer> getImageIds() {
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    /*public List<Integer> getImageIds() {
         return imageId;
     }
 
     protected void setImageIds(List<Integer> imageId) {
         this.imageId = imageId;
-    }
+    }*/
 }

@@ -19,7 +19,7 @@
     <div class="row">
 
         <div class="col-8 offset-2 col-md-6 offset-md-3 col-lg-3 offset-lg-2">
-            <img src="image?id=${product.frontImage}" id="product-image">
+            <img src="image/${product.imageId}" id="product-image">
         </div>
 
         <div class="col-12 col-md-4 offset-md-2 col-xl-3 offset-xl-2">

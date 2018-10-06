@@ -51,6 +51,7 @@ CREATE TABLE product (
   description VARCHAR(255) NOT NULL,
   count INT NOT NULL DEFAULT 0,
   cost INT NOT NULL,
+  image INT NOT NULL DEFAULT -1,
   PRIMARY KEY (id));
   
 CREATE TABLE `order` (

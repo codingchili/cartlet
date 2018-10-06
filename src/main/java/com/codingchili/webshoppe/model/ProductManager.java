@@ -3,7 +3,6 @@ package com.codingchili.webshoppe.model;
 import com.codingchili.webshoppe.model.exception.NoSuchProductException;
 import com.codingchili.webshoppe.model.exception.ProductStoreException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ abstract public class ProductManager {
      * if the list could not be retrieved an
      * empty list is returned.
      */
-    public static ArrayList<Category> listCategories() {
+    public static List<Category> listCategories() {
         ProductStore store = Store.getProductStore();
         return store.listCategories();
     }
@@ -32,8 +31,7 @@ abstract public class ProductManager {
      */
     public static List<Product> findProductsByName(String name) {
         ProductStore store = Store.getProductStore();
-        List<Product> products = store.listProductsByName(name);
-        return products;
+        return store.listProductsByName(name);
     }
 
     /**

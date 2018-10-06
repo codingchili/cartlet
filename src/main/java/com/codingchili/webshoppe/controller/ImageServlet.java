@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
  * Handles the retrieval of product images from the database.
  */
 
-@WebServlet("/image")
+@WebServlet("/image/*")
 public class ImageServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            int imageId = Integer.parseInt(req.getParameter("id"));
+            int imageId = Integer.parseInt(req.getPathInfo().replaceFirst("/", ""));
 
             if (imageId == -1) {
                 Forwarding.to("/img/placeholder.svg", req, resp);
@@ -33,6 +33,8 @@ public class ImageServlet extends HttpServlet {
                 String data = image.getData();
 
                 resp.setContentType(getContentType(data));
+                resp.setHeader("Cache-Control", "max-age=900");
+
                 data = stripContentType(data);
 
                 try (OutputStream out = resp.getOutputStream()) {

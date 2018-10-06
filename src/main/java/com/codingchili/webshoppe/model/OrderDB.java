@@ -206,6 +206,7 @@ class OrderDB implements OrderStore {
         product.setCount(result.getInt(OrderTable.GetOrderItems.OUT.COUNT));
         product.setCost(result.getInt(OrderTable.GetOrderItems.OUT.COST));
         product.setName(result.getString(OrderTable.GetOrderItems.OUT.NAME));
+        product.setImageId(result.getInt(OrderTable.GetOrderItems.OUT.IMAGE));
         return product;
     }
 

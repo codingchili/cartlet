@@ -18,7 +18,7 @@
 
         <div class="row">
             <div id="drop-area" class="col-8 offset-2 col-md-6 offset-md-3 col-lg-3 offset-lg-2">
-                <img src="image?id=${product.frontImage}" id="product-image">
+                <img src="image/${product.imageId}" id="product-image">
                 <input type="hidden" id="upload-file" name="product-image" value="">
             </div>
 

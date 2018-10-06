@@ -71,7 +71,7 @@ abstract class CartTable {
 
     class GetCart {
         public static final String QUERY =
-                "SELECT product.id, cart.count, product.name, product.cost " +
+                "SELECT product.id, cart.count, product.name, product.cost, product.image " +
                 "FROM cart, product " +
                 "WHERE cart.owner = ? AND cart.product = product.id;";
 
@@ -80,10 +80,11 @@ abstract class CartTable {
         }
 
         class OUT {
-            public static final int PRODUCT = 1;
+            public static final int PRODUCT_ID = 1;
             public static final int COUNT = 2;
             public static final int NAME = 3;
             public static final int COST = 4;
+            public static final int IMAGE_ID = 5;
         }
     }
 }

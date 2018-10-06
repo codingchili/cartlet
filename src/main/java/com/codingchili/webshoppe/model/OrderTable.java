@@ -69,7 +69,7 @@ abstract class OrderTable {
 
     class GetOrderItems {
         public static final String QUERY =
-                "SELECT product.name, order_product.count, product.cost, product.id FROM order_product, product WHERE " +
+                "SELECT product.name, order_product.count, product.cost, product.id, product.image FROM order_product, product WHERE " +
                         "order_product.order = ? " +
                         "AND order_product.product = product.id;";
 
@@ -82,6 +82,7 @@ abstract class OrderTable {
             public static final int COUNT = 2;
             public static final int COST = 3;
             public static final int PRODUCT_ID = 4;
+            public static final int IMAGE = 5;
         }
     }
 

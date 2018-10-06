@@ -1,19 +1,23 @@
 package com.codingchili.webshoppe.model;
 
 import com.codingchili.webshoppe.Properties;
+import com.codingchili.webshoppe.model.exception.OrderStoreException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.function.BiConsumer;
 
 /**
  * Created by Robin on 2015-09-28.
- *
+ * <p>
  * Initializes the connector/driver for the MySQL Database
  * with the use of connection pooling.
  */
 class Database {
-
+    private static final Logger logger = LoggerFactory.getLogger(Database.class);
     private static HikariDataSource ds;
 
     static {
@@ -40,5 +44,21 @@ class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <E> E prepared(String query, QueryImplementation<E> consumer) throws SQLException {
+        long start = System.currentTimeMillis();
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                E result = consumer.accept(connection, preparedStatement);
+                logger.info("query - " + query + "\tcompleted in " + (System.currentTimeMillis() - start) + "ms.");
+                return result;
+            }
+        }
+    }
+
+    @FunctionalInterface
+    public interface QueryImplementation<E> {
+        E accept(Connection connection, PreparedStatement statement) throws SQLException;
     }
 }

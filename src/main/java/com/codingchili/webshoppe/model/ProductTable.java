@@ -43,6 +43,7 @@ abstract class ProductTable {
             public final static int DESCRIPTION = 3;
             public final static int COUNT = 4;
             public final static int COST = 5;
+            public final static int IMAGE_ID = 6;
         }
     }
 
@@ -108,13 +109,28 @@ abstract class ProductTable {
         }
     }
 
-    class SetProductImage {
+    class InsertProductImage {
         public final static String QUERY =
                 "REPLACE INTO image (product, data) VALUES (?, ?);";
+
+        class OUT {
+            public final static int IMAGE = 1;
+
+        }
 
         class IN {
             public final static int PRODUCT_ID = 1;
             public final static int IMAGE = 2;
+        }
+    }
+
+    class SetProductImage {
+        public final static String QUERY =
+                "UPDATE product SET image = ? WHERE id = ?;";
+
+        class IN {
+            public final static int IMAGE = 1;
+            public final static int PRODUCT_ID = 2;
         }
     }
 
