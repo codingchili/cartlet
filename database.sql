@@ -52,6 +52,8 @@ CREATE TABLE product (
   count INT NOT NULL DEFAULT 0,
   cost INT NOT NULL,
   image INT NOT NULL DEFAULT -1,
+  FULLTEXT ft_name (`name`),
+  FULLTEXT ft_description (description),
   PRIMARY KEY (id));
   
 CREATE TABLE `order` (

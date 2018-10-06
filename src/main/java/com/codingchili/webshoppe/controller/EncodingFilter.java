@@ -13,12 +13,13 @@ import java.nio.charset.StandardCharsets;
 public class EncodingFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException {
         try {
-            request.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            chain.doFilter(request, response);
+            req.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            chain.doFilter(req, resp);
         } catch (Exception e) {
-            throw new ServletException(e);
+            req.setAttribute("message", e.getMessage());
+            Forwarding.to("error.jsp", req, resp);
         }
     }
 }

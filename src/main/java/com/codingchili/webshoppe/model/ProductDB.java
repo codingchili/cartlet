@@ -39,11 +39,18 @@ class ProductDB implements ProductStore {
     @Override
     public List<Product> listProductsByName(String nameFilter) throws ProductStoreException {
         try {
-            return Database.prepared(ProductTable.ListProductsByName.QUERY, (connection, statement) -> {
-                statement.setString(ProductTable.ListProductsByName.IN.NAME, "%" + nameFilter + "%");
-                ResultSet result = statement.executeQuery();
-                return productsFromResult(result);
-            });
+            if (nameFilter.isEmpty()) {
+                return Database.prepared(ProductTable.Any.QUERY, (connection, statement) ->
+                        productsFromResult(statement.executeQuery()));
+            } else {
+                // perform search on fulltext indexes.
+                return Database.prepared(ProductTable.ListProductsByName.QUERY, (connection, statement) -> {
+                    statement.setString(ProductTable.ListProductsByName.IN.NAME, nameFilter);
+                    statement.setString(ProductTable.ListProductsByName.IN.DESCRIPTION, nameFilter);
+                    ResultSet result = statement.executeQuery();
+                    return productsFromResult(result);
+                });
+            }
         } catch (SQLException e) {
             throw new ProductStoreException(e);
         }

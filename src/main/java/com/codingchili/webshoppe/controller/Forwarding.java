@@ -1,9 +1,10 @@
 package com.codingchili.webshoppe.controller;
 
 
-import com.codingchili.webshoppe.model.*;
+import com.codingchili.webshoppe.model.ProductManager;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ abstract class Forwarding {
      *
      * @param resource specified as a relative url.
      */
-    public static void to(String resource, HttpServletRequest req, HttpServletResponse resp) {
+    public static void to(String resource, ServletRequest req, ServletResponse resp) {
         try {
             req.setAttribute("categories", ProductManager.listCategories());
             req.getRequestDispatcher(resource).forward(req, resp);

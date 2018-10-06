@@ -7,6 +7,10 @@ package com.codingchili.webshoppe.model;
  */
 
 abstract class ProductTable {
+    class Any {
+        public static final String QUERY = "select * from product;";
+    }
+
     class ListCategories {
         public final static String QUERY = "SELECT id, name FROM category;";
 
@@ -29,10 +33,11 @@ abstract class ProductTable {
     }
 
     class ListProductsByName {
-        public final static String QUERY = "SELECT * FROM product WHERE name LIKE ?;";
+        public final static String QUERY = "SELECT * FROM product WHERE MATCH(name) AGAINST(?) or MATCH(description) AGAINST(?);";
 
         class IN {
             public final static int NAME = 1;
+            public final static int DESCRIPTION = 2;
         }
     }
 
