@@ -4,7 +4,6 @@ import com.codingchili.webshoppe.model.Image;
 import com.codingchili.webshoppe.model.ProductManager;
 import com.codingchili.webshoppe.model.exception.ProductStoreException;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;

@@ -13,7 +13,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col">Thumbnail</th>
+            <th scope="col"></th>
             <th scope="col">Name</th>
             <th scope="col">Each</th>
             <th scope="col">Quantity</th>
@@ -47,12 +47,12 @@
 </div>
 
 <div class="row">
-    <form method="POST" action="cart" class="col-6 offset-2">
+    <form method="POST" action="cart" class="col-5 offset-1 col-md-7 offset-md-1">
         <input type="hidden" name="action" value="order">
         <button class="btn btn-primary btn-block">Place Order</button>
     </form>
 
-    <form method="POST" action="cart" class="col-2">
+    <form method="POST" action="cart" class="col-5 col-md-3">
         <input type="hidden" name="action" value="clear">
         <button class="btn btn-danger btn-block">Clear Cart</button>
     </form>

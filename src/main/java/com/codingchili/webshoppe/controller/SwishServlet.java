@@ -5,8 +5,9 @@ import com.codingchili.webshoppe.model.*;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @WebServlet("/swish")
 public class SwishServlet extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(SwishServlet.class);
     private static final String QRG_SWISH_API_V_1_PREFILLED = "/qrg-swish/api/v1/prefilled";
     private static final String MPC_GETSWISH_NET = "mpc.getswish.net";
     private static final int PORT = 443;
@@ -36,26 +38,32 @@ public class SwishServlet extends HttpServlet {
                 .handler(response -> {
 
                     if (response.statusCode() >= 300) {
-                        req.setAttribute("message", "Failed to load order details, try later.");
-                        Forwarding.to("error.jsp", req, resp);
+                        onError(req, resp, new RuntimeException("swish responded with error code " + response.statusCode()));
                     }
-
                     response.bodyHandler(buffer -> {
                         try (OutputStream out = resp.getOutputStream()) {
                             resp.setContentType(IMAGE_SVG);
                             out.write(buffer.getBytes());
                             qrImage.complete(null);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            onError(req, resp, e);
                         }
                     });
-
+                })
+                .exceptionHandler(throwable -> {
+                    onError(req, resp, throwable);
                 })
                 .putHeader("Content-Type", "application/json")
                 .end(createQRRequest(Session.getAccount(req), orderId));
 
         // can't exit the handler before the response is written - the stream will be closed.
         qrImage.join();
+    }
+
+    private void onError(HttpServletRequest req, HttpServletResponse resp, Throwable e) {
+        logger.error(e.getMessage(), e);
+        req.setAttribute("message", e.getMessage());
+        Forwarding.to("error.jsp", req, resp);
     }
 
     @Override
@@ -83,6 +91,7 @@ public class SwishServlet extends HttpServlet {
                 .put("border", 1)
                 .put("transparent", false) // n/a for svg
                 .encode();
+        logger.info("requesting svg from swish\n\t" + json);
         return json;
     }
 }

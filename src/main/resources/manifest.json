@@ -1,0 +1,14 @@
+{
+  "name": "Webshop",
+  "short_name": "Webshop",
+  "description": "The webshop you want.",
+  "start_url": "/products",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#CCCCCC",
+  "icons": [{
+    "src": "img/app-icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}

@@ -6,6 +6,7 @@ import io.undertow.Undertow;
 import io.undertow.jsp.HackInstanceManager;
 import io.undertow.jsp.JspServletBuilder;
 import io.undertow.server.handlers.PathHandler;
+import io.undertow.server.handlers.encoding.EncodingHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
@@ -27,10 +28,10 @@ public class Launcher {
 
 
     public static void main(String[] args) throws ServletException {
-        final PathHandler servletPath = new PathHandler();
+        final PathHandler path = new PathHandler();
         final ServletContainer container = ServletContainer.Factory.newInstance();
 
-        servletPath.addPrefixPath("/web/",
+        path.addPrefixPath("/web/",
                 Handlers.resource(new ClassPathResourceManager(Launcher.class.getClassLoader())));
 
         DeploymentInfo builder = new DeploymentInfo()
@@ -53,11 +54,11 @@ public class Launcher {
 
         DeploymentManager manager = container.addDeployment(builder);
         manager.deploy();
-        servletPath.addPrefixPath(builder.getContextPath(), manager.start());
+        path.addPrefixPath(builder.getContextPath(), manager.start());
 
         Undertow server = Undertow.builder()
                 .addHttpListener(8080, "0.0.0.0")
-                .setHandler(servletPath)
+                .setHandler(new EncodingHandler.Builder().build(null).wrap(path))
                 .build();
         server.start();
     }

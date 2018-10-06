@@ -17,7 +17,7 @@ import java.util.List;
  * This is the entry point for the webshop, products are listed here.
  */
 
-@WebServlet("/products")
+@WebServlet({"/products"})
 public class ProductServlet extends HttpServlet {
 
     @Override
