@@ -12,7 +12,7 @@ import java.util.Base64;
 
 /**
  * Created by Robin on 2015-09-29.
- *
+ * <p>
  * Session logic.
  */
 public class Session implements SessionListener {
@@ -26,7 +26,16 @@ public class Session implements SessionListener {
         req.changeSessionId(); // prevent session fixation.
         session.setMaxInactiveInterval(SESSION_AUTHENTICATED_TIMEOUT);
         session.setAttribute("account", account);
-        session.setAttribute("cart", new Cart(account));
+
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if (cart.getUniqueProducts() == 0) {
+            session.setAttribute("cart", CartManager.getCart(account));
+        } else {
+            // if the user had a cart when logging in, replace any existing cart.
+            Async.task(() -> CartManager.setCartItems(cart.getItems(), account), "copy cart on login.");
+        }
+
         logger.info("session authenticated: " + session.getAttribute("account"));
     }
 
@@ -44,11 +53,15 @@ public class Session implements SessionListener {
 
         logger.info("session created with c-surf token: " + token);
         session.setAttribute("csrf", token);
+
+        if (!session.getAttributeNames().contains("cart")) {
+            session.setAttribute("cart", new Cart());
+        }
     }
 
     @Override
     public void sessionDestroyed(io.undertow.server.session.Session session, HttpServerExchange exchange, SessionDestroyedReason reason) {
-
+        // no op.
     }
 
     public static boolean isAuthenticated(HttpServletRequest req) {

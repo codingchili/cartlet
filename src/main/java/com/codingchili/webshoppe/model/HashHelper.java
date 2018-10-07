@@ -2,6 +2,8 @@ package com.codingchili.webshoppe.model;
 
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -18,6 +20,7 @@ import java.util.Base64;
  */
 
 public class HashHelper {
+    private static final Logger logger = LoggerFactory.getLogger(HashHelper.class);
     private final static int ITERATIONS = 8;
     private final static int MEMORY = 2048;
     private static final int PARALLELISM = 2;
@@ -34,7 +37,10 @@ public class HashHelper {
      * @return a hashed password in base64.
      */
     public static String hash(String password) {
-        return argon2.hash(ITERATIONS, MEMORY, PARALLELISM, password);
+        long then = System.currentTimeMillis();
+        String hash = argon2.hash(ITERATIONS, MEMORY, PARALLELISM, password);
+        logger.info("Hashed password in " + (System.currentTimeMillis() - then) + "ms.");
+        return hash;
     }
 
     /**
@@ -44,7 +50,10 @@ public class HashHelper {
      * @return true if the given passwords matches.
      */
     public static boolean verify(String password, String plaintext) {
-        return argon2.verify(password, plaintext);
+        long then = System.currentTimeMillis();
+        boolean match = argon2.verify(password, plaintext);
+        logger.info("Verified password in " + (System.currentTimeMillis() - then) + "ms.");
+        return match;
     }
 
     /**

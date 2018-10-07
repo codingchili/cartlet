@@ -1,11 +1,10 @@
 package com.codingchili.webshoppe.model;
 
-import com.codingchili.webshoppe.model.exception.CartStoreException;
-import com.codingchili.webshoppe.model.exception.StoreException;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-30.
- *
+ * <p>
  * Manages a cart object.
  */
 
@@ -14,17 +13,22 @@ abstract public class CartManager {
     /**
      * Adds an item to an users cart.
      *
-     * @param product added to the cart.
-     * @param count   number of products to add.
      * @param account owner of othe cart to add to.
      */
-    public static void addToCart(Product product, int count, Account account) {
+    public static void setCartItems(List<Product> products, Account account) {
         CartStore store = Store.getCartStore();
-        try {
-            store.addToCart(product, count, account);
-        } catch (StoreException e) {
-            e.printStackTrace();
-        }
+        store.setCartItems(products, account);
+    }
+
+    /**
+     * Adds an item to an users cart.
+     *
+     * @param product added to the cart.
+     * @param account owner of othe cart to add to.
+     */
+    public static void setCartItems(Product product, Account account) {
+        CartStore store = Store.getCartStore();
+        store.setCartItems(product, account);
     }
 
     /**
@@ -35,11 +39,7 @@ abstract public class CartManager {
      */
     public static void removeFromCart(Product product, Account account) {
         CartStore cart = Store.getCartStore();
-        try {
-            cart.removeFromCart(product, account);
-        } catch (CartStoreException e) {
-            e.printStackTrace();
-        }
+        cart.removeFromCart(product, account);
     }
 
     /**
@@ -49,11 +49,7 @@ abstract public class CartManager {
      */
     public static void clearCart(Account account) {
         CartStore store = Store.getCartStore();
-        try {
-            store.clearCart(account);
-        } catch (CartStoreException e) {
-            e.printStackTrace();
-        }
+        store.clearCart(account);
     }
 
     /**
@@ -64,13 +60,7 @@ abstract public class CartManager {
      */
     public static Cart getCart(Account account) {
         CartStore store = Store.getCartStore();
-        Cart cart = new Cart();
-        try {
-            cart = store.getCart(account);
-        } catch (StoreException e) {
-            e.printStackTrace();
-        }
-        return cart;
+        return store.getCart(account);
     }
 
     /**
@@ -80,13 +70,7 @@ abstract public class CartManager {
      * @return the number of products in the cart.
      */
     public static int getProductCount(Account account) {
-        int count = 0;
         CartStore store = Store.getCartStore();
-        try {
-            count = store.productCount(account);
-        } catch (CartStoreException e) {
-            e.printStackTrace();
-        }
-        return count;
+        return store.productCount(account);
     }
 }

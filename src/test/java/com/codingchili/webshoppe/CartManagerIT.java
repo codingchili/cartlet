@@ -39,7 +39,7 @@ public class CartManagerIT {
 
     @Test
     public void shouldAddItemsToCart() throws Exception {
-        CartManager.addToCart(product, COUNT, account);
+        CartManager.setCartItems(product.setCount(COUNT), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount == 0) {
@@ -49,8 +49,8 @@ public class CartManagerIT {
 
     @Test
     public void shouldAddCountItemsToCart() throws Exception {
-        CartManager.addToCart(product, COUNT, account);
-        CartManager.addToCart(product, COUNT, account);
+        CartManager.setCartItems(product.setCount(COUNT), account);
+        CartManager.setCartItems(product.setCount(COUNT), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount != COUNT * 2)
@@ -59,8 +59,8 @@ public class CartManagerIT {
 
     @Test
     public void shouldRemoveCountItemsFromCart() throws Exception {
-        CartManager.addToCart(product, 2, account);
-        CartManager.addToCart(product, -1, account);
+        CartManager.setCartItems(product.setCount(2), account);
+        CartManager.setCartItems(product.setCount(-1), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount != 1) {
@@ -70,8 +70,8 @@ public class CartManagerIT {
 
     @Test
     public void shouldRemoveCartItemWhenAllRemoved() throws Exception {
-        CartManager.addToCart(product, 1, account);
-        CartManager.addToCart(product, -2, account);
+        CartManager.setCartItems(product.setCount(1), account);
+        CartManager.setCartItems(product.setCount(-2), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount != 0) {
@@ -91,7 +91,7 @@ public class CartManagerIT {
 
     @Test
     public void shouldReturnCart() throws Exception {
-        CartManager.addToCart(product, COUNT, account);
+        CartManager.setCartItems(product.setCount(COUNT), account);
         Cart cart = CartManager.getCart(account);
 
         if (cart.getItems().size() == 0) {

@@ -1,28 +1,30 @@
 package com.codingchili.webshoppe.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-30.
- *
+ * <p>
  * A shopping cart holding products.
  */
 
 public class Cart implements Bean {
-    private ArrayList<Product> items = new ArrayList<>();
+    private List<Product> items = new ArrayList<>();
     private Account owner;
 
-    public Cart() {}
+    public Cart() {
+    }
 
     public Cart(Account account) {
         owner = account;
     }
 
-    public ArrayList<Product> getItems() {
+    public List<Product> getItems() {
         return items;
     }
 
-    protected void setItems(ArrayList<Product> items) {
+    protected void setItems(List<Product> items) {
         this.items = items;
     }
 
@@ -41,7 +43,7 @@ public class Cart implements Bean {
     public int getTotalCost() {
         int cost = 0;
 
-        for (Product product: items) {
+        for (Product product : items) {
             cost += product.getCost() * product.getCount();
         }
 

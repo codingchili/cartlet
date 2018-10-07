@@ -28,7 +28,7 @@ public class Product implements Bean {
         return count;
     }
 
-    protected Product setCount(int count) {
+    public Product setCount(int count) {
         this.count = count;
         return this;
     }

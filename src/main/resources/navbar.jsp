@@ -23,7 +23,11 @@
                 </div>
             </li>
 
+            <li class="nav-item"><a class="nav-link" href="cart">Cart [${sessionScope.cart.uniqueProducts}]</a></li>
+
             <c:if test="${!empty sessionScope.account}">
+                <li class="nav-item"><a class="nav-link" href="orders">Orders</a></li>
+
                 <c:if test="${sessionScope.account.role.id eq 3}">
                     <li class="nav-item"><a class="nav-link" href="managers">Managers</a></li>
                 </c:if>
@@ -33,8 +37,6 @@
                     <li class="nav-item"><a class="nav-link" href="storage">Storage</a></li>
                 </c:if>
 
-                <li class="nav-item"><a class="nav-link" href="cart">Cart [${sessionScope.cart.uniqueProducts}]</a></li>
-                <li class="nav-item"><a class="nav-link" href="orders">Orders</a></li>
                 <li class="nav-item"><a class="nav-link" href="account"><c:out value="${sessionScope.account.username}"/></a></li>
                 <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
             </c:if>

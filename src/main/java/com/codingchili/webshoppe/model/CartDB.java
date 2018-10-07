@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-30.
@@ -16,18 +17,40 @@ import java.sql.SQLException;
  */
 
 class CartDB implements CartStore {
+
     @Override
-    public void addToCart(Product product, int count, Account account) throws CartStoreException {
+    public void setCartItems(List<Product> products, Account account) throws CartStoreException {
+        clearCart(account);
+        try {
+            Database.prepared(CartTable.AddToCart.QUERY, (connection, statement) -> {
+                connection.setAutoCommit(false);
+
+                for (Product product : products) {
+                    statement.setInt(CartTable.AddToCart.IN.COUNT, product.getCount());
+                    statement.setInt(CartTable.AddToCart.IN.OWNER, account.getId());
+                    statement.setInt(CartTable.AddToCart.IN.PRODUCT, product.getId());
+                    statement.execute();
+                }
+                connection.commit();
+                return null;
+            });
+        } catch (SQLException e) {
+            throw new CartStoreException(e);
+        }
+    }
+
+    @Override
+    public void setCartItems(Product product, Account account) throws CartStoreException {
         int productsInCart = getProductCountInCart(product, account);
 
-        if (count + productsInCart <= 0) {
+        if (product.getCount() + productsInCart <= 0) {
             removeFromCart(product, account);
         } else if (productsInCart > 0) {
-            updateCartCount(product, count + productsInCart, account);
+            updateCartCount(product, product.getCount() + productsInCart, account);
         } else {
             try {
                 Database.prepared(CartTable.AddToCart.QUERY, (connection, statement) -> {
-                    statement.setInt(CartTable.AddToCart.IN.COUNT, count + productsInCart);
+                    statement.setInt(CartTable.AddToCart.IN.COUNT, product.getCount() + productsInCart);
 
                     statement.setInt(CartTable.AddToCart.IN.OWNER, account.getId());
                     statement.setInt(CartTable.AddToCart.IN.PRODUCT, product.getId());

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 /**
  * Created by Robin on 2015-09-28.
- *
+ * <p>
  * Handles the login event.
  */
 
@@ -25,10 +25,11 @@ public class LoginServlet extends HttpServlet implements ServletContextListener 
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (Session.isAuthenticated(req))
+        if (Session.isAuthenticated(req)) {
             Forwarding.redirect("/products", resp);
-        else
+        } else {
             Forwarding.to("login.jsp", req, resp);
+        }
     }
 
     @Override
@@ -38,11 +39,18 @@ public class LoginServlet extends HttpServlet implements ServletContextListener 
                 req.getParameter("password"));
         req.setAttribute("loginResult", loginResult);
 
-        if (loginResult.isErroneous())
+        if (loginResult.isErroneous()) {
             Forwarding.to("login.jsp", req, resp);
-        else {
+        } else {
             Session.authenticate(req, loginResult.getAccount());
-            Forwarding.to("/products", req, resp);
+
+            String callback = req.getParameter("callback");
+
+            if (callback != null) {
+                Forwarding.redirect(callback, resp);
+            } else {
+                Forwarding.to("/products", req, resp);
+            }
         }
     }
 

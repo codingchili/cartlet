@@ -1,8 +1,7 @@
 package com.codingchili.webshoppe.controller.servlets;
 
 import com.codingchili.webshoppe.Properties;
-import com.codingchili.webshoppe.controller.Forwarding;
-import com.codingchili.webshoppe.controller.Session;
+import com.codingchili.webshoppe.controller.*;
 import com.codingchili.webshoppe.model.*;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClientOptions;
@@ -28,14 +27,13 @@ public class SwishServlet extends HttpServlet {
     private static final String MPC_GETSWISH_NET = "mpc.getswish.net";
     private static final int PORT = 443;
     private static final String IMAGE_SVG = "image/svg+xml";
-    private static Vertx vertx = Vertx.vertx();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         CompletableFuture<Void> qrImage = new CompletableFuture<>();
         int orderId = Integer.parseInt(req.getParameter("orderId"));
 
-        vertx.createHttpClient(new HttpClientOptions().setSsl(true))
+        Async.vertx().createHttpClient(new HttpClientOptions().setSsl(true))
                 .post(PORT, MPC_GETSWISH_NET, QRG_SWISH_API_V_1_PREFILLED)
                 .handler(response -> {
 
