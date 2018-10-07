@@ -1,8 +1,7 @@
 package com.codingchili.webshoppe.model;
 
-import com.codingchili.webshoppe.model.Account;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-10-02.
@@ -10,17 +9,17 @@ import java.util.ArrayList;
  * Used as a proxy as JSTL does not deal with generic list.
  */
 public class AccountList {
-    private ArrayList<Account> accounts = new ArrayList<>();
+    private List<Account> accounts = new ArrayList<>();
 
     public AccountList() {
     }
 
-    public AccountList(ArrayList<Account> accounts) {
+    public AccountList(List<Account> accounts) {
         this.accounts = accounts;
     }
 
 
-    public ArrayList<Account> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 }

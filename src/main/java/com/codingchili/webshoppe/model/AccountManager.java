@@ -3,6 +3,7 @@ package com.codingchili.webshoppe.model;
 import com.codingchili.webshoppe.model.exception.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-28.
@@ -114,13 +115,8 @@ public abstract class AccountManager {
         return register(username, password, zip, street, new Role(Role.Actor.Manager));
     }
 
-    public static ArrayList<Account> getManagers() {
-        ArrayList<Account> managers = new ArrayList<>();
+    public static List<Account> getManagers() {
         AccountStore accounts = Store.getAccountStore();
-        try {
-            managers = accounts.getManagers();
-        } catch (AccountStoreException ignored) {
-        }
-        return managers;
+        return accounts.getManagers();
     }
 }

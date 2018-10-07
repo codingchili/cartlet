@@ -26,7 +26,7 @@ abstract public class CartManager {
      * @param product added to the cart.
      * @param account owner of othe cart to add to.
      */
-    public static void setCartItems(Product product, Account account) {
+    public static void addToCart(Product product, Account account) {
         CartStore store = Store.getCartStore();
         store.setCartItems(product, account);
     }

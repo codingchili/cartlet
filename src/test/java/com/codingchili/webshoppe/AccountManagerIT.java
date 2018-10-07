@@ -8,6 +8,7 @@ import com.codingchili.webshoppe.model.AccountManager;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Robin on 2015-09-29.
@@ -169,7 +170,7 @@ public class AccountManagerIT {
     @Test
     public void shouldCreateListAndRemoveManagers() throws Exception {
         RegisterResult register = AccountManager.registerManager("manager_test", "rawmanagersocks", "manager_zip", "manager_street");
-        ArrayList<Account> managers = AccountManager.getManagers();
+        List<Account> managers = AccountManager.getManagers();
         DeRegisterResult deregister = AccountManager.deRegister(register.getAccount());
 
         if (register.isErroneous()) {

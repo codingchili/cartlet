@@ -28,7 +28,7 @@ public class BuyServlet extends HttpServlet {
             if (Session.isAuthenticated(req)) {
                 Account account = (Account) session.getAttribute("account");
                 product.setCount(count);
-                CartManager.setCartItems(product, account);
+                CartManager.addToCart(product, account);
                 session.setAttribute("cart", CartManager.getCart(account));
             } else {
                 product = ProductManager.findProductById(product.getId());

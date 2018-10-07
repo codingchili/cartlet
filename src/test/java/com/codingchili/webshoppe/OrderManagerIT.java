@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Created by Robin on 2015-10-01.
+ * Order manager tests.
  */
 public class OrderManagerIT {
     private static final int PRODUCT_ID = 1;
@@ -28,7 +28,7 @@ public class OrderManagerIT {
 
     @Test
     public void shouldCreateOrder() throws Exception {
-        CartManager.setCartItems(product.setCount(PRODUCT_COUNT), account);
+        CartManager.addToCart(product.setCount(PRODUCT_COUNT), account);
         OrderManager.createOrder(account);
         CartManager.clearCart(account);
 
@@ -41,7 +41,7 @@ public class OrderManagerIT {
 
     @Test
     public void shouldGetOrderById() throws Exception {
-        CartManager.setCartItems(product.setCount(PRODUCT_COUNT), account);
+        CartManager.addToCart(product.setCount(PRODUCT_COUNT), account);
         OrderManager.createOrder(account);
         CartManager.clearCart(account);
         OrderList orderList = OrderManager.getOrders(account);
@@ -57,7 +57,7 @@ public class OrderManagerIT {
 
     @Test
     public void shouldClearOrders() throws Exception {
-        CartManager.setCartItems(product.setCount(1), account);
+        CartManager.addToCart(product.setCount(1), account);
         OrderManager.createOrder(account);
 
         if (OrderManager.getOrders(account).getItems().size() == 0) {
@@ -73,7 +73,7 @@ public class OrderManagerIT {
 
     @Test
     public void shouldGetOrderToPack() throws Exception {
-        CartManager.setCartItems(product.setCount(1), account);
+        CartManager.addToCart(product.setCount(1), account);
         OrderManager.createOrder(account);
         Order order = OrderManager.getOrderForShipping();
 

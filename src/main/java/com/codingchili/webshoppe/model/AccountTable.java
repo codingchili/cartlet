@@ -49,7 +49,7 @@ abstract class AccountTable {
 
     class FindById {
         public static final String QUERY =
-                "SELECT id, name, password, salt, zip, street, role FROM " + TABLE_NAME + " WHERE id = ?;";
+                "SELECT id, name, password, zip, street, role FROM " + TABLE_NAME + " WHERE id = ?;";
 
         class IN {
             public static final int ACCOUNT_ID = 1;
@@ -69,7 +69,7 @@ abstract class AccountTable {
      */
     class GetManagers {
         public static final String QUERY =
-                "SELECT id, name, password, salt, zip, street, role FROM " + TABLE_NAME
+                "SELECT id, name, password, zip, street, role FROM " + TABLE_NAME
                         + " WHERE role = 2;";
     }
 }

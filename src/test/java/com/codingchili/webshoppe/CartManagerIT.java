@@ -3,6 +3,8 @@ package com.codingchili.webshoppe;
 import com.codingchili.webshoppe.model.*;
 import org.junit.*;
 
+import java.util.List;
+
 /**
  * Created by Robin on 2015-09-30.
  * <p>
@@ -39,7 +41,7 @@ public class CartManagerIT {
 
     @Test
     public void shouldAddItemsToCart() throws Exception {
-        CartManager.setCartItems(product.setCount(COUNT), account);
+        CartManager.addToCart(product.setCount(COUNT), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount == 0) {
@@ -49,8 +51,8 @@ public class CartManagerIT {
 
     @Test
     public void shouldAddCountItemsToCart() throws Exception {
-        CartManager.setCartItems(product.setCount(COUNT), account);
-        CartManager.setCartItems(product.setCount(COUNT), account);
+        CartManager.addToCart(product.setCount(COUNT), account);
+        CartManager.addToCart(product.setCount(COUNT), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount != COUNT * 2)
@@ -59,8 +61,8 @@ public class CartManagerIT {
 
     @Test
     public void shouldRemoveCountItemsFromCart() throws Exception {
-        CartManager.setCartItems(product.setCount(2), account);
-        CartManager.setCartItems(product.setCount(-1), account);
+        CartManager.addToCart(product.setCount(2), account);
+        CartManager.addToCart(product.setCount(-1), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount != 1) {
@@ -70,8 +72,8 @@ public class CartManagerIT {
 
     @Test
     public void shouldRemoveCartItemWhenAllRemoved() throws Exception {
-        CartManager.setCartItems(product.setCount(1), account);
-        CartManager.setCartItems(product.setCount(-2), account);
+        CartManager.addToCart(product.setCount(1), account);
+        CartManager.addToCart(product.setCount(-2), account);
         int productCount = CartManager.getProductCount(account);
 
         if (productCount != 0) {
@@ -91,11 +93,19 @@ public class CartManagerIT {
 
     @Test
     public void shouldReturnCart() throws Exception {
-        CartManager.setCartItems(product.setCount(COUNT), account);
+        CartManager.addToCart(product.setCount(COUNT), account);
         Cart cart = CartManager.getCart(account);
 
         if (cart.getItems().size() == 0) {
             throw new Exception("The cart is empty.");
         }
+    }
+
+    @Test
+    public void setCartItems() {
+        List<Product> products = ProductManager.findProductsByName("");
+        CartManager.clearCart(account);
+        CartManager.setCartItems(products, account);
+        Assert.assertTrue(CartManager.getCart(account).getItems().size() > 0);
     }
 }
