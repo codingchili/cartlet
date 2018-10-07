@@ -1,6 +1,6 @@
 package com.codingchili.webshoppe;
 
-import com.codingchili.webshoppe.controller.*;
+import com.codingchili.webshoppe.controller.Session;
 import com.codingchili.webshoppe.controller.filters.CSRFFilter;
 import com.codingchili.webshoppe.controller.filters.EncodingFilter;
 import com.codingchili.webshoppe.controller.servlets.*;
@@ -9,6 +9,7 @@ import io.undertow.Undertow;
 import io.undertow.jsp.HackInstanceManager;
 import io.undertow.jsp.JspServletBuilder;
 import io.undertow.server.handlers.PathHandler;
+import io.undertow.server.handlers.RedirectHandler;
 import io.undertow.server.handlers.encoding.EncodingHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
@@ -36,6 +37,8 @@ public class Launcher {
 
         path.addPrefixPath("/web/",
                 Handlers.resource(new ClassPathResourceManager(Launcher.class.getClassLoader())));
+
+        path.addExactPath("/", new RedirectHandler("/products"));
 
         DeploymentInfo builder = new DeploymentInfo()
                 .addFilter(Servlets.filter(EncodingFilter.class))
