@@ -14,7 +14,7 @@ import java.util.Base64;
  * reference: https://crackstation.net/hashing-security.htm#javasourcecode
  */
 
-class HashHelper {
+public class HashHelper {
     private final static int ITERATIONS = 65535;
     private final static int KEY_BITS = 1024;
     private final static int SALT_BYTES = 64;
@@ -29,6 +29,25 @@ class HashHelper {
         } catch (Exception e) {
             throw new RuntimeException("Hashing Error: NoSuchCipher");
         }
+    }
+
+    /**
+     * Compares two byte arrays in constant time.
+     *
+     * @param first  the first array.
+     * @param second the second array.
+     * @return true if both arrays are of equal size and content.
+     */
+    public static boolean equals(byte[] first, byte[] second) {
+        int result = 0;
+
+        if (first.length != second.length)
+            return false;
+
+        for (int i = 0; i < first.length; i++)
+            result |= (first[i] ^ second[i]);
+
+        return result == 0;
     }
 
     public static String generateSalt() {

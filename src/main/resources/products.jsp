@@ -16,6 +16,7 @@
 
             <div class="product-footer">
                 <form method="POST" action="buy">
+                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="count" value="1">
                     <input type="hidden" name="product" value="${product.id}">
                     <button class="btn btn-primary btn-block">

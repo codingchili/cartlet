@@ -56,6 +56,7 @@
         <div class="row">
             <div class="col-10 offset-1">
                 <form method="POST" action="process">
+                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="action" value="getOrder">
                     <button class="btn btn-lg btn-primary btn-block">Next order</button>
                 </form>
@@ -79,6 +80,7 @@
         <div class="row">
             <div class="col-10 offset-1">
                 <form method="POST" action="process" class="col-12">
+                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="action" value="getOrder">
                     <button class="btn btn-lg btn-primary btn-block">Get order</button>
                 </form>

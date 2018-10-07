@@ -1,5 +1,6 @@
-package com.codingchili.webshoppe.controller;
+package com.codingchili.webshoppe.controller.servlets;
 
+import com.codingchili.webshoppe.controller.Forwarding;
 import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.ServletException;

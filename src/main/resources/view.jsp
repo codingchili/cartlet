@@ -53,6 +53,7 @@
     <div class="row buy-form">
         <div class="col-6 col-md-4 offset-3 offset-md-4">
             <form method="POST" action="buy">
+                <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                 <div class="form-group">
                     <label for="quantity" class="control-label">Quantity</label>
                     <input type="text" class="form-control" id="quantity" name="count" value="1" autofocus="true">

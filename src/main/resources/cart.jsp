@@ -31,6 +31,7 @@
                 <td class="align-middle">${product.count * product.cost}</td>
                 <td class="align-middle">
                     <form method="POST" action="cart" class="margin: 0px; padding: 0px;">
+                        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                         <div class="text-danger">
                             <input type="hidden" name="action" value="remove">
                             <input type="hidden" name="product" value="${product.id}">
@@ -48,11 +49,13 @@
 
 <div class="row">
     <form method="POST" action="cart" class="col-5 offset-1 col-md-7 offset-md-1">
+        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
         <input type="hidden" name="action" value="order">
         <button class="btn btn-primary btn-block">Place Order</button>
     </form>
 
     <form method="POST" action="cart" class="col-5 col-md-3">
+        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
         <input type="hidden" name="action" value="clear">
         <button class="btn btn-danger btn-block">Clear Cart</button>
     </form>

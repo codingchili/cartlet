@@ -1,6 +1,9 @@
 package com.codingchili.webshoppe;
 
 import com.codingchili.webshoppe.controller.*;
+import com.codingchili.webshoppe.controller.filters.CSRFFilter;
+import com.codingchili.webshoppe.controller.filters.EncodingFilter;
+import com.codingchili.webshoppe.controller.servlets.*;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.jsp.HackInstanceManager;
@@ -36,7 +39,10 @@ public class Launcher {
 
         DeploymentInfo builder = new DeploymentInfo()
                 .addFilter(Servlets.filter(EncodingFilter.class))
+                .addFilter(Servlets.filter(CSRFFilter.class))
+                .addSessionListener(new Session())
                 .addFilterUrlMapping(EncodingFilter.class.getSimpleName(), "/*", DispatcherType.REQUEST)
+                .addFilterUrlMapping(CSRFFilter.class.getSimpleName(), "/*", DispatcherType.REQUEST)
                 .setClassLoader(Launcher.class.getClassLoader())
                 .setContextPath("/")
                 .setClassIntrospecter(DefaultClassIntrospector.INSTANCE)

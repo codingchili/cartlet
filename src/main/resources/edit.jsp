@@ -3,6 +3,7 @@
 <%@include file="header.jsp" %>
 
 <form method="POST" action="edit">
+    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
     <input type="hidden" value="${product.id}" name="product">
 
     <div class="col-12 card margin-top">

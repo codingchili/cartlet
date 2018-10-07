@@ -19,6 +19,7 @@
                 </c:if>
 
                 <form class="form-horizontal" method="POST" action="login">
+                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <div class="form-group">
                         <input type="text" class="form-control" name="username" id="username"
                                placeholder="example@domain.tld" autofocus="true">

@@ -29,6 +29,7 @@
 
         <c:if test="${sessionScope.account.role.id eq 1}">
             <form method="POST" action="account" class="margin-top-1">
+                <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                 <input type="hidden" name="action" value="deRegister">
                 <button class="btn btn-danger btn-block">Close Account</button>
             </form>

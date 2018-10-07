@@ -3,6 +3,7 @@
 <div class="row">
     <div class="card margin-top col-8 offset-2 col-md-6 offset-md-0">
         <form method="POST" action="storage" class="form-horizontal">
+            <input type="hidden" name="csrf" value="${sessionScope.csrf}">
             <input type="hidden" name="action" value="addProduct">
 
             <a href="storage"><span class="glyphicon glyphicon-remove text-red pull-right"></span></a>
@@ -57,6 +58,7 @@
 
     <div class="card col-8 offset-2 col-md-5 offset-md-1 margin-top">
         <form method="POST" action="storage" class="form-horizontal">
+            <input type="hidden" name="csrf" value="${sessionScope.csrf}">
             <input type="hidden" name="action" value="addCategory">
 
             <a href="storage"><span class="glyphicon glyphicon-remove text-red pull-right"></span></a>

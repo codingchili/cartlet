@@ -1,5 +1,6 @@
-package com.codingchili.webshoppe.controller;
+package com.codingchili.webshoppe.controller.filters;
 
+import com.codingchili.webshoppe.controller.Forwarding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

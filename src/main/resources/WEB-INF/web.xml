@@ -9,7 +9,7 @@
     </listener>
 
     <listener>
-        <listener-class>com.codingchili.webshoppe.controller.LoginServlet</listener-class>
+        <listener-class>com.codingchili.webshoppe.controller.servlets.LoginServlet</listener-class>
     </listener>
 
     <welcome-file-list>

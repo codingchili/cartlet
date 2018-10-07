@@ -1,6 +1,8 @@
-package com.codingchili.webshoppe.controller;
+package com.codingchili.webshoppe.controller.servlets;
 
 import com.codingchili.webshoppe.Properties;
+import com.codingchili.webshoppe.controller.Forwarding;
+import com.codingchili.webshoppe.controller.Session;
 import com.codingchili.webshoppe.model.*;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClientOptions;

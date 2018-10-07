@@ -16,6 +16,7 @@
     </div>
 
     <form method="POST" action="swish" class="col-8 offset-2">
+        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
         <button class="btn btn-primary btn-block">I've sent the funds</button>
     </form>
 

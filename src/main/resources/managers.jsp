@@ -24,6 +24,7 @@
                     <td class="align-middle">${manager.street}</td>
                     <td>
                         <form method="POST" action="managers" class="margin: 0px; padding: 0px;">
+                            <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                             <div class="text-danger">
                                 <input type="hidden" name="action" value="remove">
                                 <input type="hidden" name="manager" value="${manager.id}">
@@ -47,6 +48,7 @@
             </div>
             <div class="panel-body">
                 <form class="form-horizontal" method="POST" action="managers">
+                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="action" value="register">
                     <fieldset>
                         <c:if test="${registerResult.erroneous}">

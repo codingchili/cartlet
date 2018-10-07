@@ -46,7 +46,7 @@ public class Account implements Bean {
      * @param password In plaintext format.
      */
     protected boolean authenticate(String password) {
-        return HashHelper.hash(password, salt).equals(this.password);
+        return HashHelper.equals(HashHelper.hash(password, salt).getBytes(), this.password.getBytes());
     }
 
     public String getUsername() {
@@ -103,4 +103,8 @@ public class Account implements Bean {
         return street;
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
 }

@@ -1,18 +1,23 @@
 package com.codingchili.webshoppe.controller;
 
 import com.codingchili.webshoppe.model.*;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.server.session.SessionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.*;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 /**
  * Created by Robin on 2015-09-29.
  *
  * Session logic.
  */
-public class Session implements HttpSessionListener {
+public class Session implements SessionListener {
+    private static final Logger logger = LoggerFactory.getLogger(Session.class);
+    private static final SecureRandom csrf = new SecureRandom();
     private static final int SESSION_TIMEOUT = 30;
     private static final int SESSION_AUTHENTICATED_TIMEOUT = 2 * 60 * 3600;
 
@@ -22,20 +27,28 @@ public class Session implements HttpSessionListener {
         session.setMaxInactiveInterval(SESSION_AUTHENTICATED_TIMEOUT);
         session.setAttribute("account", account);
         session.setAttribute("cart", new Cart(account));
+        logger.info("session authenticated: " + session.getAttribute("account"));
     }
 
     public static void deAuthenticate(HttpServletRequest req) {
         req.getSession().invalidate();
+        logger.info("session destroyed: " + req.getSession().getAttribute("account"));
     }
 
     @Override
-    public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        HttpSession session = httpSessionEvent.getSession();
+    public void sessionCreated(io.undertow.server.session.Session session, HttpServerExchange exchange) {
         session.setMaxInactiveInterval(SESSION_TIMEOUT);
+        byte[] random = new byte[32];
+        csrf.nextBytes(random);
+        String token = Base64.getEncoder().encodeToString(random);
+
+        logger.info("session created with c-surf token: " + token);
+        session.setAttribute("csrf", token);
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+    public void sessionDestroyed(io.undertow.server.session.Session session, HttpServerExchange exchange, SessionDestroyedReason reason) {
+
     }
 
     public static boolean isAuthenticated(HttpServletRequest req) {

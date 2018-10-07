@@ -13,6 +13,7 @@
             </div>
             <div class="panel-body panel-body-spacer">
                 <form class="form-horizontal" method="POST" action="register" accept-charset="UTF-8">
+                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <fieldset>
                         <c:if test="${registerResult.erroneous}">
                             <ul class="error-list text-danger">

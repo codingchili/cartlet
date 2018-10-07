@@ -14,7 +14,7 @@ import java.io.IOException;
  * Forwarding proxy class, loads the data required for all pages.
  */
 
-abstract class Forwarding {
+public abstract class Forwarding {
 
     /**
      * Redirects the user to another resource.
