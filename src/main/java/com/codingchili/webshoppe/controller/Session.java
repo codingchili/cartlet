@@ -18,6 +18,7 @@ public class Session implements HttpSessionListener {
 
     public static void authenticate(HttpServletRequest req, Account account) {
         HttpSession session = req.getSession(true);
+        req.changeSessionId(); // prevent session fixation.
         session.setMaxInactiveInterval(SESSION_AUTHENTICATED_TIMEOUT);
         session.setAttribute("account", account);
         session.setAttribute("cart", new Cart(account));
