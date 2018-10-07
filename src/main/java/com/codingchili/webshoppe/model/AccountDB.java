@@ -31,7 +31,6 @@ class AccountDB implements AccountStore {
             Database.prepared(AccountTable.Add.QUERY, (connection, statement) -> {
                 statement.setString(AccountTable.Add.IN.NAME, account.getUsername());
                 statement.setString(AccountTable.Add.IN.PASSWORD, account.getPassword());
-                statement.setString(AccountTable.Add.IN.SALT, account.getSalt());
                 statement.setString(AccountTable.Add.IN.ZIP, account.getZip());
                 statement.setString(AccountTable.Add.IN.STREET, account.getStreet());
                 statement.setInt(AccountTable.Add.IN.ROLE, account.getRole().getId());
@@ -70,7 +69,6 @@ class AccountDB implements AccountStore {
                 .setId(result.getInt(AccountTable.FindByName.OUT.ID))
                 .setUsername(result.getString(AccountTable.FindByName.OUT.NAME))
                 .setPassword(result.getString(AccountTable.FindByName.OUT.PASSWORD))
-                .setSalt(result.getString(AccountTable.FindByName.OUT.SALT))
                 .setStreet(result.getString(AccountTable.FindByName.OUT.STREET))
                 .setZip(result.getString(AccountTable.FindByName.OUT.ZIP))
                 .setRole(new Role(result.getInt(AccountTable.FindByName.OUT.ROLE)));

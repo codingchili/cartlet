@@ -13,7 +13,7 @@
             </div>
             <div class="panel-body">
                 <p>
-                    <b>Username</b><c:out value="${sessionScope.account.username}"/>
+                    <b>Username</b> <c:out value="${sessionScope.account.username}"/>
                 </p>
 
                 <p>

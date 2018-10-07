@@ -9,7 +9,6 @@ package com.codingchili.webshoppe.model;
 public class Account implements Bean {
     private String username;
     private String password;
-    private String salt;
     private int id;
     private String zip;
     private String street;
@@ -29,8 +28,7 @@ public class Account implements Bean {
      */
     protected Account(String username, String password) {
         this.username = username;
-        this.salt = HashHelper.generateSalt();
-        this.password = HashHelper.hash(password, this.salt);
+        this.password = HashHelper.hash(password);
     }
 
     protected Account setRole(Role role) {
@@ -42,28 +40,12 @@ public class Account implements Bean {
         return this.role;
     }
 
-    /**
-     * @param password In plaintext format.
-     */
-    protected boolean authenticate(String password) {
-        return HashHelper.equals(HashHelper.hash(password, salt).getBytes(), this.password.getBytes());
-    }
-
     public String getUsername() {
         return username;
     }
 
     public String getPassword() {
         return password;
-    }
-
-    protected String getSalt() {
-        return salt;
-    }
-
-    protected Account setSalt(String salt) {
-        this.salt = salt;
-        return this;
     }
 
     protected Account setUsername(String username) {

@@ -11,15 +11,14 @@ abstract class AccountTable {
 
     class Add {
         public static final String QUERY = "" +
-                "INSERT INTO " + TABLE_NAME + " (name, password, salt, zip, street, role) VALUES (?, ?, ?, ?, ?, ?);";
+                "INSERT INTO " + TABLE_NAME + " (name, password, zip, street, role) VALUES (?, ?, ?, ?, ?);";
 
         class IN {
             public static final int NAME = 1;
             public static final int PASSWORD = 2;
-            public static final int SALT = 3;
-            public static final int ZIP = 4;
-            public static final int STREET = 5;
-            public static final int ROLE = 6;
+            public static final int ZIP = 3;
+            public static final int STREET = 4;
+            public static final int ROLE = 5;
         }
     }
 
@@ -32,7 +31,7 @@ abstract class AccountTable {
     }
 
     class FindByName {
-        public static final String QUERY = "SELECT id, name, password, salt, zip, street, role FROM " + TABLE_NAME + " WHERE name = ?;";
+        public static final String QUERY = "SELECT id, name, password, zip, street, role FROM " + TABLE_NAME + " WHERE name = ?;";
 
         class IN {
             public static final int NAME = 1;
@@ -42,10 +41,9 @@ abstract class AccountTable {
             public static final int ID = 1;
             public static final int NAME = 2;
             public static final int PASSWORD = 3;
-            public static final int SALT = 4;
-            public static final int ZIP = 5;
-            public static final int STREET = 6;
-            public static final int ROLE = 7;
+            public static final int ZIP = 4;
+            public static final int STREET = 5;
+            public static final int ROLE = 6;
         }
     }
 

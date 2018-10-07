@@ -1,5 +1,8 @@
 package com.codingchili.webshoppe.model;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
@@ -7,28 +10,41 @@ import java.util.Base64;
 
 /**
  * Created by Robin on 2015-09-28.
- *
+ * <p>
  * Handles the hashing of passwords and the generation
  * of the salts used in the hashing.
- *
+ * <p>
  * reference: https://crackstation.net/hashing-security.htm#javasourcecode
  */
 
 public class HashHelper {
-    private final static int ITERATIONS = 65535;
-    private final static int KEY_BITS = 1024;
-    private final static int SALT_BYTES = 64;
-    private final static String ALGORITHM = "PBKDF2WithHmacSHA1";
+    private final static int ITERATIONS = 8;
+    private final static int MEMORY = 2048;
+    private static final int PARALLELISM = 2;
+    private final static int HASH_BYTES = 48;
+    private final static int SALT_BYTES = 24;
+    private static Argon2 argon2;
 
-    public static String hash(String password, String salt) {
-        try {
-            PBEKeySpec key = new PBEKeySpec(password.toCharArray(), salt.getBytes(), ITERATIONS, KEY_BITS);
-            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
-            byte[] hash = keyFactory.generateSecret(key).getEncoded();
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (Exception e) {
-            throw new RuntimeException("Hashing Error: NoSuchCipher");
-        }
+    static {
+        argon2 = Argon2Factory.create(SALT_BYTES, HASH_BYTES);
+    }
+
+    /**
+     * @param password the password to generate a hash of.
+     * @return a hashed password in base64.
+     */
+    public static String hash(String password) {
+        return argon2.hash(ITERATIONS, MEMORY, PARALLELISM, password);
+    }
+
+    /**
+     * Verifies the given password hash against a plaintext password.
+     * @param password a hashed password.
+     * @param plaintext a plaintext password to hash and verify.
+     * @return true if the given passwords matches.
+     */
+    public static boolean verify(String password, String plaintext) {
+        return argon2.verify(password, plaintext);
     }
 
     /**
@@ -48,11 +64,5 @@ public class HashHelper {
             result |= (first[i] ^ second[i]);
 
         return result == 0;
-    }
-
-    public static String generateSalt() {
-        byte[] salt = new byte[SALT_BYTES];
-        new SecureRandom().nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
     }
 }

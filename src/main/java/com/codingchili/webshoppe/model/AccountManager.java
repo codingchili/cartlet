@@ -27,12 +27,12 @@ public abstract class AccountManager {
             account = accounts.findByUsername(username);
             result.setAccount(account);
 
-            if (!account.authenticate(password))
+            if (!HashHelper.verify(account.getPassword(), password)) {
                 throw new AccountStoreException("Failed to authenticate user: " + username);
+            }
         } catch (AccountStoreException e) {
             result.setErroneous(true);
         }
-
         return result;
     }
 

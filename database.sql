@@ -16,7 +16,6 @@ CREATE TABLE account (
   street VARCHAR(32) NOT NULL,
   role INT DEFAULT 1,
   password VARCHAR(256) NOT NULL,
-  salt VARCHAR(128) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX name_UNIQUE (name ASC));
   
