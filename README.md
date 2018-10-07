@@ -85,5 +85,10 @@ Start the application with,
 java -jar <fileName>.jar
 ```
 
+for docker,
+```
+docker run -it <imageName>
+```
+
 ## Contributing
 Contributions are always welcome! pull requests, code reviews, new issues, comments on existing issues etc.
