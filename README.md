@@ -19,30 +19,34 @@ it would be more fun/challenging to keep the stack in place. I like to have some
 in my projects, not everything has to be NoSQL and SPA :) I'm not much for EE, application
 servers, servlets and all that enterprisey stuff. 
 
-
-
 Challenges
 - performance
-  - [ ] make sure to upgrade to latest MySQL DB / driver.
-  - [ ] analyze existing queries, check for missing/bad indexes.
-  - [ ] find the fastest goddamn application server there is.
+  - [x] make sure to upgrade to latest MySQL DB / driver.
+  - [x] analyze existing queries, check for missing/bad indexes.
+  - [x] find the fastest goddamn application server there is.
   - [ ] server side rendering causes database calls to block.
     - even worse, all our DB calls are synchronous and serialized.
 - security 
-  - [ ] tons of forms here, we need some solid CSRF protection.
-  - [ ] zero protection against XSS in place.
-  - [ ] payment security; not required for simple swish integrations.
-  - [ ] password hashing: uses PBKDF2, barely passable, upgrade to Argon2?
+  - [x] tons of forms here, we need some solid CSRF protection.
+  - [x] zero protection against XSS in place.
+  - [x] payment security; not required for simple swish integrations.
+  - [x] password hashing: uses PBKDF2, barely passable, upgrade to Argon2
+  - [x] prevent session fixation - regenerate session id.
+  - [x] use constant time compare for passwords / csrf token
 - mobile support
-  - [ ] we use bootstrap so it shouldn't be too hard.
-  - [ ] upgrade bootstrap from v3 to v4.
-  - [ ] add a favicon / pwa manifest.
+  - [x] we use bootstrap so it shouldn't be too hard.
+  - [x] upgrade bootstrap from v3 to v4.
+  - [x] add a favicon / pwa manifest.
 - containerless deployment
-  - [ ] tom EE / undertow / ? (i will NEVER touch spring.)
+  - [x] tom EE / undertow / ? (i will NEVER touch spring.)
 - payment
-  - [ ] there is no existing payment implementation.
-  - [ ] lets start with swish, and just use a URI / QR for payments.
+  - [x] there is no existing payment implementation.
+  - [x] lets start with swish, and just use a URI / QR for payments.
   - [ ] maybe later we can explore more options, Ether etc?
+- workflow
+  - [ ] order management - update order status
+  - [ ] handling of refunds / cancelled orders
+  - [ ] prevent orders from never getting completed when items out of stock
 
 ### Building
 Super easy, 
