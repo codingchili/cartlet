@@ -87,7 +87,7 @@ java -jar <fileName>.jar
 
 for docker,
 ```
-docker run -it <imageName>
+docker run -it -p 8080:8080 <imageName>
 ```
 
 ## Contributing
