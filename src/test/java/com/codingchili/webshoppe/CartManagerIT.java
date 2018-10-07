@@ -106,6 +106,7 @@ public class CartManagerIT {
         List<Product> products = ProductManager.findProductsByName("");
         CartManager.clearCart(account);
         CartManager.setCartItems(products, account);
-        Assert.assertTrue(CartManager.getCart(account).getItems().size() > 0);
+        Assert.assertTrue("cart was empty after calling setCartItems",
+                CartManager.getCart(account).getItems().size() > 0);
     }
 }
