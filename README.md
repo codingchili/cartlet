@@ -57,6 +57,11 @@ Super easy,
 
 Produces a standalone jar with an embedded application server.
 
+If you want docker,
+```
+./gradlew jar && docker build .
+```
+
 ### Installing
 
 Needs at least one MySQL server, we are using 8.0.12 for development.
@@ -74,6 +79,11 @@ The default configuration looks like,
 ``` 
 This is my development settings, you you will need to place a file called `application.json` beside your
 jar, with values that matches your environment.
+
+Start the application with,
+```
+java -jar <fileName>.jar
+```
 
 ## Contributing
 Contributions are always welcome! pull requests, code reviews, new issues, comments on existing issues etc.
