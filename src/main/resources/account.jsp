@@ -1,4 +1,5 @@
 <%@include file="header.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="row">
     <div class="col-6 offset-3">
@@ -12,15 +13,15 @@
             </div>
             <div class="panel-body">
                 <p>
-                    <b>Username</b> ${sessionScope.account.username}
+                    <b>Username</b><c:out value="${sessionScope.account.username}"/>
                 </p>
 
                 <p>
-                    <b>ZIP</b> ${sessionScope.account.zip}
+                    <b>ZIP</b> <c:out value="${sessionScope.account.zip}"/>
                 </p>
 
                 <p>
-                    <b>Street</b> ${sessionScope.account.street}
+                    <b>Street</b> <c:out value="${sessionScope.account.street}"/>
                 </p>
 
             </div>

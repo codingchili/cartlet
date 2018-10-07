@@ -11,13 +11,13 @@
             </div>
             <div class="panel-body col-6 offset-3">
                 <p>
-                    <b>Username</b> ${sessionScope.account.username}
+                    <b>Username</b><c:out value="${sessionScope.account.username}"/>
                 </p>
                 <p>
-                    <b>ZIP</b> ${sessionScope.account.zip}
+                    <b>ZIP</b> <c:out value="${sessionScope.account.zip}"/>
                 </p>
                 <p>
-                    <b>Street</b> ${sessionScope.account.street}
+                    <b>Street</b> <c:out value="${sessionScope.account.street}"/>
                 </p>
             </div>
         </div>

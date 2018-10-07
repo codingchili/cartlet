@@ -1,4 +1,5 @@
 <%@include file="header.jsp" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <jsp:useBean id="registerResult" class="com.codingchili.webshoppe.model.RegisterResult" scope="session"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -39,12 +40,12 @@
                         <div class="form-group">
                             <label for="username" class="control-label">Email</label>
                             <input type="text" class="form-control" name="username" id="username"
-                                   placeholder="example@domain.tld" value="${registerResult.account.username}" autofocus="true">
+                                   placeholder="example@domain.tld" value="${fn:escapeXml(registerResult.account.username)}" autofocus="true">
                         </div>
                         <div class="form-group">
                             <label for="password" class="control-label">Password</label>
-                            <input type="password" class="form-control" name="password" value="${registerResult.account.password}" id="password"
-                                   placeholder="9 characters or longer..">
+                            <%-- don't reflect the password because we cannot escape it without breaking the login. --%>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="9 characters or longer..">
                         </div>
                         <div class="form-group">
                             <label for="password-repeat" class="control-label">Password</label>
@@ -54,14 +55,14 @@
 
                         <div class="form-group">
                             <label for="zip" class="control-label">Zip code</label>
-                            <input type="text" maxlength="12" class="form-control" value="${registerResult.account.zip}" name="zip" id="zip"
+                            <input type="text" maxlength="12" class="form-control" value="${fn:escapeXml(registerResult.account.zip)}" name="zip" id="zip"
                                    placeholder="137 32 SE">
                         </div>
 
                         <div class="form-group">
                             <label for="street" class="control-label">Street</label>
                             <input type="text" class="form-control" name="street" id="street"
-                                   placeholder="Streetname 37" value="${registerResult.account.street}">
+                                   placeholder="Streetname 37" value="${fn:escapeXml(registerResult.account.street)}">
                         </div>
 
                         <div class="form-group">

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public abstract class AccountManager {
     private static final int PASSWORD_MIN_LENGTH = 9;
-    private static final int ACCOUNT_MIN_LENGTH = 5;
+    private static final int ACCOUNT_MIN_LENGTH = 4;
 
     /**
      * @param username of the account to be authenticate.
