@@ -6,8 +6,8 @@
 <div class="container">
     <div class="card col-10 offset-1 col-md-6 offset-md-3">
         <div class="panel ${(registerResult.erroneous) ? "panel-danger" : "panel-primary"}">
-            <div class="panel-heading">
-                <h3 class="panel-title"><fmt:message key="register.title"/></h3>
+            <div class="panel-heading margin-top-0">
+                <h4 class="panel-title"><fmt:message key="register.title"/></h4>
             </div>
             <div class="panel-body panel-body-spacer">
                 <c:set var="action" scope="request" value="register"/>

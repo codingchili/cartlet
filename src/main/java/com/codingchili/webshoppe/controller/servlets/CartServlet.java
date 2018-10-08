@@ -24,12 +24,20 @@ public class CartServlet extends HttpServlet {
 
         if (action == null) {
             doGet(req, resp);
-        } else if (action.equals("clear")) {
-            clearCart(req, resp);
-        } else if (action.equals("remove")) {
-            removeProduct(req, resp);
-        } else if (action.equals("order")) {
-            createOrder(req, resp);
+        } else {
+            switch (action) {
+                case "clear":
+                    clearCart(req, resp);
+                    break;
+                case "remove":
+                    removeProduct(req, resp);
+                    break;
+                case "order":
+                    createOrder(req, resp);
+                    break;
+                default:
+                    doGet(req, resp);
+            }
         }
     }
 
@@ -76,7 +84,6 @@ public class CartServlet extends HttpServlet {
                 Forwarding.to("error.jsp", req, resp);
             }
         } else {
-            req.setAttribute("callback", "/cart");
             Forwarding.to("login.jsp", req, resp);
         }
     }

@@ -66,11 +66,9 @@ public class TldLocator {
                                 } catch (IOException ignore) {
                                 }
                             }
-                            //System.out.println("File : " + entry.getName());
                         }
                     }
                 } catch (IOException e) {
-                    //e.printStackTrace();
                 }
             }
         }

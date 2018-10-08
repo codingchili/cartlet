@@ -6,8 +6,8 @@
 <div class="container">
     <div class="card col-10 offset-1 col-md-6 offset-md-3">
         <div class="panel ${(!empty loginResult && loginResult.erroneous) ? "panel-danger" : "panel-primary"}">
-            <div class="panel-heading">
-                <h3 class="panel-title"><fmt:message key="login.title"/></h3>
+            <div class="panel-heading margin-top-0">
+                <h4 class="panel-title"><fmt:message key="login.title"/></h4>
             </div>
 
             <div class="panel-body panel-body-spacer">
@@ -18,7 +18,6 @@
                 </c:if>
 
                 <form class="form-horizontal" method="POST" action="login">
-                    <input type="hidden" name="callback" value="${requestScope.callback}">
                     <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <div class="form-group">
                         <fmt:message key="account.username.placeholder" var="usernamePlaceholder"/>

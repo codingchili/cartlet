@@ -28,12 +28,14 @@
             <tr>
                 <td class="align-middle"><img class="cart-thumbnail" src="image/${product.imageId}"></td>
                 <td class="align-middle">${product.name}</td>
-                <td class="align-middle">${product.cost}</td>
+                <td class="align-middle">
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.cost * currency_value}"/>
+                </td>
                 <td class="align-middle">${product.count}</td>
                 <td class="align-middle"><a href="view?product=${product.id}"><fmt:message key="product.view"/></a></td>
                 <td class="align-middle" class="text-danger">
-                            <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.count * product.cost * currency_value}"/>
-                            <fmt:message key="currency"/>
+                    <fmt:formatNumber type="number" maxFractionDigits="2"
+                                      value="${product.count * product.cost * currency_value}"/><fmt:message key="currency"/>
                 </td>
             </tr>
         </c:forEach>

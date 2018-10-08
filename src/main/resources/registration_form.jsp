@@ -1,9 +1,9 @@
-<form class="form-horizontal" method="POST" action="managers">
+<form class="form-horizontal" method="POST" action="${action}">
     <input type="hidden" name="csrf" value="${sessionScope.csrf}">
     <input type="hidden" name="action" value="${action}">
     <fieldset>
         <c:if test="${registerResult.erroneous}">
-            <ul style="text-align: center; list-style-type: none;">
+            <ul class="text-danger login-messages">
                 <c:if test="${registerResult.accountExists}">
                     <li><fmt:message key="account.exists"/></li>
                 </c:if>
@@ -52,7 +52,7 @@
 
             <fmt:message key="account.zip.placeholder" var="zipPlaceholder"/>
             <input type="text" maxlength="12" class="form-control" name="zip" id="zip"
-                   placeholder="zipPlaceholder" value="${fn:escapeXml(registerResult.account.zip)}">
+                   placeholder="${zipPlaceholder}" value="${fn:escapeXml(registerResult.account.zip)}">
         </div>
 
         <div class="form-group">

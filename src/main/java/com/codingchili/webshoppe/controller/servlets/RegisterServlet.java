@@ -2,8 +2,7 @@ package com.codingchili.webshoppe.controller.servlets;
 
 import com.codingchili.webshoppe.controller.Forwarding;
 import com.codingchili.webshoppe.controller.Session;
-import com.codingchili.webshoppe.model.RegisterResult;
-import com.codingchili.webshoppe.model.AccountManager;
+import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Robin on 2015-09-28.
- *
  * Handles the registrations of USER accounts.
  */
 
@@ -22,15 +19,16 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getSession().getAttribute("username") == null)
-            Forwarding.to("register.jsp", req, resp);
-        else
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        if (Session.isAuthenticated(req)) {
             Forwarding.to("/products", req, resp);
+        } else {
+            Forwarding.to("register.jsp", req, resp);
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         RegisterResult registerResult = AccountManager.register(
                 req.getParameter("username"),
                 req.getParameter("password"),
@@ -46,7 +44,13 @@ public class RegisterServlet extends HttpServlet {
             Forwarding.to("register.jsp", req, resp);
         } else {
             Session.authenticate(req, registerResult.getAccount());
-            Forwarding.to("/products", req, resp);
+            Cart cart = (Cart) req.getSession().getAttribute("cart");
+
+            if (cart.getUniqueProducts() > 0) {
+                Forwarding.to("/cart", req, resp);
+            } else {
+                Forwarding.to("/products", req, resp);
+            }
         }
     }
 }

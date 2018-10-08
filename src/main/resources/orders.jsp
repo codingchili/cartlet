@@ -27,7 +27,8 @@
                 <td class="align-middle">${order.status}</td>
                 <td class="align-middle">${order.changed}</td>
                 <td class="align-middle"><a href="order?id=${order.orderId}"><fmt:message key="product.view"/></a></td>
-                <td  class="align-middle" class="text-danger">${order.total}<fmt:message key="currency"/></td>
+                <td class="align-middle" class="text-danger">
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.total * currency_value}"/><fmt:message key="currency"/></td>
             </tr>
         </c:forEach>
         </tbody>

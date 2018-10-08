@@ -41,6 +41,12 @@ legend {
     min-height: 40%;
 }
 
+.login-messages {
+    text-align: center;
+    list-style-type: none;
+    padding-left: 0;
+}
+
 .info-container {
     margin-top: 32px;
     margin-bottom: 32px;
@@ -168,6 +174,10 @@ a:visited {
 
 .text-red {
     color: red;
+}
+
+.margin-top-0 {
+    margin-top: 16px;
 }
 
 .margin-top-1 {

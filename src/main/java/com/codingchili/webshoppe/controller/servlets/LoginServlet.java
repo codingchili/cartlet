@@ -2,16 +2,12 @@ package com.codingchili.webshoppe.controller.servlets;
 
 import com.codingchili.webshoppe.controller.Forwarding;
 import com.codingchili.webshoppe.controller.Session;
-import com.codingchili.webshoppe.model.LoginResult;
-import com.codingchili.webshoppe.model.AccountManager;
+import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 /**
@@ -24,7 +20,7 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet implements ServletContextListener {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (Session.isAuthenticated(req)) {
             Forwarding.redirect("/products", resp);
         } else {
@@ -33,7 +29,7 @@ public class LoginServlet extends HttpServlet implements ServletContextListener 
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         LoginResult loginResult = AccountManager.authenticate(
                 req.getParameter("username"),
                 req.getParameter("password"));
@@ -44,10 +40,10 @@ public class LoginServlet extends HttpServlet implements ServletContextListener 
         } else {
             Session.authenticate(req, loginResult.getAccount());
 
-            String callback = req.getParameter("callback");
+            Cart cart = (Cart) req.getSession().getAttribute("cart");
 
-            if (callback != null) {
-                Forwarding.redirect(callback, resp);
+            if (cart.getUniqueProducts() > 0) {
+                Forwarding.to("/cart", req, resp);
             } else {
                 Forwarding.to("/products", req, resp);
             }
@@ -56,7 +52,7 @@ public class LoginServlet extends HttpServlet implements ServletContextListener 
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        AccountManager.registerAdmin("admin", "rawadminsocks", "admin_zip", "admin_street");
+        
     }
 
     @Override
