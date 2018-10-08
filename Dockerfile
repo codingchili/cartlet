@@ -18,4 +18,4 @@ RUN apk add mysql && \
 EXPOSE 8080/tcp
 
 
-ENTRYPOINT ["/bin/sh", "-c", "echo 'Starting database..' && nohup mysqld --user=root > /dev/null 2>&1 & sleep 3 && cd /opt/webshop && mysql -e 'create database webshop' && mysql webshop < database.sql && java -jar ./webshoppe.jar"]
+ENTRYPOINT ["/bin/sh", "-c", "echo 'Starting database..' && nohup mysqld --user=root > /dev/null 2>&1 & sleep 10 && echo 'creating database..' && cd /opt/webshop && mysql -e 'create database webshop' && mysql webshop < database.sql && java -jar ./webshoppe.jar"]

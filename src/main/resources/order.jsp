@@ -4,7 +4,9 @@
 <div class="row">
     <h3 class="heading-text">
         <span class="text-danger">
-            Total ${order.total}:-
+            Total
+            <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.total * currency_value}"/>
+            <fmt:message key="currency"/>
         </span>
     </h3>
 </div>
@@ -14,11 +16,11 @@
         <thead>
         <tr>
             <th></th>
-            <th>Name</th>
-            <th>Cost</th>
-            <th>Count</th>
+            <th><fmt:message key="cart.name"/></th>
+            <th><fmt:message key="cart.each"/></th>
+            <th><fmt:message key="cart.quantity"/></th>
             <th></th>
-            <th>Total</th>
+            <th><fmt:message key="product.item_total"/></th>
         </tr>
         </thead>
         <tbody>
@@ -28,8 +30,11 @@
                 <td class="align-middle">${product.name}</td>
                 <td class="align-middle">${product.cost}</td>
                 <td class="align-middle">${product.count}</td>
-                <td class="align-middle"><a href="view?product=${product.id}">View</a></td>
-                <td class="align-middle" class="text-danger">${product.count * product.cost}:-</td>
+                <td class="align-middle"><a href="view?product=${product.id}"><fmt:message key="product.view"/></a></td>
+                <td class="align-middle" class="text-danger">
+                            <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.count * product.cost * currency_value}"/>
+                            <fmt:message key="currency"/>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

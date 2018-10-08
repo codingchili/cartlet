@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-12 margin-top text-center">
-        <span class="badge badge-info">paying with swish</span>
+        <span class="badge badge-info"><fmt:message key="swish.paying_with"/></span>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
 
     <form method="POST" action="swish" class="col-8 offset-2">
         <input type="hidden" name="csrf" value="${sessionScope.csrf}">
-        <button class="btn btn-primary btn-block">I've sent the funds</button>
+        <button class="btn btn-primary btn-block"><fmt:message key="swish.sent_funds"/></button>
     </form>
 
 </div>

@@ -5,14 +5,14 @@
 <div class="margin-top row">
     <div class="col-8 offset-2 col-md-6 offset-md-1">
 
-        <h2 class="text-center">Managers</h2>
+        <h2 class="text-center"><fmt:message key="managers.managers"/></h2>
 
         <table class="table table-striped table-hover ">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Zip</th>
-                <th>Street</th>
+                <th><fmt:message key="account.username"/></th>
+                <th><fmt:message key="account.zip"/></th>
+                <th><fmt:message key="account.street"/></th>
                 <th></th>
             </tr>
             </thead>
@@ -44,75 +44,11 @@
     <div class="col-8 offset-2 col-md-4 offset-md-1">
         <div class="panel ${(registerResult.erroneous) ? "panel-danger" : "panel-primary"}">
             <div class="panel-heading">
-                <h3 class="panel-title">Add Manager</h3>
+                <h3 class="panel-title"><fmt:message key="managers.add"/></h3>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" method="POST" action="managers">
-                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
-                    <input type="hidden" name="action" value="register">
-                    <fieldset>
-                        <c:if test="${registerResult.erroneous}">
-                            <ul style="text-align: center; list-style-type: none;">
-                                <c:if test="${registerResult.accountExists}">
-                                    <li>Specified account already exists.</li>
-                                </c:if>
-                                <c:if test="${registerResult.accountNameTooShort}">
-                                    <li>Account name too short.</li>
-                                </c:if>
-                                <c:if test="${registerResult.passwordMismatch}">
-                                    <li>Passwords does not match.</li>
-                                </c:if>
-                                <c:if test="${registerResult.passwordTooShort}">
-                                    <li>Password is too short.</li>
-                                </c:if>
-                                <c:if test="${registerResult.zipSet eq false}">
-                                    <li>Zip is a required field.</li>
-                                </c:if>
-                                <c:if test="${registerResult.streetSet eq false}">
-                                    <li>Street is a required field.</li>
-                                </c:if>
-                            </ul>
-                        </c:if>
-
-                        <div class="form-group">
-                            <label for="username" class="col-lg-2 control-label">Email</label>
-
-                            <input type="text" class="form-control" name="username" id="username"
-                                   placeholder="example@domain.tld">
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-lg-2 control-label">Password</label>
-
-                            <input type="password" class="form-control" name="password" id="password"
-                                   placeholder="9 characters or longer..">
-                        </div>
-                        <div class="form-group">
-                            <label for="password-repeat" class="col-lg-2 control-label">Password</label>
-
-                            <input type="password" class="form-control" name="password-repeat" id="password-repeat"
-                                   placeholder="Password (again)">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="zip" class="col-lg-2 control-label">Zip code</label>
-
-                            <input type="text" maxlength="12" class="form-control" name="zip" id="zip"
-                                   placeholder="137 32 SE">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="street" class="col-lg-2 control-label">Street</label>
-
-                            <input type="text" class="form-control" name="street" id="street"
-                                   placeholder="Streetname 37">
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row button-spacer-top"></div>
-                            <button type="submit" class="btn btn-block btn-primary">Register</button>
-                        </div>
-                    </fieldset>
-                </form>
+                <c:set var="action" scope="request" value="managers"/>
+                <%@include file="registration_form.jsp"%>
             </div>
         </div>
     </div>

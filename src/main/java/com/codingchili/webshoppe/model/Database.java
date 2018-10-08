@@ -49,7 +49,7 @@ class Database {
         try (Connection connection = getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 E result = consumer.accept(connection, preparedStatement);
-                logger.info("query - " + query + "\tcompleted in " + (System.currentTimeMillis() - start) + "ms.");
+                logger.info("[" + (System.currentTimeMillis() - start) + "ms.] " + query);
                 return result;
             }
         }

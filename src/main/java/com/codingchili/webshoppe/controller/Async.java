@@ -29,7 +29,7 @@ public class Async {
             }
         }, false, done -> {
             long elapsed = (System.currentTimeMillis()) - then;
-            logger.info("async task '" + name + "' completed in " + elapsed + "ms.");
+            logger.info("async task '" + name + "' in " + elapsed + "ms.");
         });
     }
 

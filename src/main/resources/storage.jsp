@@ -10,20 +10,27 @@
             <fieldset>
                 <legend>New Product</legend>
                 <div class="form-group">
-                    <label for="name" class="control-label">Name</label>
+                    <label for="name" class="control-label"><fmt:message key="storage.product_name"/></label>
 
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Product name">
+                    <fmt:message key="storage.product_name.placeholder" var="productNamePlaceholder"/>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="${productNamePlaceholder}">
                 </div>
 
                 <div class="form-group">
-                    <label for="description" class="control-label">Description</label>
+                    <label for="description" class="control-label"><fmt:message key="description"/></label>
 
+                    <fmt:message key="storage.product_details.placeholder" var="productDetailsPlaceholder"/>
                     <textarea class="form-control" rows="3" name="description" id="description"
-                              placeholder="Product details.."></textarea>
-                    <span class="help-block">Formatting with HTML is <span class="text-success">ENABLED</span>.</span>
+                              placeholder="${productDetailsPlaceholder}"></textarea>
+
+                    <span class="help-block"><fmt:message key="storage.formatting"/>
+                        <span class="text-success">
+                            <fmt:message key="storage.formatting_enabled"/>
+                        </span>.
+                    </span>
                 </div>
                 <div class="form-group">
-                    <label for="category" class="control-label">Category</label>
+                    <label for="category" class="control-label"><fmt:message key="storage.category"/></label>
 
                     <select class="form-control" id="category" name="category">
                         <c:forEach items="${categories}" var="category">
@@ -33,26 +40,28 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="cost" class="control-label">Cost</label>
+                    <label for="cost" class="control-label"><fmt:message key="storage.cost"/></label>
 
+                    <fmt:message key="storage.product_cost.placeholder" var="productCostPlaceholder"/>
                     <input type="text" name="cost" class="form-control" id="cost"
-                           placeholder="Cost without concurrency unit">
+                           placeholder="${productCostPlaceholder}">
                 </div>
 
                 <div class="form-group">
-                    <label for="quantity" class="control-label">Count</label>
+                    <label for="quantity" class="control-label"><fmt:message key="storage.count"/></label>
 
+                    <fmt:message key="storage.product_quantity.placeholder" var="productQuantityPlaceholder"/>
                     <input type="text" name="quantity" class="form-control" id="quantity"
-                           placeholder="Number of items in stock">
+                           placeholder="${productQuantityPlaceholder}">
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">Add</button>
+                    <button type="submit" class="btn btn-primary btn-block"><fmt:message key="storage.add"/></button>
                 </div>
             </fieldset>
         </form>
         <div class="text-center">
-            <span class="badge badge-success">Upload product image in product edit mode.</span>
+            <span class="badge badge-success"><fmt:message key="storage.upload_image"/></span>
         </div>
     </div>
 
@@ -63,16 +72,17 @@
 
             <a href="storage"><span class="glyphicon glyphicon-remove text-red pull-right"></span></a>
             <fieldset>
-                <legend>New Category</legend>
+                <legend><fmt:message key="storage.new_category"/></legend>
                 <div class="form-group">
-                    <label for="name" class="control-label">Name</label>
+                    <label for="name" class="control-label"><fmt:message key="storage.category_name"/></label>
 
+                    <fmt:message key="storage.category_name.placeholder" var="categoryNamePlaceholder"/>
                     <input type="text" class="form-control" id="category-name" name="name"
-                           placeholder="Category name..">
+                           placeholder="${categoryNamePlaceholder}">
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">Add</button>
+                    <button type="submit" class="btn btn-primary btn-block"><fmt:message key="storage.add"/></button>
                 </div>
             </fieldset>
         </form>

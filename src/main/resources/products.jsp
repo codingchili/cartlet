@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="products" class="com.codingchili.webshoppe.model.Product" scope="session"/>
 <%@include file="header.jsp" %>
 
@@ -11,7 +10,10 @@
                 <a href="view?product=${product.id}">
                     <img src="image/${product.imageId}" class="product-thumbnail-img">
                 </a>
-                <span class="text-red product-thumbnail-price">${product.cost} :-</span>
+                <span class="text-red product-thumbnail-price">
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.cost * currency_value}"/>
+                    <fmt:message key="currency"/>
+                </span>
             </div>
 
             <div class="product-footer">

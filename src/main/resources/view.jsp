@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="product" class="com.codingchili.webshoppe.model.Product" scope="session"/>
 <%@include file="header.jsp" %>
 
@@ -11,9 +10,9 @@
     </c:if>
 
     <div class="row">
-        <h1 class="product-title offset-md-1 offset-xl-2">
+        <h2 class="product-title offset-md-1 offset-xl-2">
             ${product.name}
-        </h1>
+        </h2>
     </div>
 
     <div class="row">
@@ -23,20 +22,19 @@
         </div>
 
         <div class="col-12 col-md-4 offset-md-2 col-xl-3 offset-xl-2">
-            <h2>Description</h2>
+            <h4><fmt:message key="description"/></h4>
 
             <p>
             <div class="">
                 <c:if test="${product.count > 0}">
-                    <span class="badge badge-success">${product.count} in stock.</span>
+                    <span class="badge badge-success">${product.count} <fmt:message key="view.in_stock"/></span>
                 </c:if>
 
                 <c:if test="${product.count < 1}">
-                    <span class="badge badge-danger">Out of stock</span>
+                    <span class="badge badge-danger"><fmt:message key="view.out_of_stock"/></span>
                 </c:if>
             </div>
             </p>
-
             <p>
                 ${product.description}
             </p>
@@ -45,9 +43,12 @@
     </div>
 
     <div>
-        <h2 class="text-center" style="width:100%; margin-top:32px;">
-            <span class="text-red">${product.cost}:-</span>
-        </h2>
+        <h3 class="text-center" style="width:100%;">
+            <span class="text-red">
+                <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.cost * currency_value}"/>
+                <fmt:message key="currency"/>
+            </span>
+        </h3>
     </div>
 
     <div class="row buy-form">

@@ -4,7 +4,7 @@
 <div class="row">
     <h3 class="heading-text">
         <span class="text-danger">
-            ${orders.items.size()} Placed orders.
+            ${orders.items.size()} <fmt:message key="orders.placed"/>
         </span>
     </h3>
 </div>
@@ -13,11 +13,11 @@
     <table class="table table-striped table-hover ">
         <thead>
         <tr>
-            <th>Created</th>
-            <th>Status</th>
-            <th>Changed</th>
+            <th><fmt:message key="orders.created"/></th>
+            <th><fmt:message key="orders.status"/></th>
+            <th><fmt:message key="orders.changed"/></th>
             <th></th>
-            <th>Total</th>
+            <th><fmt:message key="product.item_total"/></th>
         </tr>
         </thead>
         <tbody>
@@ -26,8 +26,8 @@
                 <td class="align-middle">${order.created}</td>
                 <td class="align-middle">${order.status}</td>
                 <td class="align-middle">${order.changed}</td>
-                <td class="align-middle"><a href="order?id=${order.orderId}">View</a></td>
-                <td  class="align-middle" class="text-danger">${order.total}:-</td>
+                <td class="align-middle"><a href="order?id=${order.orderId}"><fmt:message key="product.view"/></a></td>
+                <td  class="align-middle" class="text-danger">${order.total}<fmt:message key="currency"/></td>
             </tr>
         </c:forEach>
         </tbody>

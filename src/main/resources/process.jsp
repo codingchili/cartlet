@@ -1,5 +1,4 @@
 <%@include file="header.jsp" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="order" class="com.codingchili.webshoppe.model.Order" scope="session"/>
 
 <div class="card row col-8 offset-2 margin-top">
@@ -7,17 +6,17 @@
 
         <div class="panel panel-default margin-top-1">
             <div class="panel-heading">
-                <h4>Shipping details</h4>
+                <h4><fmt:message key="process.shipping.title"/></h4>
             </div>
             <div class="panel-body col-6 offset-3">
                 <p>
-                    <b>Username</b><c:out value="${sessionScope.account.username}"/>
+                    <b><fmt:message key="account.username"/></b><c:out value="${sessionScope.account.username}"/>
                 </p>
                 <p>
-                    <b>ZIP</b> <c:out value="${sessionScope.account.zip}"/>
+                    <b><fmt:message key="account.zip"/></b> <c:out value="${sessionScope.account.zip}"/>
                 </p>
                 <p>
-                    <b>Street</b> <c:out value="${sessionScope.account.street}"/>
+                    <b><fmt:message key="account.street"/></b> <c:out value="${sessionScope.account.street}"/>
                 </p>
             </div>
         </div>
@@ -39,8 +38,12 @@
                         <td class="align-middle">${product.name}</td>
                         <td class="align-middle">${product.cost}</td>
                         <td class="align-middle">${product.count}</td>
-                        <td class="align-middle"><a href="view?product=${product.id}">View</a></td>
-                        <td class="align-middle" class="text-danger">${product.count * product.cost}:-</td>
+                        <td class="align-middle"><a href="view?product=${product.id}"><fmt:message
+                                key="product.view"/></a></td>
+                        <td class="align-middle" class="text-danger">
+                            <fmt:formatNumber type="number" maxFractionDigits="2"
+                                              value="${product.count * product.cost * currency_value}"/>
+                            <fmt:message key="currency"/></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -49,7 +52,11 @@
 
         <div class="row">
             <h3 class="text-center">
-                <span class="text-danger">Order total ${order.total} :-</span>
+                <span class="text-danger">
+                    <fmt:message key="process.order_total"/>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.total * currency_value}"/>
+                    <fmt:message key="currency"/>
+                </span>
             </h3>
         </div>
 
@@ -58,31 +65,23 @@
                 <form method="POST" action="process">
                     <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="action" value="getOrder">
-                    <button class="btn btn-lg btn-primary btn-block">Next order</button>
+                    <button class="btn btn-lg btn-primary btn-block"><fmt:message key="process.next_order"/></button>
                 </form>
             </div>
         </div>
     </c:if>
 
     <c:if test="${empty order.account}">
-        <h4>Manager instructions</h4>
+        <h4><fmt:message key="process.manager.instruction.title"/></h4>
         <p>
-            Welcome Employee,
-
-            Packing orders is easy,
-            just follow these 3 simple steps
-
-            1. Click the "Get order" button to get an order.
-            2. Pack the items in the order, these are
-            already allocated from the stock for you.
-            3. Move the package to the shipping area.
+            <fmt:message key="process.manager.instructions"/>
         </p>
         <div class="row">
             <div class="col-10 offset-1">
                 <form method="POST" action="process" class="col-12">
                     <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="action" value="getOrder">
-                    <button class="btn btn-lg btn-primary btn-block">Get order</button>
+                    <button class="btn btn-lg btn-primary btn-block"><fmt:message key="process.get.order"/></button>
                 </form>
             </div>
         </div>

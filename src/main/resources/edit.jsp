@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="product" class="com.codingchili.webshoppe.model.Product" scope="session"/>
 <%@include file="header.jsp" %>
 
@@ -24,17 +23,17 @@
             </div>
 
             <div class="col-12 col-md-4 offset-md-2 col-xl-3 offset-xl-2">
-                <h2>Description</h2>
+                <h2><fmt:message key="description"/></h2>
 
                 <p>
 
                 <div class="">
                     <c:if test="${product.count > 0}">
-                        <span class="badge badge-success">${product.count} in stock.</span>
+                        <span class="badge badge-success">${product.count} <fmt:message key="view.in_stock"/></span>
                     </c:if>
 
                     <c:if test="${product.count < 1}">
-                        <span class="badge badge-danger">Out of stock</span>
+                        <span class="badge badge-danger"><fmt:message key="view.out_of_stock"/></span>
                     </c:if>
                 </div>
                 </p>
@@ -51,17 +50,17 @@
                 <input type="text" class="form-control text-red" name="cost" value="${product.cost}">
             </div>
             <div class="" style="font-size: 22px;">
-                :-
+                <fmt:message key="currency"/>
             </div>
         </div>
 
         <div class="row buy-form">
             <div class="col-6 col-md-4 offset-3 offset-md-4">
                 <div class="form-group">
-                    <label for="quantity" class="control-label">Stock +/-</label>
+                    <label for="quantity" class="control-label"><fmt:message key="edit.stock"/> +/-</label>
                     <input type="text" class="form-control" id="quantity" name="quantity" value="0" autofocus="true">
                 </div>
-                <button class="btn btn-primary btn-block">Apply</button>
+                <button class="btn btn-primary btn-block"><fmt:message key="edit.apply"/></button>
             </div>
         </div>
     </div>

@@ -74,6 +74,7 @@ public class TldLocator {
                 }
             }
         }
+        tagLibInfos.values().forEach(info -> logger.info(info.getUri()));
         logger.info("Scanned JSP tld's in: " + (System.currentTimeMillis() - time) + "ms.");
         return tagLibInfos;
     }
