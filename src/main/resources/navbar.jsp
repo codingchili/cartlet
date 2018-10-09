@@ -22,7 +22,7 @@
                 </div>
             </li>
 
-            <li class="nav-item"><a class="nav-link" href="cart">Cart [${sessionScope.cart.uniqueProducts}]</a></li>
+            <li class="nav-item"><a class="nav-link" href="cart"><fmt:message key="navbar.cart"/> [${sessionScope.cart.uniqueProducts}]</a></li>
 
             <c:if test="${!empty sessionScope.account}">
                 <li class="nav-item"><a class="nav-link" href="orders"><fmt:message key="navbar.orders"/></a></li>

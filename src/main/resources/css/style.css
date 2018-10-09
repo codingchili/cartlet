@@ -91,6 +91,11 @@ legend {
     width: 100%;
 }
 
+#footer-content {
+    display: flex;
+    justify-content: space-between;
+}
+
 .button-spacer-top {
     height: 24px;
 }
@@ -99,6 +104,15 @@ legend {
     margin-bottom: 32px;
     max-width: 322px;
     max-height: 352px;
+}
+
+.inline-button {
+    padding: 0;
+    font-size: 0.6rem;
+}
+
+.footer-form {
+    display: inline;
 }
 
 .product-header {

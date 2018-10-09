@@ -10,7 +10,7 @@
             </div>
             <div class="panel-body col-6 offset-3">
                 <p>
-                    <b><fmt:message key="account.username"/></b><c:out value="${sessionScope.account.username}"/>
+                    <b><fmt:message key="account.username"/></b> <c:out value="${sessionScope.account.username}"/>
                 </p>
                 <p>
                     <b><fmt:message key="account.zip"/></b> <c:out value="${sessionScope.account.zip}"/>
@@ -25,11 +25,11 @@
             <table class="table table-striped table-hover ">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Cost</th>
-                    <th>Count</th>
+                    <th><fmt:message key="product.name"/></th>
+                    <th><fmt:message key="product.each"/></th>
+                    <th><fmt:message key="product.quantity"/></th>
                     <th></th>
-                    <th>Total</th>
+                    <th><fmt:message key="product.item_total"/></th>
                 </tr>
                 </thead>
                 <tbody>

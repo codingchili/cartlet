@@ -8,7 +8,7 @@
 
             <a href="storage"><span class="glyphicon glyphicon-remove text-red pull-right"></span></a>
             <fieldset>
-                <legend>New Product</legend>
+                <legend><fmt:message key="storage.new_product"/></legend>
                 <div class="form-group">
                     <label for="name" class="control-label"><fmt:message key="storage.product_name"/></label>
 

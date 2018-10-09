@@ -10,7 +10,7 @@
     </c:if>
 
     <div class="row">
-        <h2 class="product-title offset-md-1 offset-xl-2">
+        <h2 class="product-title text-center product-title col-12 col-md-6 offset-md-2">
             ${product.name}
         </h2>
     </div>
@@ -56,7 +56,7 @@
             <form method="POST" action="buy">
                 <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                 <div class="form-group">
-                    <label for="quantity" class="control-label">Quantity</label>
+                    <label for="quantity" class="control-label"><fmt:message key="product.quantity"/></label>
                     <input type="text" class="form-control" id="quantity" name="count" value="1" autofocus="true">
                     <input type="hidden" name="product" value="${product.id}">
                 </div>

@@ -17,9 +17,9 @@
         <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col"><fmt:message key="cart.name"/></th>
-            <th scope="col"><fmt:message key="cart.each"/></th>
-            <th scope="col"><fmt:message key="cart.quantity"/></th>
+            <th scope="col"><fmt:message key="product.name"/></th>
+            <th scope="col"><fmt:message key="product.each"/></th>
+            <th scope="col"><fmt:message key="product.quantity"/></th>
             <th scope="col"><fmt:message key="product.item_total"/></th>
             <th scope="col"></th>
         </tr>

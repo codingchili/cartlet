@@ -90,7 +90,8 @@ public class Launcher {
                 ProductCategoryServlet.class,
                 RegisterServlet.class,
                 StorageServlet.class,
-                SwishServlet.class
+                SwishServlet.class,
+                LanguageServlet.class
         )
         .map(servlet -> {
             ServletInfo info = Servlets.servlet(servlet);

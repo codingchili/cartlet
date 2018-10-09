@@ -16,9 +16,9 @@
         <thead>
         <tr>
             <th></th>
-            <th><fmt:message key="cart.name"/></th>
-            <th><fmt:message key="cart.each"/></th>
-            <th><fmt:message key="cart.quantity"/></th>
+            <th><fmt:message key="product.name"/></th>
+            <th><fmt:message key="product.each"/></th>
+            <th><fmt:message key="product.quantity"/></th>
             <th></th>
             <th><fmt:message key="product.item_total"/></th>
         </tr>

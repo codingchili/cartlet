@@ -53,6 +53,7 @@ public class Session implements SessionListener {
 
         logger.info("session created with c-surf token: " + token);
         session.setAttribute("csrf", token);
+        session.setAttribute("language", "sv");
 
         if (!session.getAttributeNames().contains("cart")) {
             session.setAttribute("cart", new Cart());

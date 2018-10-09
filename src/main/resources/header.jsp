@@ -2,7 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<fmt:setBundle basename="localization.en_bundle" scope="session"/>
+
+<fmt:setBundle basename="localization.${sessionScope.language}_bundle" scope="session"/>
+
 <html>
 <head>
     <meta charset="UTF-8">
