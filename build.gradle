@@ -27,9 +27,7 @@ dependencies {
     compile 'io.vertx:vertx-core:3.5.4'
     compile 'de.mkammerer:argon2-jvm:2.4'
 
-    compile group: 'javax.servlet.jsp.jstl', name: 'jstl', version: '1.2'
-    /*compile group: 'taglibs', name: 'fmt', version: '1.1.2'*/
-
+    compile 'javax.servlet:jstl:1.2'
 
     compile 'io.undertow:undertow-core:2.0.13.Final'
     compile 'io.undertow:undertow-servlet:2.0.13.Final'
