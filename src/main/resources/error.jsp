@@ -2,7 +2,7 @@
 
 <h2 class="badge-header">
     <span class="alert alert-danger">
-        ${requestScope.message}
+        <c:out value="${requestScope.message}"/>
     </span>
 </h2>
 

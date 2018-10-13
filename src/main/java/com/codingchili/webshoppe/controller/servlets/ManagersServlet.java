@@ -1,7 +1,6 @@
 package com.codingchili.webshoppe.controller.servlets;
 
-import com.codingchili.webshoppe.controller.Forwarding;
-import com.codingchili.webshoppe.controller.Session;
+import com.codingchili.webshoppe.controller.*;
 import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.ServletException;
@@ -19,51 +18,62 @@ import java.io.IOException;
 
 @WebServlet("/managers")
 public class ManagersServlet extends HttpServlet {
+    private static final String MANAGERS = "managers";
+    private static final String MANAGERS_JSP = "managers.jsp";
+    private static final String ACTION = "action";
+    private static final String REMOVE = "remove";
+    private static final String MANAGER = "manager";
+    private static final String REGISTER = "register";
+    private static final String REGISTER_RESULT = "registerResult";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String ZIP = "zip";
+    private static final String STREET = "street";
+    private static final String PASSWORD_REPEAT = "password-repeat";
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isAdmin(req)) {
-            req.setAttribute("managers", new AccountList(AccountManager.getManagers()));
-            Forwarding.to("managers.jsp", req, resp);
+            req.setAttribute(MANAGERS, new AccountList(AccountManager.getManagers()));
+            Forwarding.to(MANAGERS_JSP, req, resp);
         } else {
-            req.setAttribute("message", "Not Authorized.");
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.to(Language.NOT_AUTHORIZED, req, resp);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isAdmin(req)) {
-            String action = req.getParameter("action");
+            String action = req.getParameter(ACTION);
 
             if (action != null) {
-                if (action.equals("remove")) {
+                if (action.equals(REMOVE)) {
                     try {
-                        int managerId = Integer.parseInt(req.getParameter("manager"));
+                        int managerId = Integer.parseInt(req.getParameter(MANAGER));
                         AccountManager.deRegister(managerId);
                     } catch (NumberFormatException ignored) {
                     } finally {
                         doGet(req, resp);
                     }
-                } else if (action.equals("register")) {
-                    req.setAttribute("registerResult", register(req));
+                } else if (action.equals(REGISTER)) {
+                    req.setAttribute(REGISTER_RESULT, register(req));
                     doGet(req, resp);
                 }
             } else
                 doGet(req, resp);
         } else {
-            req.setAttribute("message", "Not Authorized.");
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.error(Language.NOT_AUTHORIZED, req, resp);
         }
     }
 
     private RegisterResult register(HttpServletRequest req) {
         RegisterResult registerResult = AccountManager.registerManager(
-                req.getParameter("username"),
-                req.getParameter("password"),
-                req.getParameter("zip"),
-                req.getParameter("street"));
+                req.getParameter(USERNAME),
+                req.getParameter(PASSWORD),
+                req.getParameter(ZIP),
+                req.getParameter(STREET));
 
-        if (!req.getParameter("password").equals(req.getParameter("password-repeat")))
+        if (!req.getParameter(PASSWORD).equals(req.getParameter(PASSWORD_REPEAT)))
             registerResult.setPasswordMismatch(true);
         return registerResult;
     }

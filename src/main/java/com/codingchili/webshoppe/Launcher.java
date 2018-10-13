@@ -4,17 +4,18 @@ import com.codingchili.webshoppe.controller.Session;
 import com.codingchili.webshoppe.controller.filters.CSRFFilter;
 import com.codingchili.webshoppe.controller.filters.EncodingFilter;
 import com.codingchili.webshoppe.controller.servlets.*;
-import io.undertow.Handlers;
-import io.undertow.Undertow;
+import io.undertow.*;
 import io.undertow.jsp.HackInstanceManager;
 import io.undertow.jsp.JspServletBuilder;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.RedirectHandler;
+import io.undertow.server.handlers.cache.DirectBufferCache;
 import io.undertow.server.handlers.encoding.EncodingHandler;
-import io.undertow.server.handlers.resource.ClassPathResourceManager;
+import io.undertow.server.handlers.resource.*;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import io.undertow.servlet.util.DefaultClassIntrospector;
+import org.xnio.BufferAllocator;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
@@ -50,7 +51,7 @@ public class Launcher {
                 .setContextPath("/")
                 .setClassIntrospecter(DefaultClassIntrospector.INSTANCE)
                 .setDeploymentName("webshop.war")
-                .setResourceManager(new ClassPathResourceManager(Launcher.class.getClassLoader()))
+                .setResourceManager(createResourceManager())
                 .addServlets(allServlets())
                 .addServlet(JspServletBuilder.createServlet("Default Jsp Servlet", "*.jsp"));
 
@@ -66,10 +67,26 @@ public class Launcher {
         path.addPrefixPath(builder.getContextPath(), manager.start());
 
         Undertow server = Undertow.builder()
+                .setServerOption(UndertowOptions.ENABLE_HTTP2, true)
+                .setServerOption(UndertowOptions.HTTP2_SETTINGS_ENABLE_PUSH, true)
                 .addHttpListener(8080, "0.0.0.0")
                 .setHandler(new EncodingHandler.Builder().build(null).wrap(path))
                 .build();
         server.start();
+    }
+
+    private static ResourceManager createResourceManager() {
+        final DirectBufferCache dataCache = new DirectBufferCache(1000,
+                10, 1000 * 10 * 1000,
+                BufferAllocator.DIRECT_BYTE_BUFFER_ALLOCATOR,
+                3600);
+
+        return new CachingResourceManager(
+                2048,
+                Integer.MAX_VALUE,
+                dataCache,
+                new ClassPathResourceManager(Launcher.class.getClassLoader()),
+                3600);
     }
 
     private static Collection<ServletInfo> allServlets() {

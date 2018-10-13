@@ -17,22 +17,32 @@ import java.io.IOException;
 
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
+    private static final String ORDER = "order";
+    private static final String CART = "cart";
+    private static final String SWISH_JSP = "swish.jsp";
+    private static final String LOGIN_JSP = "login.jsp";
+    private static final String PRODUCT = "product";
+    private static final String CART_JSP = "cart.jsp";
+    private static final String CLEAR = "clear";
+    private static final String REMOVE = "remove";
+    private static final String ACTION = "action";
+    private static final String ACCOUNT = "account";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        String action = req.getParameter("action");
+        String action = req.getParameter(ACTION);
 
         if (action == null) {
             doGet(req, resp);
         } else {
             switch (action) {
-                case "clear":
+                case CLEAR:
                     clearCart(req, resp);
                     break;
-                case "remove":
+                case REMOVE:
                     removeProduct(req, resp);
                     break;
-                case "order":
+                case ORDER:
                     createOrder(req, resp);
                     break;
                 default:
@@ -44,25 +54,25 @@ public class CartServlet extends HttpServlet {
     private void clearCart(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isAuthenticated(req)) {
             CartManager.clearCart(Session.getAccount(req));
-            req.getSession().setAttribute("cart", new Cart(Session.getAccount(req)));
+            req.getSession().setAttribute(CART, new Cart(Session.getAccount(req)));
         } else {
-            req.getSession().setAttribute("cart", new Cart());
+            req.getSession().setAttribute(CART, new Cart());
         }
-        Forwarding.to("cart.jsp", req, resp);
+        Forwarding.to(CART_JSP, req, resp);
     }
 
     private void removeProduct(HttpServletRequest req, HttpServletResponse resp) {
         Product product = new Product();
-        product.setId(Integer.parseInt(req.getParameter("product")));
+        product.setId(Integer.parseInt(req.getParameter(PRODUCT)));
 
         if (Session.isAuthenticated(req)) {
             CartManager.removeFromCart(product, Session.getAccount(req));
             updateCart(req);
         } else {
-            Cart cart = (Cart) req.getSession().getAttribute("cart");
+            Cart cart = (Cart) req.getSession().getAttribute(CART);
             cart.getItems().removeIf(inCart -> inCart.getId() == product.getId());
         }
-        Forwarding.to("cart.jsp", req, resp);
+        Forwarding.to(CART_JSP, req, resp);
     }
 
     private void createOrder(HttpServletRequest req, HttpServletResponse resp) {
@@ -73,30 +83,28 @@ public class CartServlet extends HttpServlet {
                 CartManager.clearCart(Session.getAccount(req));
 
                 HttpSession session = req.getSession();
-                session.setAttribute("order",
-                        OrderManager.getOrderById(account, orderId));
+                session.setAttribute(ORDER, OrderManager.getOrderById(account, orderId));
 
-                session.setAttribute("cart", new Cart(account));
+                session.setAttribute(CART, new Cart(account));
 
-                Forwarding.to("swish.jsp", req, resp);
+                Forwarding.to(SWISH_JSP, req, resp);
             } catch (Exception e) {
-                req.setAttribute("message", "Failed to place the order right now, try later.");
-                Forwarding.to("error.jsp", req, resp);
+                Forwarding.throwable(e, req, resp);
             }
         } else {
-            Forwarding.to("login.jsp", req, resp);
+            Forwarding.to(LOGIN_JSP, req, resp);
         }
     }
 
     private void updateCart(HttpServletRequest req) {
         HttpSession session = req.getSession();
-        session.setAttribute("cart",
+        session.setAttribute(CART,
                 CartManager.getCart((Account)
-                        session.getAttribute("account")));
+                        session.getAttribute(ACCOUNT)));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        Forwarding.to("cart.jsp", req, resp);
+        Forwarding.to(CART_JSP, req, resp);
     }
 }

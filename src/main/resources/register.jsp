@@ -4,7 +4,7 @@
 <div class="row" style="height: 8%;"></div>
 
 <div class="container">
-    <div class="card col-10 offset-1 col-md-6 offset-md-3">
+    <div class="card margin-top col-10 offset-1 col-md-6 offset-md-3">
         <div class="panel ${(registerResult.erroneous) ? "panel-danger" : "panel-primary"}">
             <div class="panel-heading margin-top-0">
                 <h4 class="panel-title"><fmt:message key="register.title"/></h4>

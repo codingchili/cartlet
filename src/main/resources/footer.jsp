@@ -24,8 +24,8 @@
     </div>
 </div>
 
-<div id="footer" class="col-10 offset-1">
-    <div id="footer-content" class="panel panel-default">
+<div id="footer">
+    <div id="footer-content" class="panel panel-default col-10 offset-1">
         <div>
             <a href="#exampleModal" data-toggle="modal" data-target="#exampleModal">
                 <fmt:message key="footer.contact"/>

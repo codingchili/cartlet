@@ -16,29 +16,35 @@ import java.io.IOException;
 
 @WebServlet("/buy")
 public class BuyServlet extends HttpServlet {
+    private static final String CART = "cart";
+    private static final String ACCOUNT = "account";
+    private static final String PRODUCT = "product";
+    private static final String COUNT = "count";
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
 
         try {
-            int count = Integer.parseInt(req.getParameter("count"));
+            int count = Integer.parseInt(req.getParameter(COUNT));
             Product product = new Product();
-            product.setId(Integer.parseInt(req.getParameter("product")));
+            product.setId(Integer.parseInt(req.getParameter(PRODUCT)));
 
             if (Session.isAuthenticated(req)) {
-                Account account = (Account) session.getAttribute("account");
+                Account account = (Account) session.getAttribute(ACCOUNT);
                 product.setCount(count);
                 CartManager.addToCart(product, account);
-                session.setAttribute("cart", CartManager.getCart(account));
+                session.setAttribute(CART, CartManager.getCart(account));
             } else {
                 product = ProductManager.findProductById(product.getId());
                 product.setCount(count);
-                Cart cart = (Cart) session.getAttribute("cart");
+                Cart cart = (Cart) session.getAttribute(CART);
 
                 boolean isInCart = false;
                 for (Product inCart: cart.getItems()) {
                     if (inCart.getId() == product.getId()) {
                         inCart.setCount(inCart.getCount() + count);
+
                         isInCart = true;
                     }
                 }
@@ -47,10 +53,9 @@ public class BuyServlet extends HttpServlet {
                 }
             }
 
-            Forwarding.redirect("cart", resp);
+            Forwarding.redirect(CART, resp);
         } catch (NumberFormatException e) {
-            req.setAttribute("message", "Failed to add product to cart.");
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.throwable(e, req, resp);
         }
     }
 }

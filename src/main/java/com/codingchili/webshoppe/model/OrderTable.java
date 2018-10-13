@@ -39,7 +39,7 @@ abstract class OrderTable {
                 "SELECT `order`.id, `order`.created, `order`.changed, orderstatus.name " +
                         "FROM `order`, orderstatus " +
                         "WHERE orderstatus.id = `order`.status " +
-                        "AND owner = ?;";
+                        "AND owner = ? ORDER BY created DESC;";
 
         class IN {
             public static final int OWNER = 1;

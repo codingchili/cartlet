@@ -20,7 +20,7 @@ import java.io.IOException;
 @WebServlet("/orders")
 public class OrdersServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isAuthenticated(req)) {
             req.setAttribute("orders", OrderManager.getOrders(Session.getAccount(req)));
             Forwarding.to("orders.jsp", req, resp);

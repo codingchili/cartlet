@@ -2,6 +2,11 @@ legend {
     text-align: center;
 }
 
+
+h2 > span {
+    display: block;
+}
+
 .margin-top {
     margin-top: 32px;
 }
@@ -58,6 +63,7 @@ legend {
 }
 
 .product-container {
+    z-index: 5;
     margin-top: 32px;
     margin-bottom: 32px;
     display: flex;
@@ -86,9 +92,9 @@ legend {
     font-size: x-small;
     text-align: center;
     position: fixed;
-    z-index: -1;
     bottom: 8px;
     width: 100%;
+    left: 0;
 }
 
 #footer-content {

@@ -28,7 +28,7 @@
         <c:forEach items="${sessionScope.cart.items}" var="product">
             <tr>
                 <td class="align-middle"><img class="cart-thumbnail" src="image/${product.imageId}"></td>
-                <td class="align-middle"><a href="view?product=${product.id}"><fmt:message key="product.view"/></a></td>
+                <td class="align-middle"><c:out value="${product.name}"/></td>
                 <td class="align-middle">
                     <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.cost * currency_value}"/>
                 </td>
@@ -37,6 +37,9 @@
                     <fmt:formatNumber type="number" maxFractionDigits="2"
                                       value="${product.count * product.cost * currency_value}"/>
                 </td>
+
+                <td class="align-middle"><a href="view?product=${product.id}"><fmt:message key="product.view"/></a></td>
+
                 <td class="align-middle">
                     <form method="POST" action="cart" class="margin: 0px; padding: 0px;">
                         <input type="hidden" name="csrf" value="${sessionScope.csrf}">

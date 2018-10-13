@@ -1,17 +1,14 @@
 package com.codingchili.webshoppe.controller.servlets;
 
-import com.codingchili.webshoppe.controller.Forwarding;
-import com.codingchili.webshoppe.controller.Session;
+import com.codingchili.webshoppe.controller.*;
+import com.codingchili.webshoppe.model.ProductManager;
 import com.codingchili.webshoppe.model.exception.ProductStoreException;
 import com.codingchili.webshoppe.model.exception.StoreException;
-import com.codingchili.webshoppe.model.ProductManager;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.*;
+
+import static com.codingchili.webshoppe.controller.Language.*;
 
 /**
  * Created by Robin on 2015-10-03.
@@ -20,58 +17,64 @@ import java.io.IOException;
  */
 @WebServlet("/storage")
 public class StorageServlet extends HttpServlet {
+    private static final String STORAGE_JSP = "storage.jsp";
+    private static final String ACTION = "action";
+    private static final String ADD_CATEGORY = "addCategory";
+    private static final String ADD_PRODUCT = "addProduct";
+    private static final String DESCRIPTION = "description";
+    private static final String QUANTITY = "quantity";
+    private static final String CATEGORY = "category";
+    private static final String COST = "cost";
+    public static final String NAME = "name";
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isManager(req)) {
-            Forwarding.to("storage.jsp", req, resp);
+            Forwarding.to(STORAGE_JSP, req, resp);
         } else {
-            req.setAttribute("message", "Not Authorized.");
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.error(Language.NOT_AUTHORIZED, req, resp);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = req.getParameter("action");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+        String action = req.getParameter(ACTION);
 
         if (Session.isManager(req) && action != null) {
-            if (action.equals("addCategory")) {
+            if (action.equals(ADD_CATEGORY)) {
                 addCategory(req, resp);
-            } else if (action.equals("addProduct")) {
+            } else if (action.equals(ADD_PRODUCT)) {
                 addProduct(req, resp);
             }
         } else {
-            req.setAttribute("message", "Not Authorized");
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.error(Language.NOT_AUTHORIZED, req, resp);
         }
     }
 
-    private void addProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String description = req.getParameter("description");
-        String name = req.getParameter("name");
+    private void addProduct(HttpServletRequest req, HttpServletResponse resp) {
+        String description = req.getParameter(DESCRIPTION);
+        String name = req.getParameter(NAME);
 
         try {
-            int quantity = Integer.parseInt(req.getParameter("quantity"));
-            int categoryId = Integer.parseInt(req.getParameter("category"));
-            int cost = Integer.parseInt(req.getParameter("cost"));
+            int quantity = Integer.parseInt(req.getParameter(QUANTITY));
+            int categoryId = Integer.parseInt(req.getParameter(CATEGORY));
+            int cost = Integer.parseInt(req.getParameter(COST));
             ProductManager.addProduct(name, description, categoryId, quantity, cost);
-            req.setAttribute("message", "Created product \"" + name + "\".");
-            Forwarding.to("success.jsp", req, resp);
+
+
+            Forwarding.success(PRODUCT_CREATE_SUCCESS, req, resp);
         } catch (NumberFormatException | StoreException e) {
-            req.setAttribute("message", "Failed to add product: " + e.getMessage());
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.error(PRODUCT_CREATE_FAIL, req, resp);
         }
     }
 
-    private void addCategory(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String category = req.getParameter("name");
+    private void addCategory(HttpServletRequest req, HttpServletResponse resp) {
+        String category = req.getParameter(NAME);
         try {
             ProductManager.addCategory(category);
-            req.setAttribute("message", "Added category \"" + category + "\".");
-            Forwarding.to("success.jsp", req, resp);
+            Forwarding.success(CATEGORY_CREATE_SUCCESS, req, resp);
         } catch (ProductStoreException e) {
-            req.setAttribute("message", "Failed to add category.");
-            Forwarding.to("error.jsp", req, resp);
+            Forwarding.error(CATEGORY_CREATE_FAIL, req, resp);
         }
     }
 }
