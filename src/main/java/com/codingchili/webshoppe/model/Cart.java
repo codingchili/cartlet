@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class Cart implements Bean {
-    private List<Product> items = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
     private Account owner;
 
     public Cart() {
@@ -20,12 +20,12 @@ public class Cart implements Bean {
         owner = account;
     }
 
-    public List<Product> getItems() {
-        return items;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    protected void setItems(List<Product> items) {
-        this.items = items;
+    protected void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public Account getOwner() {
@@ -37,20 +37,28 @@ public class Cart implements Bean {
     }
 
     protected void addProduct(Product product) {
-        items.add(product);
+        products.add(product);
     }
 
     public int getTotalCost() {
         int cost = 0;
 
-        for (Product product : items) {
+        for (Product product : products) {
             cost += product.getCost() * product.getCount();
         }
 
         return cost;
     }
 
+    public int getProductCount() {
+        int count = 0;
+        for (Product product : products) {
+            count += product.getCount();
+        }
+        return count;
+    }
+
     public int getUniqueProducts() {
-        return items.size();
+        return products.size();
     }
 }

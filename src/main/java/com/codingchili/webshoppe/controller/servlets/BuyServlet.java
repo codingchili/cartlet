@@ -41,7 +41,7 @@ public class BuyServlet extends HttpServlet {
                 Cart cart = (Cart) session.getAttribute(CART);
 
                 boolean isInCart = false;
-                for (Product inCart: cart.getItems()) {
+                for (Product inCart: cart.getProducts()) {
                     if (inCart.getId() == product.getId()) {
                         inCart.setCount(inCart.getCount() + count);
 
@@ -49,7 +49,7 @@ public class BuyServlet extends HttpServlet {
                     }
                 }
                 if (!isInCart) {
-                    cart.getItems().add(product);
+                    cart.getProducts().add(product);
                 }
             }
 

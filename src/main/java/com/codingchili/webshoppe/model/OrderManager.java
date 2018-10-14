@@ -14,10 +14,10 @@ abstract public class OrderManager {
      * @param account owning the cart to create the order from.
      * @return the id of the placed order.
      */
-    public static int createOrder(Account account) {
+    public static int createOrder(Account account, Cart cart) {
         OrderStore store = Store.getOrderStore();
-        if (CartManager.getCart(account).getItems().size() > 0) {
-            return store.createOrder(account);
+        if (CartManager.getCart(account).getProducts().size() > 0) {
+            return store.createOrder(account, cart);
         } else {
             throw new OrderStoreException("No items in order.");
         }
@@ -47,6 +47,19 @@ abstract public class OrderManager {
     }
 
     /**
+     * Get an order by its id.
+     *
+     * @param orderId of the order to retrieve.
+     * @return an order matching the criteria.
+     */
+    public static Order getOrderById(int orderId) {
+        OrderStore store = Store.getOrderStore();
+        Order order = store.getOrderById(orderId);
+        order.setAccount(Store.getAccountStore().findById(order.getOwnerId()));
+        return order;
+    }
+
+    /**
      * Clear all orders assigned to an account.
      *
      * @param account owning the orders to be cleared.
@@ -65,6 +78,8 @@ abstract public class OrderManager {
      */
     public static Order getOrderForShipping() throws NoSuchOrderException {
         OrderStore store = Store.getOrderStore();
-        return store.getOrderForShipping();
+        Order order = store.getOrderForShipping();
+        order.setAccount(Store.getAccountStore().findById(order.getOwnerId()));
+        return order;
     }
 }

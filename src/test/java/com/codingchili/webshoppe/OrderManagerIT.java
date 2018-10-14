@@ -11,12 +11,16 @@ import org.junit.Test;
 public class OrderManagerIT {
     private static final int PRODUCT_ID = 1;
     private static final int PRODUCT_COUNT = 2;
+    public static final String ACCOUNT_USER_TEST = "account_user_test";
     private static Account account;
     private static Product product;
 
     @BeforeClass
     public static void setUp() {
-        account = AccountManager.register("account_user_test", "password99", "zip", "street").getAccount();
+        account = AccountManager.register(AccountManagerIT.getAccount()
+                .setUsername(ACCOUNT_USER_TEST))
+                .getAccount();
+
         product = new Product();
         product.setId(PRODUCT_ID);
     }
@@ -29,7 +33,7 @@ public class OrderManagerIT {
     @Test
     public void shouldCreateOrder() throws Exception {
         CartManager.addToCart(product.setCount(PRODUCT_COUNT), account);
-        OrderManager.createOrder(account);
+        OrderManager.createOrder(account, CartManager.getCart(account));
         CartManager.clearCart(account);
 
         OrderList orders = OrderManager.getOrders(account);
@@ -42,7 +46,7 @@ public class OrderManagerIT {
     @Test
     public void shouldGetOrderById() throws Exception {
         CartManager.addToCart(product.setCount(PRODUCT_COUNT), account);
-        OrderManager.createOrder(account);
+        OrderManager.createOrder(account, CartManager.getCart(account));
         CartManager.clearCart(account);
         OrderList orderList = OrderManager.getOrders(account);
 
@@ -58,7 +62,7 @@ public class OrderManagerIT {
     @Test
     public void shouldClearOrders() throws Exception {
         CartManager.addToCart(product.setCount(1), account);
-        OrderManager.createOrder(account);
+        OrderManager.createOrder(account, CartManager.getCart(account));
 
         if (OrderManager.getOrders(account).getItems().size() == 0) {
             throw new Exception("Precondition failed: unable to add items to cart.");
@@ -74,7 +78,7 @@ public class OrderManagerIT {
     @Test
     public void shouldGetOrderToPack() throws Exception {
         CartManager.addToCart(product.setCount(1), account);
-        OrderManager.createOrder(account);
+        OrderManager.createOrder(account, CartManager.getCart(account));
         Order order = OrderManager.getOrderForShipping();
 
         if (order.getProducts().size() == 0) {

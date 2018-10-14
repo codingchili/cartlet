@@ -19,12 +19,16 @@ import java.io.IOException;
 
 @WebServlet("/orders")
 public class OrdersServlet extends HttpServlet {
+    private static final String ORDERS = "orders";
+    private static final String ORDERS_JSP = "orders.jsp";
+    private static final String LOGIN_JSP = "login.jsp";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isAuthenticated(req)) {
-            req.setAttribute("orders", OrderManager.getOrders(Session.getAccount(req)));
-            Forwarding.to("orders.jsp", req, resp);
+            req.setAttribute(ORDERS, OrderManager.getOrders(Session.getAccount(req)));
+            Forwarding.to(ORDERS_JSP, req, resp);
         } else
-            Forwarding.to("login.jsp", req, resp);
+            Forwarding.to(LOGIN_JSP, req, resp);
     }
 }

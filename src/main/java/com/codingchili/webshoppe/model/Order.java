@@ -9,8 +9,11 @@ import java.util.List;
  * An order with items and an account as the owner.
  */
 public class Order implements Bean {
-    private String status;
+    private int status;
     private int orderId;
+    private int orderTotal;
+    private int itemCount;
+    private int ownerId;
     private String changed;
     private String created;
     private Account account;
@@ -19,12 +22,25 @@ public class Order implements Bean {
     public Order() {
     }
 
+    public int getItemCount() {
+        if (products.isEmpty()) {
+            return itemCount;
+        } else {
+            return products.size();
+        }
+    }
+
+    public void setItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
+
     public String getChanged() {
         return changed;
     }
 
     protected void setAccount(Account account) {
         this.account = account;
+        this.ownerId = account.getId();
     }
 
     public Account getAccount() {
@@ -51,11 +67,11 @@ public class Order implements Bean {
         return orderId;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    protected void setStatus(String status) {
+    protected void setStatus(int status) {
         this.status = status;
     }
 
@@ -67,13 +83,29 @@ public class Order implements Bean {
         this.products = products;
     }
 
-    public int getTotal() {
-        int cost = 0;
+    public void setOrderTotal(int orderTotal) {
+        this.orderTotal = orderTotal;
+    }
 
-        for (Product product : products) {
-            cost += product.getCost() * product.getCount();
+    public int getOrderTotal() {
+        if (products.isEmpty()) {
+            return orderTotal;
+        } else {
+            int cost = 0;
+
+            for (Product product : products) {
+                cost += product.getCost() * product.getCount();
+            }
+            return cost;
         }
-        return cost;
+    }
+
+    public void setOwner(Integer integer) {
+        ownerId = integer;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
     }
 
     protected class Status {

@@ -1,11 +1,12 @@
 <%@include file="header.jsp" %>
-<jsp:useBean id="orders" class="com.codingchili.webshoppe.model.OrderList" scope="session"/>
+<jsp:useBean id="orders" class="com.codingchili.webshoppe.model.OrderList" scope="request"/>
 
 <div class="row">
     <h3 class="heading-text">
-        <span class="text-danger">
-            ${orders.items.size()} <fmt:message key="orders.placed"/>
+        <span class="text-warning">
+            ${orders.items.size()}
         </span>
+        <fmt:message key="orders.placed"/>
     </h3>
 </div>
 
@@ -16,7 +17,6 @@
             <th><fmt:message key="orders.created"/></th>
             <th><fmt:message key="orders.status"/></th>
             <th><fmt:message key="orders.changed"/></th>
-            <th></th>
             <th><fmt:message key="product.item_total"/></th>
         </tr>
         </thead>
@@ -24,11 +24,14 @@
         <c:forEach items="${orders.items}" var="order">
             <tr>
                 <td class="align-middle">${order.created}</td>
-                <td class="align-middle">${order.status}</td>
+                <td class="align-middle"><fmt:message key="order.status_${order.status}"/></td>
                 <td class="align-middle">${order.changed}</td>
-                <td class="align-middle"><a href="order?id=${order.orderId}"><fmt:message key="product.view"/></a></td>
-                <td class="align-middle" class="text-danger">
-                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.total * currency_value}"/><fmt:message key="currency"/></td>
+                <td class="align-middle text-danger">
+                    <a href="order?id=${order.orderId}">
+                        <fmt:formatNumber type="number" maxFractionDigits="2"
+                                          value="${order.orderTotal * currency_value}"/><fmt:message key="currency"/>
+                    </a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

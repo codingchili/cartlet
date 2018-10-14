@@ -50,4 +50,12 @@ interface AccountStore {
      * @return a list of all the managers in the store.
      */
     ArrayList<Account> getManagers() throws AccountStoreException;
+
+    /**
+     * retrieves an account by its ID.
+     * @param accountId the id of the account to retrieve.
+     * @return the found account.
+     * @throws AccountStoreException on failure to retrieve the account.
+     */
+    Account findById(int accountId) throws AccountStoreException;
 }

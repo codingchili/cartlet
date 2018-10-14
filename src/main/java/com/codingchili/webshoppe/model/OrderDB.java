@@ -18,8 +18,9 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 
 class OrderDB implements OrderStore {
+
     @Override
-    public int createOrder(Account account) throws OrderStoreException {
+    public int createOrder(Account account, Cart cart) throws OrderStoreException {
         try {
             return Database.prepared(OrderTable.CreateOrder.QUERY, (connection, create) -> {
                 connection.setAutoCommit(false);
@@ -29,6 +30,9 @@ class OrderDB implements OrderStore {
                 create.setString(OrderTable.CreateOrder.IN.CREATED, getTimeStamp());
                 create.setString(OrderTable.CreateOrder.IN.CHANGED, getTimeStamp());
                 create.setInt(OrderTable.CreateOrder.IN.OWNER, account.getId());
+                create.setInt(OrderTable.CreateOrder.IN.TOTAL, cart.getTotalCost());
+                create.setInt(OrderTable.CreateOrder.IN.ITEM_COUNT, cart.getProductCount());
+
                 create.execute();
 
                 ResultSet result = create.getGeneratedKeys();
@@ -38,12 +42,17 @@ class OrderDB implements OrderStore {
                 }
 
                 // Move all objects from the users cart to the order_product table.
-                try (PreparedStatement move =
-                             connection.prepareStatement(OrderTable.CopyFromCart.QUERY)) {
-                    move.setInt(OrderTable.CopyFromCart.IN.ORDER, orderId);
-                    move.setInt(OrderTable.CopyFromCart.IN.OWNER, account.getId());
-                    move.execute();
+                try (PreparedStatement items =
+                             connection.prepareStatement(OrderTable.AddToOrder.QUERY)) {
+
+                    for (Product product : cart.getProducts()) {
+                        items.setInt(OrderTable.AddToOrder.IN.ORDER, orderId);
+                        items.setInt(OrderTable.AddToOrder.IN.PRODUCT, product.getId());
+                        items.setInt(OrderTable.AddToOrder.IN.COUNT, product.getCount());
+                        items.execute();
+                    }
                 }
+
                 connection.commit();
                 return orderId;
             });
@@ -62,7 +71,6 @@ class OrderDB implements OrderStore {
                 ResultSet result = statement.executeQuery();
                 while (result.next()) {
                     Order order = orderFromResult(result);
-                    order.setProducts(getOrderItems(result.getInt(OrderTable.GetOrder.OUT.ORDER_ID)));
                     orders.add(order);
                 }
                 return orders;
@@ -77,9 +85,12 @@ class OrderDB implements OrderStore {
     private Order orderFromResult(ResultSet result) throws SQLException {
         Order order = new Order();
         order.setOrderId(result.getInt(OrderTable.GetOrder.OUT.ORDER_ID));
+        order.setOwner(result.getInt(OrderTable.GetOrder.OUT.OWNER));
         order.setCreated(result.getString(OrderTable.GetOrder.OUT.CREATED));
         order.setChanged(result.getString(OrderTable.GetOrder.OUT.CHANGED));
-        order.setStatus(result.getString(OrderTable.GetOrder.OUT.STATUS));
+        order.setStatus(result.getInt(OrderTable.GetOrder.OUT.STATUS));
+        order.setOrderTotal(result.getInt(OrderTable.GetOrders.OUT.TOTAL));
+        order.setItemCount(result.getInt(OrderTable.GetOrders.OUT.ITEM_COUNT));
         return order;
     }
 
@@ -89,19 +100,34 @@ class OrderDB implements OrderStore {
             return Database.prepared(OrderTable.GetOrder.QUERY, (connection, statement) -> {
                 statement.setInt(OrderTable.GetOrder.IN.ORDER_ID, orderId);
                 statement.setInt(OrderTable.GetOrder.IN.OWNER_ID, account.getId());
-
                 ResultSet result = statement.executeQuery();
-
-                if (result.next()) {
-                    Order order = orderFromResult(result);
-                    order.setProducts(getOrderItems(order.getOrderId()));
-                    return order;
-                } else {
-                    throw new OrderStoreException("Unable to find the order.");
-                }
+                return createOrderFromResult(result);
             });
         } catch (SQLException e) {
             throw new OrderStoreException(e);
+        }
+    }
+
+    @Override
+    public Order getOrderById(int orderId) throws OrderStoreException {
+        try {
+            return Database.prepared(OrderTable.GetOrderUnchecked.QUERY, (connection, statement) -> {
+                statement.setInt(OrderTable.GetOrder.IN.ORDER_ID, orderId);
+                ResultSet result = statement.executeQuery();
+                return createOrderFromResult(result);
+            });
+        } catch (SQLException e) {
+            throw new OrderStoreException(e);
+        }
+    }
+
+    private Order createOrderFromResult(ResultSet result) throws SQLException {
+        if (result.next()) {
+            Order order = orderFromResult(result);
+            order.setProducts(getOrderItems(order.getOrderId()));
+            return order;
+        } else {
+            throw new OrderStoreException("Unable to find the order.");
         }
     }
 
@@ -166,7 +192,7 @@ class OrderDB implements OrderStore {
 
                 connection.commit();
                 order.setProducts(getOrderItems(order.getOrderId()));
-                order.setAccount(new AccountDB().findById(ownerId.get()));
+                order.setOwner(ownerId.get());
                 return null;
             });
         } catch (SQLException | AccountStoreException e) {

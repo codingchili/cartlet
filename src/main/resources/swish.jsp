@@ -1,6 +1,5 @@
 <%@include file="header.jsp" %>
 <jsp:useBean id="order" class="com.codingchili.webshoppe.model.Order" scope="session"/>
-<jsp:useBean id="properties" class="com.codingchili.webshoppe.Properties" scope="session"/>
 
 <div class="row">
     <div class="col-12 margin-top text-center">
@@ -10,12 +9,12 @@
 
 <div class="row">
     <div class="col-10 offset-1 swish-qr">
-        <a href="swish://payment?data={'version':1,'payee':{'value':'${properties.swishReceiver}'},'amount':{'value': 200},message:{'value':'order 21'}}">
+        <a href="swish://payment?data={'version':1,'payee':{'value':'${requestScope.swish}'},'amount':{'value': ${order.orderTotal}},message:{'value':'order ${order.orderId}'}}">
             <img alt="Loading QR image from swish.." src="swish?orderId=${order.orderId}">
         </a>
     </div>
 
-    <form method="POST" action="swish" class="col-8 offset-2">
+    <form method="POST" action="swish" class="col-8 offset-2 margin-top">
         <input type="hidden" name="csrf" value="${sessionScope.csrf}">
         <button class="btn btn-primary btn-block"><fmt:message key="swish.sent_funds"/></button>
     </form>

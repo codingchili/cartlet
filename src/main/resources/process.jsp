@@ -1,5 +1,5 @@
 <%@include file="header.jsp" %>
-<jsp:useBean id="order" class="com.codingchili.webshoppe.model.Order" scope="session"/>
+<jsp:useBean id="order" class="com.codingchili.webshoppe.model.Order" scope="request"/>
 
 <div class="card row col-8 offset-2 margin-top">
     <c:if test="${!empty order.account}">
@@ -35,12 +35,16 @@
                 <tbody>
                 <c:forEach items="${order.products}" var="product">
                     <tr>
-                        <td class="align-middle">${product.name}</td>
-                        <td class="align-middle">${product.cost}</td>
-                        <td class="align-middle">${product.count}</td>
+                        <td class="align-middle">
+                            <a href="view?product=${product.id}">
+                                <c:out value="${product.name}"/>
+                            </a>
+                        </td>
+                        <td class="align-middle"> <c:out value="${product.cost}"/></td>
+                        <td class="align-middle"> <c:out value="${product.count}"/></td>
                         <td class="align-middle"><a href="view?product=${product.id}"><fmt:message
                                 key="product.view"/></a></td>
-                        <td class="align-middle" class="text-danger">
+                        <td class="align-middle">
                             <fmt:formatNumber type="number" maxFractionDigits="2"
                                               value="${product.count * product.cost * currency_value}"/>
                             <fmt:message key="currency"/></td>
@@ -52,9 +56,9 @@
 
         <div class="row">
             <h3 class="text-center">
+                <fmt:message key="process.order_total"/>
                 <span class="text-danger">
-                    <fmt:message key="process.order_total"/>
-                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.total * currency_value}"/>
+                    <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.orderTotal * currency_value}"/>
                     <fmt:message key="currency"/>
                 </span>
             </h3>
@@ -81,10 +85,23 @@
                 <form method="POST" action="process" class="col-12">
                     <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                     <input type="hidden" name="action" value="getOrder">
-                    <button class="btn btn-lg btn-primary btn-block"><fmt:message key="process.get.order"/></button>
+
+                    <div class="form-group">
+                        <fmt:message key="process.order_id.placeholder" var="orderIdPlaceholder"/>
+                        <input type="text" class="form-control" name="order-id" id="order-id"
+                               placeholder="${orderIdPlaceholder}" autofocus="true">
+                    </div>
+
+                    <button class="btn btn-lg btn-primary btn-block">
+                        <fmt:message key="process.get.order"/>
+                    </button>
                 </form>
             </div>
         </div>
+
+        <%-- todo: show some orders / products that needs to be restocked?--%>
+        <%-- todo: reject order packing if order is already packed. --%>
+
     </c:if>
 </div>
 

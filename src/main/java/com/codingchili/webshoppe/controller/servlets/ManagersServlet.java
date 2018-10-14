@@ -67,14 +67,12 @@ public class ManagersServlet extends HttpServlet {
     }
 
     private RegisterResult register(HttpServletRequest req) {
-        RegisterResult registerResult = AccountManager.registerManager(
-                req.getParameter(USERNAME),
-                req.getParameter(PASSWORD),
-                req.getParameter(ZIP),
-                req.getParameter(STREET));
-
-        if (!req.getParameter(PASSWORD).equals(req.getParameter(PASSWORD_REPEAT)))
-            registerResult.setPasswordMismatch(true);
-        return registerResult;
+        return AccountManager.registerManager(
+                new Account()
+                .setUsername(req.getParameter(USERNAME))
+                .setPassword(req.getParameter(PASSWORD))
+                .setPasswordRepeat(req.getParameter(PASSWORD_REPEAT))
+                .setZip(req.getParameter(ZIP))
+                .setStreet(req.getParameter(STREET)));
     }
 }

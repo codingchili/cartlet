@@ -18,7 +18,7 @@ import static com.codingchili.webshoppe.controller.Language.PAYMENT_GATEWAY_OK;
 
 /**
  * @author Robin Duda
- *
+ * <p>
  * Swish payment integration.
  */
 @WebServlet("/swish")
@@ -43,6 +43,7 @@ public class SwishServlet extends HttpServlet {
                 .handler(response -> {
 
                     if (response.statusCode() >= 300) {
+                        qrImage.complete(null);
                         Forwarding.throwable(
                                 new RuntimeException(SWISH_ERROR + response.statusCode()),
                                 req,
@@ -58,7 +59,10 @@ public class SwishServlet extends HttpServlet {
                         }
                     });
                 })
-                .exceptionHandler(e -> Forwarding.throwable(e, req, resp))
+                .exceptionHandler(e -> {
+                    qrImage.complete(null);
+                    Forwarding.throwable(e, req, resp);
+                })
                 .putHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .end(createQRRequest(Session.getAccount(req), orderId));
 
@@ -77,14 +81,14 @@ public class SwishServlet extends HttpServlet {
         String json = new JsonObject()
                 .put("format", "svg")
                 .put("message", new JsonObject()
-                        .put("value", "order " +order.getOrderId())
+                        .put("value", "order " + order.getOrderId())
                         .put("editable", false))
                 .put("payee",
                         new JsonObject()
                                 .put("value", Properties.get().getSwishReceiver())
                                 .put("editable", false))
                 .put("amount", new JsonObject()
-                        .put("value", order.getTotal())
+                        .put("value", order.getOrderTotal())
                         .put("editable", false))
                 .put("size", 600)          // n/a for svg
                 .put("border", 1)

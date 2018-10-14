@@ -1,5 +1,6 @@
 package com.codingchili.webshoppe.controller;
 
+import com.codingchili.webshoppe.Properties;
 import com.codingchili.webshoppe.model.*;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.session.SessionListener;
@@ -20,28 +21,32 @@ public class Session implements SessionListener {
     private static final SecureRandom csrf = new SecureRandom();
     private static final int SESSION_TIMEOUT = 30;
     private static final int SESSION_AUTHENTICATED_TIMEOUT = 2 * 60 * 3600;
+    public static final String ACCOUNT = "account";
+    public static final String CSRF = "csrf";
+    public static final String LANGUAGE = "language";
+    public static final String CART = "cart";
 
     public static void authenticate(HttpServletRequest req, Account account) {
         HttpSession session = req.getSession(true);
         req.changeSessionId(); // prevent session fixation.
         session.setMaxInactiveInterval(SESSION_AUTHENTICATED_TIMEOUT);
-        session.setAttribute("account", account);
+        session.setAttribute(ACCOUNT, account);
 
-        Cart cart = (Cart) session.getAttribute("cart");
+        Cart cart = (Cart) session.getAttribute(CART);
 
         if (cart.getUniqueProducts() == 0) {
-            session.setAttribute("cart", CartManager.getCart(account));
+            session.setAttribute(CART, CartManager.getCart(account));
         } else {
             // if the user had a cart when logging in, replace any existing cart.
-            Async.task(() -> CartManager.setCartItems(cart.getItems(), account), "copy cart on login.");
+            Async.task(() -> CartManager.setCartItems(cart.getProducts(), account), "copy cart on login.");
         }
 
-        logger.info("session authenticated: " + session.getAttribute("account"));
+        logger.info("session authenticated: " + session.getAttribute(ACCOUNT));
     }
 
     public static void deAuthenticate(HttpServletRequest req) {
         req.getSession().invalidate();
-        logger.info("session destroyed: " + req.getSession().getAttribute("account"));
+        logger.info("session destroyed: " + req.getSession().getAttribute(ACCOUNT));
     }
 
     @Override
@@ -52,11 +57,11 @@ public class Session implements SessionListener {
         String token = Base64.getEncoder().encodeToString(random);
 
         logger.info("session created with c-surf token: " + token);
-        session.setAttribute("csrf", token);
-        session.setAttribute("language", "sv");
+        session.setAttribute(CSRF, token);
+        session.setAttribute(LANGUAGE, Properties.get().getLanguage());
 
-        if (!session.getAttributeNames().contains("cart")) {
-            session.setAttribute("cart", new Cart());
+        if (!session.getAttributeNames().contains(CART)) {
+            session.setAttribute(CART, new Cart());
         }
     }
 
@@ -84,6 +89,6 @@ public class Session implements SessionListener {
     }
 
     public static Account getAccount(HttpServletRequest req) {
-        return (Account) req.getSession().getAttribute("account");
+        return (Account) req.getSession().getAttribute(ACCOUNT);
     }
 }

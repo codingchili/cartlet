@@ -2,8 +2,8 @@
 
 <div class="row">
     <h3 class="heading-text">
-        <span class="text-danger">
-           <fmt:message key="cart.total"/>
+        <fmt:message key="cart.total"/>
+        <span class="text-warning">
             <fmt:formatNumber type="number" maxFractionDigits="2"
                               value="${sessionScope.cart.totalCost * currency_value}"/>
             <fmt:message key="currency"/>
@@ -21,14 +21,22 @@
             <th scope="col"><fmt:message key="product.each"/></th>
             <th scope="col"><fmt:message key="product.quantity"/></th>
             <th scope="col"><fmt:message key="product.item_total"/></th>
-            <th scope="col"></th>
+            <th scope="col"><%-- remove --%></th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${sessionScope.cart.items}" var="product">
+        <c:forEach items="${sessionScope.cart.products}" var="product">
             <tr>
-                <td class="align-middle"><img class="cart-thumbnail" src="image/${product.imageId}"></td>
-                <td class="align-middle"><c:out value="${product.name}"/></td>
+                <td class="align-middle">
+                    <a href="view?product=${product.id}">
+                        <img class="cart-thumbnail" src="image/${product.imageId}">
+                    </a>
+                </td>
+                <td class="align-middle">
+                    <a href="view?product=${product.id}">
+                        <c:out value="${product.name}"/>
+                    </a>
+                </td>
                 <td class="align-middle">
                     <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.cost * currency_value}"/>
                 </td>
@@ -37,8 +45,6 @@
                     <fmt:formatNumber type="number" maxFractionDigits="2"
                                       value="${product.count * product.cost * currency_value}"/>
                 </td>
-
-                <td class="align-middle"><a href="view?product=${product.id}"><fmt:message key="product.view"/></a></td>
 
                 <td class="align-middle">
                     <form method="POST" action="cart" class="margin: 0px; padding: 0px;">
@@ -59,17 +65,19 @@
 </div>
 
 <div class="row">
-    <form method="POST" action="cart" class="col-5 offset-1 col-md-7 offset-md-1">
-        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
-        <input type="hidden" name="action" value="order">
-        <button class="btn btn-primary btn-block"><fmt:message key="cart.place_order"/></button>
-    </form>
+    <c:if test="${sessionScope.cart.productCount gt 0}">
+        <form method="POST" action="cart" class="col-5 offset-1 col-md-7 offset-md-1">
+            <input type="hidden" name="csrf" value="${sessionScope.csrf}">
+            <input type="hidden" name="action" value="order">
+            <button class="btn btn-primary btn-block"><fmt:message key="cart.place_order"/></button>
+        </form>
 
-    <form method="POST" action="cart" class="col-5 col-md-3">
-        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
-        <input type="hidden" name="action" value="clear">
-        <button class="btn btn-danger btn-block"><fmt:message key="cart.clear"/></button>
-    </form>
+        <form method="POST" action="cart" class="col-5 col-md-3">
+            <input type="hidden" name="csrf" value="${sessionScope.csrf}">
+            <input type="hidden" name="action" value="clear">
+            <button class="btn btn-danger btn-block"><fmt:message key="cart.clear"/></button>
+        </form>
+    </c:if>
 </div>
 
 <%@include file="footer.jsp" %>

@@ -7,9 +7,10 @@ package com.codingchili.webshoppe.model;
  */
 
 public class Account implements Bean {
+    private int id;
     private String username;
     private String password;
-    private int id;
+    private String passwordRepeat;
     private String zip;
     private String street;
     private Role role = new Role(Role.Actor.User);
@@ -48,12 +49,12 @@ public class Account implements Bean {
         return password;
     }
 
-    protected Account setUsername(String username) {
+    public Account setUsername(String username) {
         this.username = username;
         return this;
     }
 
-    protected Account setPassword(String password) {
+    public Account setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -88,5 +89,14 @@ public class Account implements Bean {
     @Override
     public String toString() {
         return username;
+    }
+
+    public String getPasswordRepeat() {
+        return passwordRepeat;
+    }
+
+    public Account setPasswordRepeat(String repeat) {
+        this.passwordRepeat = repeat;
+        return this;
     }
 }

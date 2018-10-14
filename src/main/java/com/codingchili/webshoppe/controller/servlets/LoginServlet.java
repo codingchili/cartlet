@@ -19,28 +19,36 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet implements ServletContextListener {
 
+    public static final String PRODUCTS = "/products";
+    public static final String LOGIN_JSP = "login.jsp";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String LOGIN_RESULT = "loginResult";
+    public static final String CART = "cart";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (Session.isAuthenticated(req)) {
-            Forwarding.redirect("/products", resp);
+            Forwarding.redirect(PRODUCTS, resp);
         } else {
-            Forwarding.to("login.jsp", req, resp);
+            Forwarding.to(LOGIN_JSP, req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         LoginResult loginResult = AccountManager.authenticate(
-                req.getParameter("username"),
-                req.getParameter("password"));
-        req.setAttribute("loginResult", loginResult);
+                req.getParameter(USERNAME),
+                req.getParameter(PASSWORD));
+
+        req.setAttribute(LOGIN_RESULT, loginResult);
 
         if (loginResult.isErroneous()) {
-            Forwarding.to("login.jsp", req, resp);
+            Forwarding.to(LOGIN_JSP, req, resp);
         } else {
             Session.authenticate(req, loginResult.getAccount());
 
-            Cart cart = (Cart) req.getSession().getAttribute("cart");
+            Cart cart = (Cart) req.getSession().getAttribute(CART);
 
             if (cart.getUniqueProducts() > 0) {
                 Forwarding.to("/cart", req, resp);

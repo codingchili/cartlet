@@ -19,7 +19,7 @@ import static com.codingchili.webshoppe.controller.Language.ORDER_LOAD_FAILED;
 public class OrderServlet extends HttpServlet {
     private static final String ID = "id";
     private static final String ORDER_JSP = "order.jsp";
-    private static final String ORDER = "order.jsp";
+    private static final String ORDER = "order";
     private static final String LOGIN = "login.jsp";
 
     @Override

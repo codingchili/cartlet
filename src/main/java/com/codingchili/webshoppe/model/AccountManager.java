@@ -38,29 +38,30 @@ public abstract class AccountManager {
     }
 
 
-    public static RegisterResult registerAdmin(
-            String username, String password, String zip, String street) {
-        return register(username, password, zip, street, new Role(Role.Actor.Admin));
+    public static RegisterResult registerAdmin(Account account) {
+        return register(account, new Role(Role.Actor.Admin));
     }
 
 
-    public static RegisterResult register(
-            String username, String password, String zip, String street) {
-        return register(username, password, zip, street, new Role(Role.Actor.User));
+    public static RegisterResult register(Account account) {
+        return register(account, new Role(Role.Actor.User));
     }
 
-    private static RegisterResult register(String username, String password, String zip, String street, Role role) {
-        RegisterResult registerResult = verifyInput(username, password, zip, street);
+    private static RegisterResult register(Account register, Role role) {
+        RegisterResult registerResult = verifyInput(register);
         AccountStore store = Store.getAccountStore();
 
         if (!registerResult.isErroneous()) {
             try {
-                Account account = new Account(username, password);
-                account.setZip(zip);
-                account.setStreet(street);
-                account.setRole(role);
+                Account account = new Account(register.getUsername(), register.getPassword())
+                        .setRole(role)
+                        .setStreet(register.getStreet())
+                        .setZip(register.getZip());
+
                 store.add(account);
-                registerResult.setAccount(store.findByUsername(username));
+                registerResult.setAccount(
+                        store.findByUsername(account.getUsername())
+                );
             } catch (AccountExistsException e) {
                 registerResult.setAccountExists(true);
             } catch (AccountStoreException e) {
@@ -70,19 +71,14 @@ public abstract class AccountManager {
         return registerResult;
     }
 
-    private static RegisterResult verifyInput(
-            String username, String password, String zip, String street) {
+    private static RegisterResult verifyInput(Account account) {
         return new RegisterResult()
-                .setZipSet(zip.length() != 0)
-                .setStreetSet(street.length() != 0)
-                .setAccount(new Account()
-                        .setUsername(username)
-                        .setZip(zip)
-                        .setStreet(street)
-                        .setPassword(password)
-                )
-                .setPasswordLowEntropy(password.length() < PASSWORD_MIN_LENGTH)
-                .setAccountNameTooShort(username.length() < ACCOUNT_MIN_LENGTH);
+                .setZipSet(account.getZip().length() != 0)
+                .setStreetSet(account.getStreet().length() != 0)
+                .setAccount(account)
+                .setPasswordLowEntropy(account.getPassword().length() < PASSWORD_MIN_LENGTH)
+                .setAccountNameTooShort(account.getUsername().length() < ACCOUNT_MIN_LENGTH)
+                .setPasswordMismatch(!account.getPassword().equals(account.getPasswordRepeat()));
     }
 
     public static DeRegisterResult deRegister(int accountId) {
@@ -111,8 +107,8 @@ public abstract class AccountManager {
         return result;
     }
 
-    public static RegisterResult registerManager(String username, String password, String zip, String street) {
-        return register(username, password, zip, street, new Role(Role.Actor.Manager));
+    public static RegisterResult registerManager(Account account) {
+        return register(account, new Role(Role.Actor.Manager));
     }
 
     public static List<Account> getManagers() {

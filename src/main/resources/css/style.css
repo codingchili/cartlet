@@ -2,13 +2,8 @@ legend {
     text-align: center;
 }
 
-
 h2 > span {
     display: block;
-}
-
-.margin-top {
-    margin-top: 32px;
 }
 
 .fill-width {
@@ -52,14 +47,15 @@ h2 > span {
     padding-left: 0;
 }
 
-.info-container {
-    margin-top: 32px;
-    margin-bottom: 32px;
+@media (min-width: 768px) {
+    .info-container {
+        margin-top: 32px;
+        margin-bottom: 32px;
+    }
 }
 
 .product-title {
     margin-top: 12px;
-    margin-left: 12px;
 }
 
 .product-container {
@@ -91,24 +87,29 @@ h2 > span {
 #footer {
     font-size: x-small;
     text-align: center;
-    position: fixed;
+    position: static;
     bottom: 8px;
     width: 100%;
     left: 0;
+    margin-top: -10px;
 }
 
 #footer-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .button-spacer-top {
     height: 24px;
 }
 
+.product-image-edit {
+    cursor: pointer;
+}
+
 #product-image {
     margin-bottom: 32px;
-    max-width: 322px;
+    max-width: 100%;
     max-height: 352px;
 }
 
@@ -134,20 +135,29 @@ h2 > span {
     margin-top: 18px;
 }
 
+.file-input-hidden {
+    visibility:hidden;
+    width: 0px;
+    height: 0px;
+}
+
 .product-thumbnail-img {
     display: block;
+    max-width: 100%;
     max-height: 200px;
     min-height: 200px;
-    width: 195px;
     margin-left: auto;
     margin-right: auto;
 }
 
+.form-inline > .form-group {
+    margin-bottom: 0;
+}
+
 .product-thumbnail-price {
     text-align: center;
-    font-size: large;
     display: block;
-    margin: auto auto -18px auto;
+    margin: 2px auto -16px auto;
 }
 
 .cart-thumbnail {
@@ -194,6 +204,25 @@ a:visited {
 
 .text-red {
     color: red;
+}
+
+.stock-badge {
+    position: absolute;
+    top: 0.12rem;
+    right: 2.4rem;
+}
+
+@media (min-width: 768px) {
+    .margin-top {
+        margin-top: 1rem;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .hide-on-mobile {
+        display: none;
+    }
 }
 
 .margin-top-0 {

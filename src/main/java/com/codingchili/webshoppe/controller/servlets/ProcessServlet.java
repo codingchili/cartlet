@@ -23,13 +23,14 @@ import static com.codingchili.webshoppe.controller.Language.ORDERS_NONE_TO_PACK;
 public class ProcessServlet extends HttpServlet {
     private static final String PROCESS_JSP = "process.jsp";
     private static final String ORDER = "order";
+    public static final String ORDER_ID = "order-id";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isManager(req)) {
             Forwarding.to(PROCESS_JSP, req, resp);
         } else {
-            Forwarding.to(Language.NOT_AUTHORIZED, req, resp);
+            Forwarding.error(Language.NOT_AUTHORIZED, req, resp);
         }
     }
 
@@ -37,7 +38,14 @@ public class ProcessServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isManager(req)) {
             try {
-                req.setAttribute(ORDER, OrderManager.getOrderForShipping());
+                String orderId = req.getParameter(ORDER_ID);
+
+                if (orderId == null || orderId.isEmpty()) {
+                    req.setAttribute(ORDER, OrderManager.getOrderForShipping());
+                } else {
+                    req.setAttribute(ORDER, OrderManager.getOrderById(Integer.parseInt(orderId)));
+                }
+
                 Forwarding.to(PROCESS_JSP, req, resp);
             } catch (NoSuchOrderException noSuchOrder) {
                 Forwarding.success(ORDERS_NONE_TO_PACK, req, resp);

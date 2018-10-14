@@ -23,7 +23,7 @@ public class EncodingFilter implements Filter {
         try {
             req.setCharacterEncoding(StandardCharsets.UTF_8.name());
             chain.doFilter(req, resp);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Forwarding.throwable(e, (HttpServletRequest) req, (HttpServletResponse) resp);
         }
     }

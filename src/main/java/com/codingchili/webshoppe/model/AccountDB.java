@@ -110,7 +110,8 @@ class AccountDB implements AccountStore {
         return managers;
     }
 
-    protected Account findById(int accountId) throws AccountStoreException {
+    @Override
+    public Account findById(int accountId) throws AccountStoreException {
         try {
             return Database.prepared(AccountTable.FindById.QUERY, (connection, statement) -> {
                 statement.setInt(AccountTable.FindById.IN.ACCOUNT_ID, accountId);

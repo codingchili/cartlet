@@ -30,13 +30,12 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         RegisterResult registerResult = AccountManager.register(
-                req.getParameter("username"),
-                req.getParameter("password"),
-                req.getParameter("zip"),
-                req.getParameter("street"));
-
-        if (!req.getParameter("password").equals(req.getParameter("password-repeat")))
-            registerResult.setPasswordMismatch(true);
+                new Account()
+                    .setUsername(req.getParameter("username"))
+                    .setStreet(req.getParameter("street"))
+                    .setZip(req.getParameter("zip"))
+                    .setPassword(req.getParameter("password"))
+                    .setPasswordRepeat(req.getParameter("password-repeat")));
 
         req.setAttribute("registerResult", registerResult);
 

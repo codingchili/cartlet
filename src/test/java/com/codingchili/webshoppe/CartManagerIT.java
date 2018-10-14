@@ -22,10 +22,17 @@ public class CartManagerIT {
     private static Product product;
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
         product = new Product();
         product.setId(PRODUCT_ID);
-        RegisterResult result = AccountManager.register(USERNAME, PASS, ZIP, STREET);
+
+        RegisterResult result = AccountManager.register(AccountManagerIT.getAccount()
+                .setUsername(USERNAME)
+                .setPasswordRepeat(PASS)
+                .setPassword(PASS)
+                .setZip(ZIP)
+                .setStreet(STREET));
+
         account = result.getAccount();
     }
 
@@ -96,7 +103,7 @@ public class CartManagerIT {
         CartManager.addToCart(product.setCount(COUNT), account);
         Cart cart = CartManager.getCart(account);
 
-        if (cart.getItems().size() == 0) {
+        if (cart.getProducts().size() == 0) {
             throw new Exception("The cart is empty.");
         }
     }
@@ -107,6 +114,6 @@ public class CartManagerIT {
         CartManager.clearCart(account);
         CartManager.setCartItems(products, account);
         Assert.assertTrue("cart was empty after calling setCartItems",
-                CartManager.getCart(account).getItems().size() > 0);
+                CartManager.getCart(account).getProducts().size() > 0);
     }
 }

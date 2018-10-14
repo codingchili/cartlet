@@ -4,16 +4,16 @@
 
 <div class="col-12 card product-container">
     <c:forEach items="${products}" var="product">
-        <div class="panel panel-default product col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="panel panel-default product col-6 col-sm-6 col-md-4 col-lg-3">
             <div class="product-header">${product.name}</div>
             <div class="panel-body">
                 <a href="view?product=${product.id}">
                     <img src="image/${product.imageId}" class="product-thumbnail-img">
                 </a>
-                <span class="text-red product-thumbnail-price">
+                <h6 class="text-warning product-thumbnail-price">
                     <fmt:formatNumber type="number" maxFractionDigits="2" value="${product.cost * currency_value}"/>
                     <fmt:message key="currency"/>
-                </span>
+                </h6>
             </div>
 
             <div class="product-footer">

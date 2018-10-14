@@ -8,12 +8,14 @@ package com.codingchili.webshoppe.model;
 
 abstract class OrderTable {
     class CreateOrder {
-        public static final String QUERY = "INSERT INTO `order` (owner, created, status, changed) VALUES (?, ?, 1, ?);";
+        public static final String QUERY = "INSERT INTO `order` (owner, created, status, changed, total, item_count) VALUES (?, ?, 0, ?, ?, ?);";
 
         class IN {
             public static final int OWNER = 1;
             public static final int CREATED = 2;
             public static final int CHANGED = 3;
+            public static final int TOTAL = 4;
+            public static final int ITEM_COUNT = 5;
         }
 
         class OUT {
@@ -21,37 +23,22 @@ abstract class OrderTable {
         }
     }
 
-    class CopyFromCart {
-        public static final String QUERY = "INSERT INTO order_product (product, `order`, count)" +
-                "SELECT product, ?, count FROM cart WHERE owner = ?;";
+    class AddToOrder {
+        public static final String QUERY = "INSERT INTO `order_product` (`order`, product, count) VALUES (?, ?, ?);";
 
         class IN {
             public static final int ORDER = 1;
-            public static final int OWNER = 2;
-        }
-    }
-
-    /**
-     * Uses GetOrder for OUT.
-     */
-    class GetOrders {
-        public static final String QUERY =
-                "SELECT `order`.id, `order`.created, `order`.changed, orderstatus.name " +
-                        "FROM `order`, orderstatus " +
-                        "WHERE orderstatus.id = `order`.status " +
-                        "AND owner = ? ORDER BY created DESC;";
-
-        class IN {
-            public static final int OWNER = 1;
+            public static final int PRODUCT = 2;
+            public static final int COUNT = 3;
         }
     }
 
     class GetOrder {
         public static final String QUERY =
-                "SELECT `order`.id, `order`.created, `order`.changed, orderstatus.name " +
-                        "FROM `order`, orderstatus " +
-                        "WHERE orderstatus.id = `order`.status " +
-                        "AND `order`.id = ? " +
+                "SELECT * " +
+                        "FROM `order` " +
+                        "WHERE " +
+                        "`order`.id = ? " +
                         "AND `order`.owner = ?;";
 
         class IN {
@@ -61,9 +48,42 @@ abstract class OrderTable {
 
         class OUT {
             public static final int ORDER_ID = 1;
-            public static final int CREATED = 2;
-            public static final int CHANGED = 3;
+            public static final int OWNER = 2;
+            public static final int CREATED = 3;
             public static final int STATUS = 4;
+            public static final int CHANGED = 5;
+            public static final int TOTAL = 6;
+            public static final int ITEM_COUNT = 7;
+        }
+    }
+
+    class GetOrderUnchecked {
+        public static final String QUERY =
+                "SELECT * " +
+                        "FROM `order` " +
+                        "WHERE " +
+                        "`order`.id = ?;";
+
+        class IN {
+            public static final int ORDER_ID = 1;
+        }
+    }
+
+    class GetOrders {
+        public static final String QUERY = "SELECT * FROM `order` WHERE `order`.owner = ? ORDER BY created DESC;";
+
+        class IN {
+            public static final int OWNER = 1;
+        }
+
+        class OUT {
+            public static final int ORDER_ID = 1;
+            public static final int OWNER = 2;
+            public static final int CREATED = 3;
+            public static final int STATUS = 4;
+            public static final int CHANGED = 5;
+            public static final int TOTAL = 6;
+            public static final int ITEM_COUNT = 7;
         }
     }
 

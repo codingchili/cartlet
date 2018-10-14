@@ -1,13 +1,12 @@
 package com.codingchili.webshoppe.controller.servlets;
 
+import com.codingchili.webshoppe.Properties;
 import com.codingchili.webshoppe.controller.Forwarding;
 import com.codingchili.webshoppe.controller.Session;
 import com.codingchili.webshoppe.model.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
 
 /**
  * Created by Robin on 2015-10-01.
@@ -27,6 +26,7 @@ public class CartServlet extends HttpServlet {
     private static final String REMOVE = "remove";
     private static final String ACTION = "action";
     private static final String ACCOUNT = "account";
+    public static final String SWISH = "swish";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
@@ -70,7 +70,7 @@ public class CartServlet extends HttpServlet {
             updateCart(req);
         } else {
             Cart cart = (Cart) req.getSession().getAttribute(CART);
-            cart.getItems().removeIf(inCart -> inCart.getId() == product.getId());
+            cart.getProducts().removeIf(inCart -> inCart.getId() == product.getId());
         }
         Forwarding.to(CART_JSP, req, resp);
     }
@@ -79,7 +79,9 @@ public class CartServlet extends HttpServlet {
         if (Session.isAuthenticated(req)) {
             try {
                 Account account = Session.getAccount(req);
-                int orderId = OrderManager.createOrder(account);
+                int orderId = OrderManager.createOrder(account,
+                        (Cart) req.getSession().getAttribute(CART));
+
                 CartManager.clearCart(Session.getAccount(req));
 
                 HttpSession session = req.getSession();
@@ -87,6 +89,7 @@ public class CartServlet extends HttpServlet {
 
                 session.setAttribute(CART, new Cart(account));
 
+                req.setAttribute(SWISH, Properties.get().getSwishReceiver());
                 Forwarding.to(SWISH_JSP, req, resp);
             } catch (Exception e) {
                 Forwarding.throwable(e, req, resp);

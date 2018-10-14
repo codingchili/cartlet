@@ -22,6 +22,7 @@ public class Properties {
     private String databaseUser = "root";
     private String databasePass = "";
     private String swishReceiver = "0737557200";
+    private String language = "sv";
 
     static {
         try {
@@ -33,7 +34,7 @@ public class Properties {
                 Files.write(Paths.get("application.json"), mapper.writeValueAsBytes(properties));
                 logger.info("no 'application.properties' file found, generated new.");
             } catch (Exception e2) {
-                e2.printStackTrace();
+                logger.error("Failed to generate default properties.", e);
             }
         }
     }
@@ -72,5 +73,13 @@ public class Properties {
 
     public void setJdbcUrl(String jdbcUrl) {
         this.jdbcUrl = jdbcUrl;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

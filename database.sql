@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS product_category;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS order_product;
-DROP TABLE IF EXISTS orderstatus;
 DROP TABLE IF EXISTS role;
 
 CREATE TABLE account (
@@ -61,17 +60,14 @@ CREATE TABLE `order` (
   created VARCHAR(24) NOT NULL,
   status INT NOT NULL,
   changed VARCHAR(24) NOT NULL,
+  total INT NOT NULL,
+  item_count INT NOT NULL,
   PRIMARY KEY (id));
 
 CREATE TABLE order_product (
   `order` INT NOT NULL,
   product INT NOT NULL,
   `count` INT NOT NULL);
-
-CREATE TABLE orderstatus (
-  id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(45) NOT NULL,
-  PRIMARY KEY (id));
   
   CREATE TABLE role (
   id INT NOT NULL,
@@ -122,11 +118,6 @@ INSERT INTO product_category (product, category) VALUES (12, 3);
 INSERT INTO product_category (product, category) VALUES (13, 3);
 INSERT INTO product_category (product, category) VALUES (14, 3);
 INSERT INTO product_category (product, category) VALUES (15, 3);
-
-INSERT INTO orderstatus (name) VALUES ('Waiting');
-INSERT INTO orderstatus (name) VALUES ('Approved');
-INSERT INTO orderstatus (name) VALUES ('Processing');
-INSERT INTO orderstatus (name) VALUES ('Shipped');
 
 INSERT INTO role (id, name) VALUES (1, 'user');
 INSERT INTO role (id, name) VALUES (2, 'employee');
