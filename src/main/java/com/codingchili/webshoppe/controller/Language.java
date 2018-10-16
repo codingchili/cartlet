@@ -29,6 +29,7 @@ public class Language {
     public static final String SERVER_CSRF_MISSING = "server.csrf_missing";
 
     public static final String ORDERS_NONE_TO_PACK = "orders.none_to_pack";
+    public static final String ORDER_NOT_FOUND = "order.not_found";
 
     /**
      * Retrieves the localized string for the given key.

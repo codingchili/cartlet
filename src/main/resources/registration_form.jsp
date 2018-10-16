@@ -51,7 +51,7 @@
             <label for="zip" class="control-label"><fmt:message key="account.zip"/></label>
 
             <fmt:message key="account.zip.placeholder" var="zipPlaceholder"/>
-            <input type="text" maxlength="12" class="form-control" name="zip" id="zip"
+            <input type="number" maxlength="12" class="form-control" name="zip" id="zip"
                    placeholder="${zipPlaceholder}" value="${fn:escapeXml(registerResult.account.zip)}">
         </div>
 

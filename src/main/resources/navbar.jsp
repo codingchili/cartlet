@@ -49,7 +49,7 @@
         <fmt:message key="navbar.search.placeholder" var="search"/>
         <form method="GET" action="products" class="form-inline my-2 my-lg-0" role="search">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="${search}" name="search">
+                <input type="search" class="form-control" placeholder="${search}" name="search">
             </div>
             <button type="submit" class="btn btn-warning" style="margin-left: 16px;">
                 <i class="fas fa-search"></i>

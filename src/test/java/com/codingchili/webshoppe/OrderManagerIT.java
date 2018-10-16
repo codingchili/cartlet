@@ -1,9 +1,9 @@
 package com.codingchili.webshoppe;
 
 import com.codingchili.webshoppe.model.*;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+
+import java.util.Optional;
 
 /**
  * Order manager tests.
@@ -46,14 +46,17 @@ public class OrderManagerIT {
     @Test
     public void shouldGetOrderById() throws Exception {
         CartManager.addToCart(product.setCount(PRODUCT_COUNT), account);
-        OrderManager.createOrder(account, CartManager.getCart(account));
+
+        int orderId = OrderManager.createOrder(account, CartManager.getCart(account));
+        Assert.assertTrue(OrderManager.getOrderById(orderId).isPresent());
+
         CartManager.clearCart(account);
         OrderList orderList = OrderManager.getOrders(account);
 
         for (Order order : orderList.getItems()) {
-            Order byId = OrderManager.getOrderById(account, order.getOrderId());
+            Optional<Order> byId = OrderManager.getOrderById(account, order.getOrderId());
 
-            if (byId.getProducts() == null) {
+            if (!byId.isPresent() || byId.get().getProducts() == null) {
                 throw new Exception("No products returned from getOrderById.");
             }
         }
@@ -76,21 +79,29 @@ public class OrderManagerIT {
     }
 
     @Test
-    public void shouldGetOrderToPack() throws Exception {
+    public void searchForMissingOrder() {
+        Assert.assertFalse(OrderManager.getOrderById(-1).isPresent());
+    }
+
+    @Test
+    public void shouldGetOrderToPack() {
         CartManager.addToCart(product.setCount(1), account);
-        OrderManager.createOrder(account, CartManager.getCart(account));
-        Order order = OrderManager.getOrderForShipping();
+        int orderId = OrderManager.createOrder(account, CartManager.getCart(account));
+        OrderManager.updateOrder(orderId, OrderStatus.PAYED);
+        Optional<Order> order = OrderManager.getOrderForShipping();
 
-        if (order.getProducts().size() == 0) {
-            throw new Exception("Order to pack is empty.");
-        }
+        order.ifPresent(o -> {
+            if (o.getProducts().size() == 0) {
+                throw new RuntimeException("Order to pack is empty.");
+            }
 
-        if (order.getAccount() == null) {
-            throw new Exception("No account associated with Order.");
-        }
+            if (o.getAccount() == null) {
+                throw new RuntimeException("No account associated with Order.");
+            }
 
-        if (ProductManager.findProductById(product.getId()).getCount() == product.getCount()) {
-            throw new Exception("Packing order does not deduct stock.");
-        }
+            if (ProductManager.findProductById(product.getId()).getCount() == product.getCount()) {
+                throw new RuntimeException("Packing order does not deduct stock.");
+            }
+        });
     }
 }

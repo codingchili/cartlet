@@ -3,6 +3,8 @@ package com.codingchili.webshoppe.model;
 import com.codingchili.webshoppe.model.exception.NoSuchOrderException;
 import com.codingchili.webshoppe.model.exception.OrderStoreException;
 
+import java.util.Optional;
+
 /**
  * Created by Robin on 2015-10-01.
  */
@@ -24,6 +26,16 @@ abstract public class OrderManager {
     }
 
     /**
+     * Updates the status of the given order.
+     *
+     * @param orderId the order to update the status of.
+     * @param status  the status to set.
+     */
+    public static void updateOrder(int orderId, OrderStatus status) {
+        Store.getOrderStore().updateOrderStatus(orderId, status);
+    }
+
+    /**
      * Returns orders from a specified account.
      *
      * @param account associated with the orders.
@@ -41,7 +53,7 @@ abstract public class OrderManager {
      * @param orderId of the order to retrieve.
      * @return an order matching the criteria.
      */
-    public static Order getOrderById(Account account, int orderId) {
+    public static Optional<Order> getOrderById(Account account, int orderId) {
         OrderStore store = Store.getOrderStore();
         return store.getOrderById(account, orderId);
     }
@@ -52,10 +64,13 @@ abstract public class OrderManager {
      * @param orderId of the order to retrieve.
      * @return an order matching the criteria.
      */
-    public static Order getOrderById(int orderId) {
+    public static Optional<Order> getOrderById(int orderId) {
         OrderStore store = Store.getOrderStore();
-        Order order = store.getOrderById(orderId);
-        order.setAccount(Store.getAccountStore().findById(order.getOwnerId()));
+        Optional<Order> order = store.getOrderById(orderId);
+
+        order.ifPresent(theOrder ->
+                theOrder.setAccount(Store.getAccountStore().findById(theOrder.getOwnerId())));
+
         return order;
     }
 
@@ -76,10 +91,20 @@ abstract public class OrderManager {
      * Before returning the order the in-store product count
      * must be decremented.
      */
-    public static Order getOrderForShipping() throws NoSuchOrderException {
+    public static Optional<Order> getOrderForShipping() throws NoSuchOrderException {
         OrderStore store = Store.getOrderStore();
-        Order order = store.getOrderForShipping();
-        order.setAccount(Store.getAccountStore().findById(order.getOwnerId()));
+        Optional<Order> order = store.getOrderForShipping();
+
+        order.ifPresent(o -> o.setAccount(Store.getAccountStore().findById(o.getOwnerId())));
+
         return order;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static OrderStatistics getStatistics() {
+        return Store.getOrderStore().getOrderStatistics();
     }
 }

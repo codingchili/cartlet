@@ -3,6 +3,8 @@ package com.codingchili.webshoppe.model;
 import com.codingchili.webshoppe.model.exception.NoSuchOrderException;
 import com.codingchili.webshoppe.model.exception.OrderStoreException;
 
+import java.util.Optional;
+
 /**
  * Created by Robin on 2015-10-01.
  */
@@ -32,7 +34,7 @@ interface OrderStore {
      * @return an order object from the matching order.
      * @throws OrderStoreException when the store has failed.
      */
-    Order getOrderById(Account account, int orderId) throws OrderStoreException;
+    Optional<Order> getOrderById(Account account, int orderId) throws OrderStoreException;
 
     /**
      * Returns an order by its id.
@@ -41,7 +43,7 @@ interface OrderStore {
      * @return an order object from the matching order.
      * @throws OrderStoreException when the store has failed.
      */
-    Order getOrderById(int orderId) throws OrderStoreException;
+    Optional<Order> getOrderById(int orderId) throws OrderStoreException;
 
     /**
      * Removes all orders associated to the account.
@@ -59,7 +61,7 @@ interface OrderStore {
      *
      * @return An Order ready for shipping.
      */
-    Order getOrderForShipping() throws OrderStoreException, NoSuchOrderException;
+    Optional<Order> getOrderForShipping() throws OrderStoreException, NoSuchOrderException;
 
     /**
      * Updates the status of the given order.
@@ -68,4 +70,9 @@ interface OrderStore {
      * @param status  the status to set.
      */
     void updateOrderStatus(int orderId, OrderStatus status);
+
+    /**
+     * @return some statistics about the orders registered in the system.
+     */
+    OrderStatistics getOrderStatistics();
 }

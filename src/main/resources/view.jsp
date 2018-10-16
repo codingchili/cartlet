@@ -55,7 +55,7 @@
                 <input type="hidden" name="csrf" value="${sessionScope.csrf}">
                 <div class="form-group">
                     <label for="quantity" class="control-label"><fmt:message key="product.quantity"/></label>
-                    <input type="text" class="form-control" id="quantity" name="count" value="1" autofocus="true">
+                    <input type="number" class="form-control" id="quantity" name="count" value="1" autofocus="true">
                     <input type="hidden" name="product" value="${product.id}">
                 </div>
 

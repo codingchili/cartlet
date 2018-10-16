@@ -1,12 +1,12 @@
 package com.codingchili.webshoppe.controller.servlets;
 
 import com.codingchili.webshoppe.Properties;
-import com.codingchili.webshoppe.controller.Forwarding;
-import com.codingchili.webshoppe.controller.Session;
+import com.codingchili.webshoppe.controller.*;
 import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.util.Optional;
 
 /**
  * Created by Robin on 2015-10-01.
@@ -82,15 +82,20 @@ public class CartServlet extends HttpServlet {
                 int orderId = OrderManager.createOrder(account,
                         (Cart) req.getSession().getAttribute(CART));
 
-                CartManager.clearCart(Session.getAccount(req));
+                Optional<Order> order = OrderManager.getOrderById(account, orderId);
 
-                HttpSession session = req.getSession();
-                session.setAttribute(ORDER, OrderManager.getOrderById(account, orderId));
+                if (order.isPresent()) {
+                    CartManager.clearCart(Session.getAccount(req));
+                    HttpSession session = req.getSession();
 
-                session.setAttribute(CART, new Cart(account));
+                    session.setAttribute(ORDER, order.get());
+                    session.setAttribute(CART, new Cart(account));
 
-                req.setAttribute(SWISH, Properties.get().getSwishReceiver());
-                Forwarding.to(SWISH_JSP, req, resp);
+                    req.setAttribute(SWISH, Properties.get().getSwishReceiver());
+                    Forwarding.to(SWISH_JSP, req, resp);
+                } else {
+                    Forwarding.error(Language.ORDER_NOT_FOUND, req, resp);
+                }
             } catch (Exception e) {
                 Forwarding.throwable(e, req, resp);
             }

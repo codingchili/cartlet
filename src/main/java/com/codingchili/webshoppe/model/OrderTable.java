@@ -116,6 +116,18 @@ abstract class OrderTable {
         }
     }
 
+    class GetStatistics {
+        public static final String QUERY = "SELECT STATUS,COUNT(status),AVG(total),AVG(item_count) " +
+                "FROM `order` GROUP BY status order by STATUS ASC;";
+
+        class OUT {
+            public static final int STATUS = 1;
+            public static final int COUNT_STATUS = 2;
+            public static final int AVG_COST = 3;
+            public static final int AVG_ITEMS = 4;
+        }
+    }
+
     class GetOrderForShipping {
         public static final String QUERY = "" +
                 "SELECT * FROM `order` WHERE status = 1 " +
@@ -131,6 +143,10 @@ abstract class OrderTable {
             public static final int ORDER_ID = 1;
             public static final int OWNER_ID = 2;
             public static final int CREATED = 3;
+            public static final int STATUS = 4;
+            public static final int CHANGED = 5;
+            public static final int TOTAL = 6;
+            public static final int ITEM_COUNT = 7;
         }
     }
 
