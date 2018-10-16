@@ -9,11 +9,11 @@ import java.util.List;
  * An order with items and an account as the owner.
  */
 public class Order implements Bean {
-    private int status;
     private int orderId;
     private int orderTotal;
     private int itemCount;
     private int ownerId;
+    private OrderStatus status;
     private String changed;
     private String created;
     private Account account;
@@ -67,11 +67,11 @@ public class Order implements Bean {
         return orderId;
     }
 
-    public int getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    protected void setStatus(int status) {
+    protected void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -107,13 +107,4 @@ public class Order implements Bean {
     public int getOwnerId() {
         return ownerId;
     }
-
-    protected class Status {
-        public final static int WAITING = 1;
-        public final static int SHIPPED = 2;
-        public final static int PROCESSING = 3;
-        public final static int APPROVED = 4;
-    }
-
-    ;
 }

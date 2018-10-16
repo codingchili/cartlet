@@ -99,6 +99,11 @@ h2 > span {
     justify-content: space-evenly;
 }
 
+.spacious {
+    margin-bottom: 32px;
+    margin-top: 32px;
+}
+
 .button-spacer-top {
     height: 24px;
 }

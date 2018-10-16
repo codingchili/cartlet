@@ -1,34 +1,55 @@
+<%@ page import="static com.codingchili.webshoppe.model.OrderStatus.*" %>
 <%@include file="header.jsp" %>
 <jsp:useBean id="order" class="com.codingchili.webshoppe.model.Order" scope="request"/>
 
 <div class="card row col-8 offset-2 margin-top">
     <c:if test="${!empty order.account}">
 
-        <div class="panel panel-default margin-top-1">
-            <div class="panel-heading">
-                <h4><fmt:message key="process.shipping.title"/></h4>
-            </div>
-            <div class="panel-body col-6 offset-3">
-                <p>
-                    <b><fmt:message key="account.username"/></b> <c:out value="${sessionScope.account.username}"/>
-                </p>
-                <p>
-                    <b><fmt:message key="account.zip"/></b> <c:out value="${sessionScope.account.zip}"/>
-                </p>
-                <p>
-                    <b><fmt:message key="account.street"/></b> <c:out value="${sessionScope.account.street}"/>
-                </p>
-            </div>
+        <div class="panel-heading margin-top-1">
+            <h4><fmt:message key="process.shipping.title"/></h4>
         </div>
+        <div class="panel-body col-6 offset-3">
+            <p>
+                <b><fmt:message key="account.username"/></b> <c:out value="${sessionScope.account.username}"/>
+            </p>
+            <p>
+                <b><fmt:message key="account.zip"/></b> <c:out value="${sessionScope.account.zip}"/>
+            </p>
+            <p>
+                <b><fmt:message key="account.street"/></b> <c:out value="${sessionScope.account.street}"/>
+            </p>
+        </div>
+
+        <h3 class="text-center spacious">
+            <%
+                String displayStatus;
+                switch (order.getStatus()) {
+                    case SHIPPED:
+                        displayStatus = "success";
+                        break;
+                    case CANCELLED:
+                        displayStatus = "danger";
+                        break;
+                    default:
+                        displayStatus = "warning";
+                        break;
+                }
+                request.setAttribute("displayStatus", displayStatus);
+            %>
+
+            <span class="badge badge-${displayStatus}">
+                <fmt:message key="orders.status"/>: <fmt:message key="order.status_${order.status}"/>
+            </span>
+        </h3>
 
         <div class="row">
             <table class="table table-striped table-hover ">
                 <thead>
                 <tr>
+                    <th></th>
                     <th><fmt:message key="product.name"/></th>
                     <th><fmt:message key="product.each"/></th>
                     <th><fmt:message key="product.quantity"/></th>
-                    <th></th>
                     <th><fmt:message key="product.item_total"/></th>
                 </tr>
                 </thead>
@@ -37,13 +58,16 @@
                     <tr>
                         <td class="align-middle">
                             <a href="view?product=${product.id}">
+                                <img class="cart-thumbnail" src="image/${product.imageId}">
+                            </a>
+                        </td>
+                        <td class="align-middle">
+                            <a href="view?product=${product.id}">
                                 <c:out value="${product.name}"/>
                             </a>
                         </td>
-                        <td class="align-middle"> <c:out value="${product.cost}"/></td>
-                        <td class="align-middle"> <c:out value="${product.count}"/></td>
-                        <td class="align-middle"><a href="view?product=${product.id}"><fmt:message
-                                key="product.view"/></a></td>
+                        <td class="align-middle"><c:out value="${product.cost}"/></td>
+                        <td class="align-middle"><c:out value="${product.count}"/></td>
                         <td class="align-middle">
                             <fmt:formatNumber type="number" maxFractionDigits="2"
                                               value="${product.count * product.cost * currency_value}"/>
@@ -55,7 +79,7 @@
         </div>
 
         <div class="row">
-            <h3 class="text-center">
+            <h3 class="text-center spacious">
                 <fmt:message key="process.order_total"/>
                 <span class="text-danger">
                     <fmt:formatNumber type="number" maxFractionDigits="2" value="${order.orderTotal * currency_value}"/>

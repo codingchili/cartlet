@@ -14,6 +14,7 @@
     <table class="table table-striped table-hover ">
         <thead>
         <tr>
+            <th><fmt:message key="order.title"/></th>
             <th><fmt:message key="orders.created"/></th>
             <th><fmt:message key="orders.status"/></th>
             <th><fmt:message key="orders.changed"/></th>
@@ -23,14 +24,17 @@
         <tbody>
         <c:forEach items="${orders.items}" var="order">
             <tr>
+                <td class="align-middle">
+                    <a href="order?id=${order.orderId}">
+                            #&nbsp;${order.orderId}
+                    </a>
+                </td>
                 <td class="align-middle">${order.created}</td>
                 <td class="align-middle"><fmt:message key="order.status_${order.status}"/></td>
                 <td class="align-middle">${order.changed}</td>
                 <td class="align-middle text-danger">
-                    <a href="order?id=${order.orderId}">
-                        <fmt:formatNumber type="number" maxFractionDigits="2"
-                                          value="${order.orderTotal * currency_value}"/><fmt:message key="currency"/>
-                    </a>
+                    <fmt:formatNumber type="number" maxFractionDigits="2"
+                                      value="${order.orderTotal * currency_value}"/><fmt:message key="currency"/>
                 </td>
             </tr>
         </c:forEach>

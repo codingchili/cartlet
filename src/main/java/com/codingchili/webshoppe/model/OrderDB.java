@@ -88,7 +88,7 @@ class OrderDB implements OrderStore {
         order.setOwner(result.getInt(OrderTable.GetOrder.OUT.OWNER));
         order.setCreated(result.getString(OrderTable.GetOrder.OUT.CREATED));
         order.setChanged(result.getString(OrderTable.GetOrder.OUT.CHANGED));
-        order.setStatus(result.getInt(OrderTable.GetOrder.OUT.STATUS));
+        order.setStatus(OrderStatus.values()[result.getInt(OrderTable.GetOrder.OUT.STATUS)]);
         order.setOrderTotal(result.getInt(OrderTable.GetOrders.OUT.TOTAL));
         order.setItemCount(result.getInt(OrderTable.GetOrders.OUT.ITEM_COUNT));
         return order;
@@ -173,7 +173,8 @@ class OrderDB implements OrderStore {
                     throw new NoSuchOrderException();
                 }
 
-                // deduct the stock count
+                // todo: deduct the stock count = do this when order is complete packing
+                // todo: only find orders in the correct status when shipping.
                 try (PreparedStatement stock =
                              connection.prepareStatement(OrderTable.DeductStockByOrder.QUERY)) {
                     stock.setInt(OrderTable.DeductStockByOrder.IN.ORDER_ID1, order.getOrderId());
@@ -181,14 +182,7 @@ class OrderDB implements OrderStore {
                     stock.execute();
                 }
 
-                // update the order status
-                try (PreparedStatement status =
-                             connection.prepareStatement(OrderTable.SetOrderStatus.QUERY)) {
-                    status.setInt(OrderTable.SetOrderStatus.IN.ORDER_ID, order.getOrderId());
-                    status.setInt(OrderTable.SetOrderStatus.IN.STATUS, Order.Status.SHIPPED);
-                    status.setString(OrderTable.SetOrderStatus.IN.CHANGED, getTimeStamp());
-                    status.execute();
-                }
+                updateOrderStatus(order.getOrderId(), OrderStatus.PACKING, connection);
 
                 connection.commit();
                 order.setProducts(getOrderItems(order.getOrderId()));
@@ -198,8 +192,26 @@ class OrderDB implements OrderStore {
         } catch (SQLException | AccountStoreException e) {
             throw new OrderStoreException(e);
         }
-
         return order;
+    }
+
+    @Override
+    public void updateOrderStatus(int orderId, OrderStatus status) {
+        try (Connection connection = Database.getConnection()) {
+            updateOrderStatus(orderId, status, connection);
+        } catch (Exception e) {
+            throw new OrderStoreException(e);
+        }
+    }
+
+    private void updateOrderStatus(int orderId, OrderStatus status, Connection connection) throws SQLException {
+        try (PreparedStatement statement =
+                     connection.prepareStatement(OrderTable.SetOrderStatus.QUERY)) {
+            statement.setInt(OrderTable.SetOrderStatus.IN.ORDER_ID, orderId);
+            statement.setInt(OrderTable.SetOrderStatus.IN.STATUS, status.ordinal());
+            statement.setString(OrderTable.SetOrderStatus.IN.CHANGED, getTimeStamp());
+            statement.execute();
+        }
     }
 
     private List<Product> getOrderItems(int orderId) throws OrderStoreException {

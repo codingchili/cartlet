@@ -21,7 +21,7 @@ public class Properties {
     private String jdbcUrl = "jdbc:mysql://localhost:3306/webshop?useSSL=false";
     private String databaseUser = "root";
     private String databasePass = "";
-    private String swishReceiver = "0737557200";
+    private String swishReceiver = "0737557201";
     private String language = "sv";
 
     static {

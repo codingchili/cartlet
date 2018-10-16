@@ -11,7 +11,7 @@ import org.junit.Test;
 public class OrderManagerIT {
     private static final int PRODUCT_ID = 1;
     private static final int PRODUCT_COUNT = 2;
-    public static final String ACCOUNT_USER_TEST = "account_user_test";
+    private static final String ACCOUNT_USER_TEST = "account_user_test";
     private static Account account;
     private static Product product;
 
