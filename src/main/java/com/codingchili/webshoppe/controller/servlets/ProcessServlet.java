@@ -1,8 +1,7 @@
 package com.codingchili.webshoppe.controller.servlets;
 
 import com.codingchili.webshoppe.controller.*;
-import com.codingchili.webshoppe.model.Order;
-import com.codingchili.webshoppe.model.OrderManager;
+import com.codingchili.webshoppe.model.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -20,6 +19,10 @@ public class ProcessServlet extends HttpServlet {
     private static final String ORDER_ID = "order-id";
     private static final String ORDER = "order";
     private static final String STATISTICS = "stats";
+    private static final String ACTION = "action";
+    private static final String UPDATE = "update";
+    private static final String STATUS = "status";
+    private static final String SEARCH = "search";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
@@ -35,8 +38,11 @@ public class ProcessServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         if (Session.isManager(req)) {
             String orderId = req.getParameter(ORDER_ID);
+            String action = req.getParameter(ACTION);
 
-            if (orderId == null || orderId.isEmpty()) {
+            // no order id: return next to ship.
+            if (action.equals(SEARCH) && orderId == null || orderId.isEmpty()) {
+                // todo: sets status to packing !
                 Optional<Order> shipping = OrderManager.getOrderForShipping();
 
                 if (shipping.isPresent()) {
@@ -49,6 +55,11 @@ public class ProcessServlet extends HttpServlet {
                 Optional<Order> order = OrderManager.getOrderById(Integer.parseInt(orderId));
 
                 if (order.isPresent()) {
+                    if (action.equals(UPDATE)) {
+                        OrderStatus status = OrderStatus.valueOf(req.getParameter(STATUS));
+                        OrderManager.updateOrder(order.get().getOrderId(), status);
+                        order.get().setStatus(status);
+                    }
                     req.setAttribute(ORDER, order.get());
                     Forwarding.to(PROCESS_JSP, req, resp);
                 } else {

@@ -5,41 +5,33 @@
 <div class="card row col-12 margin-top">
     <c:if test="${!empty order.account}">
 
+        <h3 class="text-center margin-top"><fmt:message key="order.title"/> #${order.orderId}</h3>
+
         <div class="panel-heading margin-top-1">
-            <h4><fmt:message key="process.shipping.title"/></h4>
+            <h4 class="text-center"><fmt:message key="process.shipping.title"/></h4>
         </div>
         <div class="panel-body col-6 offset-3">
-            <p>
-                <b><fmt:message key="account.username"/></b> <c:out value="${sessionScope.account.username}"/>
-            </p>
-            <p>
-                <b><fmt:message key="account.zip"/></b> <c:out value="${sessionScope.account.zip}"/>
-            </p>
-            <p>
-                <b><fmt:message key="account.street"/></b> <c:out value="${sessionScope.account.street}"/>
-            </p>
+
+            <table class="table table-striped table-hover ">
+                <thead>
+                <tr>
+                    <th><fmt:message key="account.username"/></th>
+                    <th><fmt:message key="account.zip"/></th>
+                    <th><fmt:message key="account.street"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="align-middle"><c:out value="${sessionScope.account.username}"/></td>
+                    <td class="align-middle"><c:out value="${sessionScope.account.zip}"/></td>
+                    <td class="align-middle"><c:out value="${sessionScope.account.street}"/></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
         <h3 class="text-center spacious">
-            <%
-                String displayStatus = "danger";
-                if (order != null) {
-                    switch (order.getStatus()) {
-                        case SHIPPED:
-                            displayStatus = "success";
-                            break;
-                        case CANCELLED:
-                            displayStatus = "danger";
-                            break;
-                        default:
-                            displayStatus = "warning";
-                            break;
-                    }
-                }
-                request.setAttribute("displayStatus", displayStatus);
-            %>
-
-            <span class="badge badge-${displayStatus}">
+            <span class="badge badge-${order.status.color()}">
                 <fmt:message key="orders.status"/>: <fmt:message key="order.status_${order.status}"/>
             </span>
         </h3>
@@ -91,12 +83,21 @@
         </div>
 
         <div class="row">
-            <div class="col-10 offset-1">
-                <form method="POST" action="process">
-                    <input type="hidden" name="csrf" value="${sessionScope.csrf}">
-                    <input type="hidden" name="action" value="getOrder">
-                    <button class="btn btn-lg btn-primary btn-block"><fmt:message key="process.next_order"/></button>
-                </form>
+
+            <div class="col-10 offset-1 transition-forms">
+                    <%-- available statuses + forEach bind? --%>
+                <c:forEach items="${order.status.next()}" var="status">
+                    <form method="POST" action="process" class="transition-form">
+                        <input type="hidden" name="csrf" value="${sessionScope.csrf}">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="status" value="${status}">
+                        <input type="hidden" name="order-id" value="${order.orderId}">
+
+                        <button class="btn btn-lg btn-${status.color()} btn-block">
+                            <fmt:message key="order.status_${status}"/>
+                        </button>
+                    </form>
+                </c:forEach>
             </div>
         </div>
     </c:if>
@@ -110,7 +111,7 @@
             <div class="col-10 offset-1">
                 <form method="POST" action="process" class="col-12">
                     <input type="hidden" name="csrf" value="${sessionScope.csrf}">
-                    <input type="hidden" name="action" value="getOrder">
+                    <input type="hidden" name="action" value="search">
 
                     <div class="form-group">
                         <fmt:message key="process.order_id.placeholder" var="orderIdPlaceholder"/>

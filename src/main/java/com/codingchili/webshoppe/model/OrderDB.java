@@ -26,6 +26,7 @@ class OrderDB implements OrderStore {
                 // Create the order post in order table.
                 create.setString(OrderTable.CreateOrder.IN.CREATED, getTimeStamp());
                 create.setString(OrderTable.CreateOrder.IN.CHANGED, getTimeStamp());
+                create.setInt(OrderTable.CreateOrder.IN.STATUS, OrderStatus.PAYMENT.ordinal());
                 create.setInt(OrderTable.CreateOrder.IN.OWNER, account.getId());
                 create.setInt(OrderTable.CreateOrder.IN.TOTAL, cart.getTotalCost());
                 create.setInt(OrderTable.CreateOrder.IN.ITEM_COUNT, cart.getProductCount());

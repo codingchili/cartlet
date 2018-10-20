@@ -8,14 +8,15 @@ package com.codingchili.webshoppe.model;
 
 abstract class OrderTable {
     class CreateOrder {
-        public static final String QUERY = "INSERT INTO `order` (owner, created, status, changed, total, item_count) VALUES (?, ?, 0, ?, ?, ?);";
+        public static final String QUERY = "INSERT INTO `order` (owner, created, status, changed, total, item_count) VALUES (?, ?, ?, ?, ?, ?);";
 
         class IN {
             public static final int OWNER = 1;
             public static final int CREATED = 2;
-            public static final int CHANGED = 3;
-            public static final int TOTAL = 4;
-            public static final int ITEM_COUNT = 5;
+            public static final int STATUS= 3;
+            public static final int CHANGED = 4;
+            public static final int TOTAL = 5;
+            public static final int ITEM_COUNT = 6;
         }
 
         class OUT {

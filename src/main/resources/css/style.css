@@ -84,6 +84,14 @@ h2 > span {
     margin-top: 24px;
 }
 
+.transition-forms {
+    display: flex;
+}
+
+.transition-form {
+    width: 100%;
+}
+
 #footer {
     font-size: x-small;
     text-align: center;

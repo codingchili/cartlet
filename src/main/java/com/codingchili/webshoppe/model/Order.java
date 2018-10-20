@@ -71,7 +71,7 @@ public class Order implements Bean {
         return status;
     }
 
-    protected void setStatus(OrderStatus status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
