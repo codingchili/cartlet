@@ -1,4 +1,4 @@
-# webshoppe [![Build Status](https://travis-ci.org/codingchili/webshoppe.svg?branch=master)](https://travis-ci.org/codingchili/webshoppe)
+# webshoppe [![Build Status](https://travis-ci.org/codingchili/cartlet.svg?branch=master)](https://travis-ci.org/codingchili/cartlet)
 
 A webshop project from 2015 rebooted, demo https://www.youtube.com/watch?v=gUCBCB0Om-8 
 
