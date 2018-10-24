@@ -2,7 +2,7 @@
 
 A webshop project from 2015 rebooted, demo https://www.youtube.com/watch?v=gUCBCB0Om-8 
 
-![alt text](https://raw.githubusercontent.com/codingchili/webshoppe/master/scrapbook/2-styling-fixes.PNG "Current snapshot version")
+![alt text](https://raw.githubusercontent.com/codingchili/webshoppe/master/scrapbook/4-tons-of-fixes.PNG "Current snapshot version")
 
 [(swish payments!)](https://raw.githubusercontent.com/codingchili/webshoppe/master/scrapbook/3-swish-payments.png "Current snapshot version")
 
