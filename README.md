@@ -44,7 +44,7 @@ Challenges
   - [x] lets start with swish, and just use a URI / QR for payments.
   - [ ] maybe later we can explore more options, Ether etc?
 - workflow
-  - [ ] order management - update order status
+  - [x] order management - update order status
   - [ ] handling of refunds / cancelled orders
   - [ ] prevent orders from never getting completed when items out of stock
 
