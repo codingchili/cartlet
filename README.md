@@ -51,14 +51,14 @@ Challenges
 ### Building
 Super easy, 
 
-```
+```console
 ./gradlew jar
 ```
 
 Produces a standalone jar with an embedded application server.
 
 If you want docker,
-```
+```console
 ./gradlew jar && docker build .
 ```
 
@@ -69,24 +69,24 @@ Needs at least one MySQL server, we are using 8.0.12 for development.
 Preload a new database with the file `database.sql`.
 
 The default configuration looks like,
-```
+```console
 {
   "jdbcUrl" : "jdbc:mysql://localhost:3306/webshop?useSSL=false",
   "databaseUser" : "root",
   "databasePass" : "",
   "swishReceiver" : "07372151522"
 }
-``` 
+``` console
 This is my development settings, you you will need to place a file called `application.json` beside your
 jar, with values that matches your environment.
 
 Start the application with,
-```
+```console
 java -jar <fileName>.jar
 ```
 
 for docker,
-```
+```console
 docker run -it -p 8080:8080 <imageName>
 ```
 
