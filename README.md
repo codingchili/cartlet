@@ -76,16 +76,19 @@ The default configuration looks like,
   "databasePass" : "",
   "swishReceiver" : "07372151522"
 }
+
 ``` console
 This is my development settings, you you will need to place a file called `application.json` beside your
 jar, with values that matches your environment.
 
 Start the application with,
+
 ```console
 java -jar <fileName>.jar
 ```
 
 for docker,
+
 ```console
 docker run -it -p 8080:8080 <imageName>
 ```
